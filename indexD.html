@@ -228,7 +228,7 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
 
   .bottom{
   position: absolute;
-  top: 380px;
+  top: 480px;
   left: 50%;
   transform: translateX(-50%);
   width: fit-content;
@@ -254,10 +254,11 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   -webkit-backdrop-filter: blur(5px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   text-align: center;
 }
+
 
     .day-name{
       font-size: 15px;
@@ -265,6 +266,7 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
       color: var(--title);
       margin-bottom: 6px;
       letter-spacing: 0.02em;
+      margin-top: 40px;
     }
 
 .day-date{
@@ -463,6 +465,51 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   object-fit:contain;
   transform: translateY(1px);
 }
+.trip-summary{
+  position: absolute;
+  top: 360px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: min(720px, calc(100vw - 120px));
+  padding: 16px 24px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  border-radius: 18px;
+
+  background: rgba(255,255,255,0.35);
+  border: 1px solid rgba(7, 78, 41, 0.08);
+
+  backdrop-filter: blur(6px);
+}
+
+
+.trip-summary-dates{
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--title);
+  letter-spacing: 0.02em;
+}
+
+
+.trip-summary-meta{
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(30,42,34,0.7);
+}
+
+
+.trip-summary-text{
+  font-size: 14px;
+  line-height: 1.4;
+  color: rgba(30,42,34,0.62);
+  text-align: center;
+  max-width: 640px;
+}
 
 
 
@@ -513,6 +560,11 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   </div>
 
   <div class="participants" id="participants"></div>
+<div class="trip-summary" id="tripSummary">
+  <div class="trip-summary-dates" id="tripDates"></div>
+  <div class="trip-summary-meta" id="tripMeta"></div>
+  <div class="trip-summary-text" id="tripText"></div>
+</div>
 
 </section>
 
@@ -531,10 +583,15 @@ document.getElementById("badgeYear").textContent = ACTIVE_TRIP;
 const trips = {
 
   "2024": {
+  title: "Dagestan 2024",
+  raceDate: null,
 
-    title: "Dagestan 2024",
-    raceDate: null,
-    participants: [
+  summary: {
+    dates: "28.09 — 05.10",
+    meta: "8 этапов · 716 км · +15200 м · 4 участника",
+  },
+
+  participants: [
       {name:"Саша", img:"./image/people/sasha.png"},
       {name:"Паша", img:"./image/people/pasha.png"},
       {name:"Катя", img:"./image/people/kate.png"},
@@ -560,6 +617,13 @@ const trips = {
     title: "Dagestan 2026",
     raceDate: "2026-05-22T02:10:00",
 
+    summary: {
+  dates: "22.05 — 30.05",
+  meta: "9 этапов · маршрут формируется",
+  text: "Следующая экспедиция по Дагестану"
+},
+
+
     participants: [
       {name:"Саша", img:"./image/people/sasha.png"},
       {name:"Олег", img:"./image/people/olegT.png"}
@@ -583,6 +647,11 @@ const trips = {
 
 
 const trip = trips[ACTIVE_TRIP];
+
+document.getElementById("tripDates").textContent = trip.summary?.dates || "";
+document.getElementById("tripMeta").textContent = trip.summary?.meta || "";
+document.getElementById("tripText").textContent = trip.summary?.text || "";
+
 
 document.documentElement.style.setProperty("--participants-count", trip.participants.length);
 document.documentElement.style.setProperty("--days-count", trip.days.length);
