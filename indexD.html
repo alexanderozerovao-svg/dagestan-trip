@@ -14,16 +14,22 @@
     }
 
     :root{
-      --bg: #f6f6f4;
-      --title: #074e29;
-      --text: #1e2a22;
-      --muted: rgba(30, 42, 34, 0.66);
-      --card: rgba(255, 255, 255, 0.68);
-      --card-border: rgba(7, 78, 41, 0.10);
-      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-      --day-bg: rgba(255, 255, 255, 0.72);
-      --day-border: rgba(7, 78, 41, 0.12);
-    }
+  --bg: #f6f6f4;
+  --title: #074e29;
+  --text: #1e2a22;
+  --muted: rgba(30, 42, 34, 0.66);
+  --card: rgba(255, 255, 255, 0.68);
+  --card-border: rgba(7, 78, 41, 0.10);
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  --day-bg: rgba(255, 255, 255, 0.72);
+  --day-border: rgba(7, 78, 41, 0.12);
+
+  --participant-size: 100px;
+  --participant-gap: 20px;
+
+  --day-size: 100px;
+  --day-gap: 12px;
+}
 
     *{
       box-sizing: border-box;
@@ -173,14 +179,12 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
 
 
 
-    .participants{
-  width: min(100%, 900px);
+  .participants{
   display: grid;
+  grid-template-columns: repeat(var(--participants-count), var(--participant-size));
+  gap: var(--participant-gap);
 
-  grid-template-columns: repeat(4, 100px); /* фиксированная ширина */
-  justify-content: center;                 /* центрируем блок */
-
-  gap: 20px;
+  width: fit-content;
 
   position: absolute;
   top: 200px;
@@ -188,8 +192,8 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   transform: translateX(-50%);
 }
 
-    .participant{
-  width: 100px;
+.participant{
+  width: var(--participant-size);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -197,8 +201,8 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
 
 .participant-photo{
-  width: 100px;
-  height: 100px;
+  width: var(--participant-size);
+  height: var(--participant-size);
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: 16px;
@@ -222,38 +226,38 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   text-align: center;
 }
 
-    .bottom{
+  .bottom{
   position: absolute;
-  top: 380px;   /* положение дней */
+  top: 380px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
+  width: fit-content;
 }
 
-    .days{
-      width: min(100%, 1180px);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(8, minmax(0, 1fr));
-      gap: 12px;
-      align-items: stretch;
-    }
+  .days{
+  display: grid;
+  grid-template-columns: repeat(var(--days-count), var(--day-size));
+  gap: var(--day-gap);
 
-    .day-card{
-      min-height: 88px;
-      padding: 14px 10px 12px;
-      border-radius: 16px;
-      background: var(--day-bg);
-      border: 1px solid var(--day-border);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
+  width: fit-content;
+}
+
+  .day-card{
+  width: var(--day-size);
+  height: var(--day-size);
+  padding: 10px;
+  border-radius: 16px;
+  background: var(--day-bg);
+  border: 1px solid var(--day-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
     .day-name{
       font-size: 15px;
@@ -263,56 +267,159 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
       letter-spacing: 0.02em;
     }
 
-    .day-date{
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text);
-    }
+.day-date{
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
 
-    @media (max-width: 900px){
-      .participants{
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+/* ===== COUNTDOWN: ОСНОВНЫЕ СТИЛИ, НЕ ВНУТРИ MEDIA ===== */
 
-      .days{
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
-    }
+.countdown-wrap{
+  position: absolute;
+  top: 50px;
+  right: 24px;
+  width: min(320px, calc(100vw - 320px));
+  min-height: 82px;
 
-    @media (max-width: 560px){
-      .page{
-        padding: 22px 14px 24px;
-      }
+  display: none;
+  align-items: center;
+  justify-content: center;
 
-      .participants{
-        gap: 12px;
-      }
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(7, 78, 41, 0.10);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.05);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
 
-      .participant{
-        width: 100px;
-        gap: 6px;
-      }
+.countdown-wrap.show{
+  display: flex;
+}
 
-      .participant-photo{
-        width: 100px;
-        height: 100px;
-        border-radius: 16px;
-      }
+.countdown{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-      .participant-name{
-        font-size: 13px;
-      }
+.countdown-title{
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--title);
+  text-align: center;
+}
 
-      .days{
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-      }
+.countdown-values{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
 
-      .day-card{
-        min-height: 78px;
-        border-radius: 14px;
-      }
-    }
+.countdown-item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.countdown-number{
+  font-size: clamp(18px, 2.4vw, 32px);
+  font-weight: 800;
+  line-height: 1;
+  color: #111;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-label{
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--title);
+}
+@media (max-width: 1100px){
+  .countdown-wrap{
+    width: min(390px, calc(100vw - 280px));
+  }
+}
+
+@media (max-width: 900px){
+  .countdown-wrap{
+    position: static;
+    width: 100%;
+    max-width: 560px;
+    min-height: auto;
+    margin: 0 auto 12px;
+  }
+
+  .participants{
+    position: static;
+    left: auto;
+    top: auto;
+    transform: none;
+    margin: 0 auto;
+  }
+
+  .bottom{
+    position: static;
+    left: auto;
+    top: auto;
+    transform: none;
+    margin: 24px auto 0;
+    width: fit-content;
+  }
+}
+
+
+@media (max-width: 560px){
+  .page{
+    padding: 22px 14px 24px;
+  }
+
+  :root{
+    --participant-size: 84px;
+    --participant-gap: 12px;
+
+    --day-size: 72px;
+    --day-gap: 10px;
+  }
+
+  .participants{
+    gap: var(--participant-gap);
+  }
+
+  .participant{
+    width: var(--participant-size);
+    gap: 6px;
+  }
+
+  .participant-photo{
+    width: var(--participant-size);
+    height: var(--participant-size);
+    border-radius: 16px;
+  }
+
+  .participant-name{
+    font-size: 13px;
+  }
+
+  .day-name{
+    font-size: 12px;
+    margin-bottom: 3px;
+  }
+
+  .day-date{
+    font-size: 12px;
+  }
+}
+
+   
   </style>
 </head>
 <body>
@@ -329,6 +436,33 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
 
     <div class="trip-badge-name">DAGESTAN</div>
   </aside>
+  <div class="countdown-wrap" id="countdownWrap">
+    <div class="countdown">
+      <div class="countdown-title">Старт через</div>
+
+      <div class="countdown-values">
+        <div class="countdown-item">
+          <div class="countdown-number" id="cdDays">000</div>
+          <div class="countdown-label">Дней</div>
+        </div>
+
+        <div class="countdown-item">
+          <div class="countdown-number" id="cdHours">00</div>
+          <div class="countdown-label">Часов</div>
+        </div>
+
+        <div class="countdown-item">
+          <div class="countdown-number" id="cdMinutes">00</div>
+          <div class="countdown-label">Мин</div>
+        </div>
+
+        <div class="countdown-item">
+          <div class="countdown-number" id="cdSeconds">00</div>
+          <div class="countdown-label">Сек</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="participants" id="participants"></div>
 
@@ -342,7 +476,7 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
 
   <script>
 
-const ACTIVE_TRIP = "2024";
+const ACTIVE_TRIP = "2026";
 
 document.getElementById("badgeYear").textContent = ACTIVE_TRIP;
 
@@ -351,7 +485,7 @@ const trips = {
   "2024": {
 
     title: "Dagestan 2024",
-
+    raceDate: null,
     participants: [
       {name:"Саша", img:"./sasha.png"},
       {name:"Паша", img:"./pasha.png"},
@@ -375,6 +509,7 @@ const trips = {
   "2026": {
 
     title: "Dagestan 2026",
+    raceDate: "2026-05-22T02:10:00",
 
     participants: [
       {name:"Саша", img:"./sasha.png"},
@@ -382,8 +517,15 @@ const trips = {
     ],
 
     days: [
-      {name:"Сб", date:"20.09"},
-      {name:"Вс", date:"21.09"}
+      {name:"Пт", date:"22.05"},
+      {name:"Сб", date:"23.05"},
+      {name:"Вс", date:"24.05"},
+      {name:"Пн", date:"25.05"},
+      {name:"Вт", date:"26.05"},
+      {name:"Чт", date:"27.05"},
+      {name:"Пт", date:"28.05"},
+      {name:"Сб", date:"29.05"},
+      {name:"Вс", date:"30.05"},
     ]
 
   }
@@ -393,6 +535,8 @@ const trips = {
 
 const trip = trips[ACTIVE_TRIP];
 
+document.documentElement.style.setProperty("--participants-count", trip.participants.length);
+document.documentElement.style.setProperty("--days-count", trip.days.length);
 
 const participantsEl = document.getElementById("participants");
 
@@ -428,7 +572,52 @@ trip.days.forEach(d => {
   daysEl.appendChild(el);
 
 });
+const countdownWrap = document.getElementById("countdownWrap");
+const cdDays = document.getElementById("cdDays");
+const cdHours = document.getElementById("cdHours");
+const cdMinutes = document.getElementById("cdMinutes");
+const cdSeconds = document.getElementById("cdSeconds");
 
+function pad(value){
+  return String(value).padStart(2, "0");
+}
+
+function startCountdown(targetDateString){
+  if (!targetDateString) return;
+
+  countdownWrap.classList.add("show");
+
+  const targetDate = new Date(targetDateString);
+
+  function updateCountdown(){
+    const now = new Date();
+    const diff = targetDate - now;
+
+    if (diff <= 0){
+      cdDays.textContent = "0";
+      cdHours.textContent = "00";
+      cdMinutes.textContent = "00";
+      cdSeconds.textContent = "00";
+      return;
+    }
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    cdDays.textContent = String(days);
+    cdHours.textContent = pad(hours);
+    cdMinutes.textContent = pad(minutes);
+    cdSeconds.textContent = pad(seconds);
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+}
+
+startCountdown(trip.raceDate);
 </script>
 </body>
 </html>
