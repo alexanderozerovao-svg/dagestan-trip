@@ -27,7 +27,7 @@
   --participant-size: 100px;
   --participant-gap: 20px;
 
-  --day-size: 100px;
+  --day-size: 140px;
   --day-gap: 12px;
 }
 
@@ -418,8 +418,56 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
     font-size: 12px;
   }
 }
+.day-card{
+  position: relative;
+}
 
-   
+.day-stage{
+  position: absolute;
+  top: 10px;
+  right: 12px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  color: rgba(7,78,41,0.25);
+
+  letter-spacing: 0.05em;
+}
+  .day-stats{
+  margin-top:10px;
+  font-size:14px;
+  font-weight:600;
+  color: rgba(30,42,34,0.55);
+}
+.day-stats span:last-child{
+  opacity:0.8;
+}
+
+.day-weather{
+  position:absolute;
+  top:10px;
+  left:10px;
+
+  width:28px;
+  height:28px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.day-weather img{
+  max-width:120%;
+  max-height:120%;
+  object-fit:contain;
+  transform: translateY(1px);
+}
+
+
+
+
+
   </style>
 </head>
 <body>
@@ -431,7 +479,7 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
     <div class="trip-badge-year" id="badgeYear"></div>
 
     <div class="trip-badge-logo">
-      <img src="./logo.png" alt="Dagestan logo">
+      <img src="./image/logo.png" alt="Dagestan logo">
     </div>
 
     <div class="trip-badge-name">DAGESTAN</div>
@@ -476,7 +524,7 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
 
   <script>
 
-const ACTIVE_TRIP = "2026";
+const ACTIVE_TRIP = "2024";
 
 document.getElementById("badgeYear").textContent = ACTIVE_TRIP;
 
@@ -487,22 +535,23 @@ const trips = {
     title: "Dagestan 2024",
     raceDate: null,
     participants: [
-      {name:"Саша", img:"./sasha.png"},
-      {name:"Паша", img:"./pasha.png"},
-      {name:"Катя", img:"./kate.png"},
-      {name:"Олег", img:"./oleg.png"}
+      {name:"Саша", img:"./image/people/sasha.png"},
+      {name:"Паша", img:"./image/people/pasha.png"},
+      {name:"Катя", img:"./image/people/kate.png"},
+      {name:"Олег", img:"./image/people/oleg.png"}
     ],
 
     days: [
-      {name:"Сб", date:"28.09"},
-      {name:"Вс", date:"29.09"},
-      {name:"Пн", date:"30.09"},
-      {name:"Вт", date:"01.10"},
-      {name:"Ср", date:"02.10"},
-      {name:"Чт", date:"03.10"},
-      {name:"Пт", date:"04.10"},
-      {name:"Сб", date:"05.10"}
-    ]
+  {name:"Сб", date:"28.09", km:96, climb:2100, weather:"sun.png"},
+{name:"Вс", date:"29.09", km:82, climb:1600, weather:"cloudsun.png"},
+{name:"Пн", date:"30.09", km:110, climb:2400, weather:"rain.png"},
+{name:"Вт", date:"01.10", km:75, climb:1800, weather:"cloud.png"},
+{name:"Ср", date:"02.10", km:90, climb:2100, weather:"sun.png"},
+{name:"Чт", date:"03.10", km:105, climb:2500, weather:"thinder.png"},
+{name:"Пт", date:"04.10", km:88, climb:1700, weather:"cloudsun.png"},
+{name:"Сб", date:"05.10", km:70, climb:900, weather:"sun.png"}
+
+]
 
   },
 
@@ -512,8 +561,8 @@ const trips = {
     raceDate: "2026-05-22T02:10:00",
 
     participants: [
-      {name:"Саша", img:"./sasha.png"},
-      {name:"Олег", img:"./olegT.png"}
+      {name:"Саша", img:"./image/people/sasha.png"},
+      {name:"Олег", img:"./image/people/olegT.png"}
     ],
 
     days: [
@@ -559,15 +608,27 @@ trip.participants.forEach(p => {
 
 const daysEl = document.getElementById("days");
 
-trip.days.forEach(d => {
+trip.days.forEach((d, i) => {
 
   const el = document.createElement("article");
   el.className = "day-card";
 
   el.innerHTML = `
-    <div class="day-name">${d.name}</div>
-    <div class="day-date">${d.date}</div>
-  `;
+  <div class="day-stage">${i + 1}</div>
+
+  <div class="day-weather">
+    <img src="./image/weather/${d.weather}">
+  </div>
+
+  <div class="day-name">${d.name}</div>
+  <div class="day-date">${d.date}</div>
+
+  <div class="day-stats">
+    <span>${d.km} км</span>
+    <span>↗ ${d.climb}</span>
+  </div>
+`;
+
 
   daysEl.appendChild(el);
 
