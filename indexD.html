@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <style>
+    @font-face {
+      font-family: 'DagestanCustom';
+      src: url('./DagestaN%20.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root{
+      --bg: #f6f6f4;
+      --title: #074e29;
+      --text: #1e2a22;
+      --muted: rgba(30, 42, 34, 0.66);
+      --card: rgba(255, 255, 255, 0.68);
+      --card-border: rgba(7, 78, 41, 0.10);
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+      --day-bg: rgba(255, 255, 255, 0.72);
+      --day-border: rgba(7, 78, 41, 0.12);
+    }
+
+    *{
+      box-sizing: border-box;
+    }
+
+    html,
+    body{
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body{
+      background: var(--bg);
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::after{
+      content: "";
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: min(260px, 32vh);
+      background: url('./dagestan-footer.svg') bottom center / cover no-repeat;
+      opacity: 0.55;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    body::before{
+      content: "";
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: min(320px, 40vh);
+      background: linear-gradient(
+        to top,
+        rgba(246, 246, 244, 0) 0%,
+        rgba(246, 246, 244, 0.72) 48%,
+        rgba(246, 246, 244, 1) 100%
+      );
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .page{
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 28px 24px 34px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .top{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .title{
+  margin: 0;
+  font-family: 'DagestanCustom', serif;
+  font-size: clamp(30px, 7vw, 90px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: var(--title);
+  text-transform: uppercase;
+  text-align: center;
+
+  max-width: calc(100% - 260px);
+}
+.trip-badge{
+  position: absolute;
+
+  top: 10px;      /* выше */
+  left: 40px;     /* теперь слева */
+
+  width: 200px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  z-index: 5;
+}
+
+.trip-badge-year{
+  position: absolute;
+  top: 30px;
+  right: -60px;
+
+  font-family: 'DagestanCustom', serif;
+  font-size: 28px;
+  font-weight: 400;
+width: 200px;
+  letter-spacing: 0.05em;
+  color: #074e29;
+display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: rotate(0deg) translate(0,-5px);
+text-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  z-index: 5;
+}
+
+.trip-badge-logo{
+  width: 185px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trip-badge-logo img{
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.trip-badge-name{
+  position: relative;
+
+  top: -8px;      /* вниз / вверх */
+  left: 0px;     /* вправо / влево */
+
+  margin-top: 0;
+
+  font-family: 'DagestanCustom', serif;
+  font-size: 38px;
+  line-height: 0.95;
+  letter-spacing: 0.09em;
+
+  color: #074e29;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+
+
+    .participants{
+  width: min(100%, 900px);
+  display: grid;
+
+  grid-template-columns: repeat(4, 100px); /* фиксированная ширина */
+  justify-content: center;                 /* центрируем блок */
+
+  gap: 20px;
+
+  position: absolute;
+  top: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+    .participant{
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.participant-photo{
+  width: 100px;
+  height: 100px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+
+.participant img{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.participant-name{
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--title);
+  text-align: center;
+}
+
+    .bottom{
+  position: absolute;
+  top: 380px;   /* положение дней */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+}
+
+    .days{
+      width: min(100%, 1180px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .day-card{
+      min-height: 88px;
+      padding: 14px 10px 12px;
+      border-radius: 16px;
+      background: var(--day-bg);
+      border: 1px solid var(--day-border);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .day-name{
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--title);
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .day-date{
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    @media (max-width: 900px){
+      .participants{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .days{
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px){
+      .page{
+        padding: 22px 14px 24px;
+      }
+
+      .participants{
+        gap: 12px;
+      }
+
+      .participant{
+        width: 100px;
+        gap: 6px;
+      }
+
+      .participant-photo{
+        width: 100px;
+        height: 100px;
+        border-radius: 16px;
+      }
+
+      .participant-name{
+        font-size: 13px;
+      }
+
+      .days{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .day-card{
+        min-height: 78px;
+        border-radius: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+
+<section class="top">
+
+  <aside class="trip-badge">
+    <div class="trip-badge-year" id="badgeYear"></div>
+
+    <div class="trip-badge-logo">
+      <img src="./logo.png" alt="Dagestan logo">
+    </div>
+
+    <div class="trip-badge-name">DAGESTAN</div>
+  </aside>
+
+  <div class="participants" id="participants"></div>
+
+</section>
+
+<section class="bottom">
+  <div class="days" id="days"></div>
+</section>
+
+  </main>
+
+  <script>
+
+const ACTIVE_TRIP = "2024";
+
+document.getElementById("badgeYear").textContent = ACTIVE_TRIP;
+
+const trips = {
+
+  "2024": {
+
+    title: "Dagestan 2024",
+
+    participants: [
+      {name:"Саша", img:"./sasha.png"},
+      {name:"Паша", img:"./pasha.png"},
+      {name:"Катя", img:"./kate.png"},
+      {name:"Олег", img:"./oleg.png"}
+    ],
+
+    days: [
+      {name:"Сб", date:"28.09"},
+      {name:"Вс", date:"29.09"},
+      {name:"Пн", date:"30.09"},
+      {name:"Вт", date:"01.10"},
+      {name:"Ср", date:"02.10"},
+      {name:"Чт", date:"03.10"},
+      {name:"Пт", date:"04.10"},
+      {name:"Сб", date:"05.10"}
+    ]
+
+  },
+
+  "2026": {
+
+    title: "Dagestan 2026",
+
+    participants: [
+      {name:"Саша", img:"./sasha.png"},
+      {name:"Катя", img:"./kate.png"}
+    ],
+
+    days: [
+      {name:"Сб", date:"20.09"},
+      {name:"Вс", date:"21.09"}
+    ]
+
+  }
+
+};
+
+
+const trip = trips[ACTIVE_TRIP];
+
+
+const participantsEl = document.getElementById("participants");
+
+trip.participants.forEach(p => {
+
+  const el = document.createElement("article");
+  el.className = "participant";
+
+  el.innerHTML = `
+    <div class="participant-photo">
+      <img src="${p.img}" alt="${p.name}">
+    </div>
+    <div class="participant-name">${p.name}</div>
+  `;
+
+  participantsEl.appendChild(el);
+
+});
+
+
+const daysEl = document.getElementById("days");
+
+trip.days.forEach(d => {
+
+  const el = document.createElement("article");
+  el.className = "day-card";
+
+  el.innerHTML = `
+    <div class="day-name">${d.name}</div>
+    <div class="day-date">${d.date}</div>
+  `;
+
+  daysEl.appendChild(el);
+
+});
+
+</script>
+</body>
+</html>

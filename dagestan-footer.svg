@@ -1,0 +1,97 @@
+<svg width="1440" height="260" viewBox="0 0 1440 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="fadeTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="28%" stop-color="#F7FAF8" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#F6F3E8" stop-opacity="1"/>
+    </linearGradient>
+
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7EC9D2" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#4FA8B4" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <linearGradient id="shore" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E7D8B7" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#D9C398" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <linearGradient id="mountainBack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#C9D7DF" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#B2C6D0" stop-opacity="0.65"/>
+    </linearGradient>
+
+    <linearGradient id="mountainMid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9FC2B1" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#7FA88F" stop-opacity="0.78"/>
+    </linearGradient>
+
+    <linearGradient id="mountainFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#A8C26B" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#8FAA53" stop-opacity="0.85"/>
+    </linearGradient>
+
+    <filter id="blurSoft" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+
+    <filter id="blurMist" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+
+  <rect width="1440" height="260" fill="url(#fadeTop)"/>
+
+  <!-- distant mountains -->
+  <path d="M0 165C82 136 132 110 190 88C252 64 302 40 364 58C408 71 424 97 455 100C497 104 533 61 576 58C615 55 639 85 673 93C709 102 733 89 762 75C799 57 835 42 874 55C908 67 919 89 946 96C979 105 1011 87 1041 75C1081 58 1122 45 1160 63C1200 82 1212 101 1247 108C1280 114 1315 100 1360 83C1395 70 1420 66 1440 70V260H0V165Z" fill="url(#mountainBack)" filter="url(#blurSoft)"/>
+
+  <!-- mid mountains -->
+  <path d="M0 184C55 176 98 149 142 124C191 96 232 79 272 90C304 98 318 120 348 124C386 130 423 94 458 86C500 77 531 90 566 105C608 123 636 131 673 124C715 115 742 82 786 73C825 65 861 79 892 98C928 120 951 130 985 126C1022 122 1053 98 1087 87C1127 74 1164 79 1197 96C1233 115 1257 130 1289 137C1337 147 1393 141 1440 130V260H0V184Z" fill="url(#mountainMid)"/>
+
+  <!-- front hills -->
+  <path d="M0 204C80 194 148 176 216 162C271 151 329 152 374 161C410 168 445 182 486 179C533 176 567 150 607 140C650 129 698 140 733 154C776 172 814 189 860 188C899 187 938 171 971 161C1020 146 1066 147 1114 161C1160 174 1190 196 1230 201C1286 208 1360 190 1440 176V260H0V204Z" fill="url(#mountainFront)"/>
+
+  <!-- tree line -->
+  <path d="M0 205C19 185 30 175 45 180C59 184 60 202 77 203C89 204 94 188 106 185C123 182 130 196 144 199C160 203 170 191 182 188C198 184 206 190 219 199C235 210 247 214 264 212C281 210 286 196 301 192C315 188 324 196 336 204C353 214 366 217 381 214C401 210 408 191 428 189C448 187 455 202 469 211C486 221 501 223 518 220C539 216 550 196 571 194C591 192 603 207 620 215C639 224 659 226 682 223C706 219 722 203 744 199C771 194 787 209 811 218C836 228 858 228 883 223C911 217 929 198 955 193C981 188 998 201 1019 211C1040 221 1060 227 1085 225C1108 223 1120 209 1140 205C1163 200 1178 213 1197 221C1215 229 1234 233 1258 231C1282 229 1298 218 1316 211C1340 201 1361 202 1382 210C1405 219 1422 230 1440 232V260H0V205Z" fill="#8FAB58" fill-opacity="0.6"/>
+
+  <!-- sea left -->
+  <path d="M0 219C66 214 117 210 162 212C217 215 261 225 309 228C347 231 396 230 452 221L441 260H0V219Z" fill="url(#sea)"/>
+  <path d="M267 227C307 225 343 223 383 216C420 210 454 204 490 202L520 260H266L267 227Z" fill="url(#shore)" fill-opacity="0.82"/>
+
+  <!-- foreground land -->
+  <path d="M0 228C75 223 144 227 216 234C293 242 363 247 433 239C499 231 551 213 606 208C665 203 712 214 765 228C825 243 885 245 950 234C1002 225 1049 212 1101 214C1157 216 1209 234 1266 241C1336 250 1388 247 1440 237V260H0V228Z" fill="#E8E3C6" fill-opacity="0.95"/>
+
+  <!-- village right -->
+  <g opacity="0.38">
+    <rect x="1118" y="179" width="26" height="13" rx="1.5" fill="#C8B08B"/>
+    <polygon points="1116,180 1131,170 1146,180" fill="#A78D67"/>
+
+    <rect x="1149" y="171" width="22" height="12" rx="1.5" fill="#C8B08B"/>
+    <polygon points="1147,172 1160,164 1173,172" fill="#A78D67"/>
+
+    <rect x="1180" y="165" width="25" height="14" rx="1.5" fill="#C8B08B"/>
+    <polygon points="1178,166 1192.5,156 1207,166" fill="#A78D67"/>
+
+    <rect x="1213" y="159" width="23" height="13" rx="1.5" fill="#C8B08B"/>
+    <polygon points="1211,160 1224.5,150 1238,160" fill="#A78D67"/>
+
+    <rect x="1244" y="151" width="27" height="14" rx="1.5" fill="#C8B08B"/>
+    <polygon points="1242,152 1257.5,141 1273,152" fill="#A78D67"/>
+
+    <rect x="1280" y="145" width="24" height="13" rx="1.5" fill="#C8B08B"/>
+    <polygon points="1278,146 1292,136 1306,146" fill="#A78D67"/>
+
+    <rect x="1311" y="139" width="25" height="14" rx="1.5" fill="#C8B08B"/>
+    <polygon points="1309,140 1323.5,130 1338,140" fill="#A78D67"/>
+
+    <rect x="1350" y="133" width="22" height="13" rx="1.5" fill="#C8B08B"/>
+    <polygon points="1348,134 1361,124 1374,134" fill="#A78D67"/>
+
+    <rect x="1199" y="149" width="10" height="30" rx="1" fill="#B79D76"/>
+    <polygon points="1197,149 1204,133 1211,149" fill="#A78D67"/>
+  </g>
+
+  <!-- mist -->
+  <ellipse cx="739" cy="174" rx="520" ry="34" fill="#FFFFFF" fill-opacity="0.38" filter="url(#blurMist)"/>
+  <ellipse cx="1160" cy="185" rx="180" ry="24" fill="#FFFFFF" fill-opacity="0.28" filter="url(#blurMist)"/>
+</svg>
