@@ -637,33 +637,61 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   transform: scale(1.03);
 }
 
-.day-modal-stage{
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: rgba(7, 78, 41, 0.55);
+.day-modal-topline{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 10px;
+  min-height: 42px;
 }
 
-.day-modal-head{
-  margin-bottom: 18px;
-  padding-right: 36px;
+
+.day-modal-topline-spacer{
+  width: 100%;
+  height: 42px;
 }
 
-.day-modal-title{
-  font-size: 28px;
-  font-weight: 800;
+
+
+.day-modal-meta{
+  position: absolute;
+  right: 40px;
+
+  top: 12px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(7, 78, 41, 0.58);
+
+  line-height: 1;
+  white-space: nowrap;
+
+  transform: translateY(-29px);
+}
+
+
+
+
+
+
+.day-modal-route-title{
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
   line-height: 1.15;
-  color: var(--title);
-  margin-bottom: 6px;
+   color: var(--title);
+  text-transform: uppercase;
+  transform: translateY(-19px);
 }
 
-.day-modal-date{
-  font-size: 17px;
-  font-weight: 600;
-  color: rgba(30,42,34,0.72);
-}
+
 
 .day-modal-stats{
   display: flex;
@@ -793,12 +821,12 @@ body.modal-open{
   <div class="day-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="dayModalTitle">
     <button class="day-modal-close" id="dayModalClose" type="button" aria-label="Закрыть">×</button>
 
-    <div class="day-modal-stage" id="dayModalStage"></div>
+   <div class="day-modal-topline">
+  <div class="day-modal-meta" id="dayModalMeta"></div>
+  <div class="day-modal-route-title" id="dayModalTitle"></div>
+</div>
 
-    <div class="day-modal-head">
-      <div class="day-modal-title" id="dayModalTitle"></div>
-      <div class="day-modal-date" id="dayModalDate"></div>
-    </div>
+
 
     <div class="day-modal-stats" id="dayModalStats"></div>
 
@@ -884,9 +912,10 @@ const trips = {
 const dayModal = document.getElementById("dayModal");
 const dayModalBackdrop = document.getElementById("dayModalBackdrop");
 const dayModalClose = document.getElementById("dayModalClose");
-const dayModalStage = document.getElementById("dayModalStage");
+
+const dayModalMeta = document.getElementById("dayModalMeta");
 const dayModalTitle = document.getElementById("dayModalTitle");
-const dayModalDate = document.getElementById("dayModalDate");
+
 const dayModalStats = document.getElementById("dayModalStats");
 const dayModalRoute = document.getElementById("dayModalRoute");
 const dayModalDescription = document.getElementById("dayModalDescription");
@@ -909,9 +938,9 @@ const tripToggleBtn = document.getElementById("tripToggleBtn");
 
 
 function openDayModal(day, index) {
-  dayModalStage.textContent = `Этап ${index + 1}`;
-  dayModalTitle.textContent = day.title || `${day.name} · ${day.date}`;
-  dayModalDate.textContent = `${day.name} · ${day.date}`;
+  dayModalMeta.textContent = `Этап ${index + 1} · ${day.name} · ${day.date}`;
+dayModalTitle.textContent = day.routeTitle || day.title || "Махачкала - Дербент";
+
 
   const chips = [];
 
