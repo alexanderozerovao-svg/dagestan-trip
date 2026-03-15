@@ -688,46 +688,18 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   line-height: 1.15;
    color: var(--title);
   text-transform: uppercase;
-  transform: translateY(-19px);
+  transform: translateY(-17px);
 }
 
 
 
-.day-modal-stats{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-}
 
-.day-modal-chip{
-  padding: 10px 14px;
-  border-radius: 14px;
-  background: rgba(7, 78, 41, 0.05);
-  border: 1px solid rgba(7, 78, 41, 0.08);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--title);
-}
 
-.day-modal-section{
-  margin-top: 16px;
-}
 
-.day-modal-label{
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(7, 78, 41, 0.52);
-  margin-bottom: 8px;
-}
 
-.day-modal-value{
-  font-size: 16px;
-  line-height: 1.55;
-  color: rgba(30,42,34,0.84);
-}
+
+
+
 
 body.modal-open{
   overflow: hidden;
@@ -749,6 +721,79 @@ body.modal-open{
 
   .day-modal-value{
     font-size: 15px;
+  }
+}
+
+.day-modal-layout{
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.day-panel{
+  border-radius: 22px;
+  border: 1px solid rgba(7, 78, 41, 0.14);
+  background: rgba(255,255,255,0.34);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.03);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.day-panel-summary{
+  min-height: 220px;
+  padding: 28px 24px;
+}
+
+.day-panel-logistics{
+  min-height: 220px;
+  padding: 28px 24px;
+}
+
+.day-panel-map{
+  grid-column: 1 / -1;
+  min-height: 420px;
+  padding: 36px 28px;
+}
+
+.day-panel-title{
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: rgba(239, 90, 76, 0.95);
+  text-align: center;
+}
+
+.day-panel-title-map{
+  margin-top: 120px;
+}
+
+.day-panel-subtitle{
+  margin-top: 16px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+
+  font-size: 18px;
+  line-height: 1.45;
+  text-align: center;
+  color: rgba(239, 90, 76, 0.95);
+}
+
+@media (max-width: 900px){
+  .day-modal-layout{
+    grid-template-columns: 1fr;
+  }
+
+  .day-panel-map{
+    grid-column: auto;
+    min-height: 320px;
+  }
+
+  .day-panel-title-map{
+    margin-top: 60px;
   }
 }
 
@@ -828,22 +873,25 @@ body.modal-open{
 
 
 
-    <div class="day-modal-stats" id="dayModalStats"></div>
+    <div class="day-modal-layout">
+  <section class="day-panel day-panel-summary">
+    <div class="day-panel-title">СВОДНАЯ ИНФОРМАЦИЯ ПО ЭТАПУ</div>
+  </section>
 
-    <div class="day-modal-section">
-      <div class="day-modal-label">Маршрут</div>
-      <div class="day-modal-value" id="dayModalRoute"></div>
-    </div>
+  <section class="day-panel day-panel-logistics">
+    <div class="day-panel-title">ЛОГИСТИКА</div>
+  </section>
 
-    <div class="day-modal-section">
-      <div class="day-modal-label">Описание</div>
-      <div class="day-modal-value" id="dayModalDescription"></div>
+  <section class="day-panel day-panel-map">
+    <div class="day-panel-title day-panel-title-map">
+      КАРТА + ПРОФИЛЬ ВЫСОТ
     </div>
+    <div class="day-panel-subtitle">
+      НА КАРТЕ БУДУТ ТОЧКИ: СТАРТ; ФИНИШ; НОЧЕВКА; ПИТАНИЕ
+    </div>
+  </section>
+</div>
 
-    <div class="day-modal-section">
-      <div class="day-modal-label">Заметки</div>
-      <div class="day-modal-value" id="dayModalNotes"></div>
-    </div>
   </div>
 </div>
 
@@ -870,15 +918,72 @@ const trips = {
     ],
 
     days: [
-      { name: "Сб", date: "28.09", km: 12, climb: 59, weather: "sun.png" },
-      { name: "Вс", date: "29.09", km: 56, climb: 1089, weather: "cloudsun.png" },
-      { name: "Пн", date: "30.09", km: 39, climb: 1423, weather: "rain.png" },
-      { name: "Вт", date: "01.10", km: 46, climb: 2123, weather: "cloud.png" },
-      { name: "Ср", date: "02.10", km: 84, climb: 1080, weather: "sun.png" },
-      { name: "Чт", date: "03.10", km: 29, climb: 1803, weather: "thinder.png" },
-      { name: "Пт", date: "04.10", km: 65, climb: 995, weather: "cloudsun.png" },
-      { name: "Сб", date: "05.10", km: 15, climb: 30, weather: "sun.png" }
-    ]
+  {
+    name: "Сб",
+    date: "28.09",
+    km: 12,
+    climb: 59,
+    weather: "sun.png",
+    routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ"
+  },
+  {
+    name: "Вс",
+    date: "29.09",
+    km: 56,
+    climb: 1089,
+    weather: "cloudsun.png",
+    routeTitle: "ДЕРБЕНТ — ХУЧНИ"
+  },
+  {
+    name: "Пн",
+    date: "30.09",
+    km: 39,
+    climb: 1423,
+    weather: "rain.png",
+    routeTitle: "ХУЧНИ - МАДЖАЛИС"
+  },
+  {
+    name: "Вт",
+    date: "01.10",
+    km: 46,
+    climb: 2123,
+    weather: "cloud.png",
+    routeTitle: "МАДЖАЛИС - ГЕРХМАХИ"
+  },
+  {
+    name: "Ср",
+    date: "02.10",
+    km: 84,
+    climb: 1080,
+    weather: "sun.png",
+    routeTitle: "ГЕРХМАХИ — ИРГАНАЙ"
+  },
+  {
+    name: "Чт",
+    date: "03.10",
+    km: 29,
+    climb: 1803,
+    weather: "thinder.png",
+    routeTitle: "ИРГАНАЙ — ДУБКИ"
+  },
+  {
+    name: "Пт",
+    date: "04.10",
+    km: 65,
+    climb: 995,
+    weather: "cloudsun.png",
+    routeTitle: "ДУБКИ — МАХАЧКАЛА"
+  },
+  {
+    name: "Сб",
+    date: "05.10",
+    km: 15,
+    climb: 30,
+    weather: "sun.png",
+    routeTitle: "МАХАЧКАЛА"
+  }
+]
+
   },
 
   "2026": {
@@ -896,16 +1001,81 @@ const trips = {
     ],
 
     days: [
-      { name: "Пт", date: "22.05" },
-      { name: "Сб", date: "23.05" },
-      { name: "Вс", date: "24.05" },
-      { name: "Пн", date: "25.05" },
-      { name: "Вт", date: "26.05" },
-      { name: "Чт", date: "27.05" },
-      { name: "Пт", date: "28.05" },
-      { name: "Сб", date: "29.05" },
-      { name: "Вс", date: "30.05" }
-    ]
+  {
+    name: "Пт",
+    date: "22.05",
+    km: 12,
+    climb: 59,
+    weather: "sun.png",
+    routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ"
+  },
+  {
+    name: "Сб",
+    date: "23.05",
+    km: 56,
+    climb: 1089,
+    weather: "cloudsun.png",
+    routeTitle: "ДЕРБЕНТ — ХУЧНИ"
+  },
+  {
+    name: "Вс",
+    date: "24.05",
+    km: 39,
+    climb: 1423,
+    weather: "rain.png",
+    routeTitle: "ХУЧНИ — КУБАЧИ"
+  },
+  {
+    name: "Пн",
+    date: "25.05",
+    km: 46,
+    climb: 2123,
+    weather: "cloud.png",
+    routeTitle: "КУБАЧИ — ГУНИБ"
+  },
+  {
+    name: "Вт",
+    date: "26.05",
+    km: 84,
+    climb: 1080,
+    weather: "sun.png",
+    routeTitle: "ГУНИБ — ЧОХ"
+  },
+  {
+    name: "Ср",
+    date: "27.05",
+    km: 29,
+    climb: 1803,
+    weather: "thinder.png",
+    routeTitle: "ЧОХ — ГАМСУТЛЬ"
+  },
+  {
+    name: "Чт",
+    date: "28.05",
+    km: 65,
+    climb: 995,
+    weather: "cloudsun.png",
+    routeTitle: "ГАМСУТЛЬ — САЛТА"
+  },
+  {
+    name: "Пт",
+    date: "29.05",
+    km: 15,
+    climb: 30,
+    weather: "sun.png",
+    routeTitle: "САЛТА — ФИНИШ"
+    
+  },
+  {
+    name: "Сб",
+    date: "30.05",
+    km: 15,
+    climb: 30,
+    weather: "sun.png",
+    routeTitle: "САЛТА — ФИНИШ"
+  }
+]
+
   }
 };
 
@@ -915,11 +1085,6 @@ const dayModalClose = document.getElementById("dayModalClose");
 
 const dayModalMeta = document.getElementById("dayModalMeta");
 const dayModalTitle = document.getElementById("dayModalTitle");
-
-const dayModalStats = document.getElementById("dayModalStats");
-const dayModalRoute = document.getElementById("dayModalRoute");
-const dayModalDescription = document.getElementById("dayModalDescription");
-const dayModalNotes = document.getElementById("dayModalNotes");
 
 
 
@@ -938,34 +1103,15 @@ const tripToggleBtn = document.getElementById("tripToggleBtn");
 
 
 function openDayModal(day, index) {
-  dayModalMeta.textContent = `Этап ${index + 1} · ${day.name} · ${day.date}`;
-dayModalTitle.textContent = day.routeTitle || day.title || "Махачкала - Дербент";
-
-
-  const chips = [];
-
-  if (day.km !== undefined) {
-    chips.push(`<div class="day-modal-chip">${day.km} км</div>`);
-  }
-
-  if (day.climb !== undefined) {
-    chips.push(`<div class="day-modal-chip">↗ ${formatNumber(day.climb)} м</div>`);
-  }
-
-  if (day.weather) {
-    chips.push(`<div class="day-modal-chip">Погода задана</div>`);
-  }
-
-  dayModalStats.innerHTML = chips.join("");
-
-  dayModalRoute.textContent = day.route || "Маршрут будет добавлен";
-  dayModalDescription.textContent = day.description || "Описание этапа будет добавлено";
-  dayModalNotes.textContent = day.notes || "Дополнительные заметки пока не добавлены";
+  dayModalMeta.textContent = `ЭТАП ${index + 1} · ${String(day.name).toUpperCase()} · ${day.date}`;
+  dayModalTitle.textContent = (day.routeTitle || day.title || "МАРШРУТ ЭТАПА").toUpperCase();
 
   dayModal.setAttribute("aria-hidden", "false");
   dayModal.classList.add("is-open");
   document.body.classList.add("modal-open");
 }
+
+
 
 function closeDayModal() {
   dayModal.setAttribute("aria-hidden", "true");
