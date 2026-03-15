@@ -726,8 +726,8 @@ body.modal-open{
 
 .day-modal-layout{
   display: grid;
-  grid-template-columns: 1.45fr 1fr;
-  gap: 16px;
+  grid-template-columns: 0.9fr 1.6fr;
+  gap: 18px;
   margin-top: 4px;
 }
 
@@ -741,8 +741,7 @@ body.modal-open{
 }
 
 .day-panel-summary{
-  min-height: 220px;
-  padding: 28px 24px;
+  padding: 18px 18px 18px;
 }
 
 .day-panel-logistics{
@@ -797,9 +796,136 @@ body.modal-open{
   }
 }
 
+.summary-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.summary-tile{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  border-radius: 22px;
+
+  background: rgba(255,255,255,0.95);
+
+  border: 1px solid rgba(7,78,41,0.14);
+
+  box-shadow:
+    0 6px 16px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.summary-tile:hover{
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 22px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
 
 
+.tile-content{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 
+  gap: 8px;
+  padding: 12px;
+}
+
+
+.tile-title{
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  color:rgba(30,42,34,0.55);
+}
+
+.tile-value{
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--title);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.tile-content-stage{
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.tile-stage-type{
+  margin-top: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--title);
+  text-align: center;
+}
+
+.stage-stars{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 28px;
+}
+
+.stage-stars img{
+  width: 24px;
+  height: 24px;
+  display: block;
+  object-fit: contain;
+}
+
+.tile-content-metric{
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.tile-corner-icon{
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  margin-bottom: 8px;
+  opacity: 0.95;
+}
+
+.tile-content-weather{
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+.tile-weather-icon{
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
+  flex: 0 0 auto;
+}
+
+.tile-content-weather .tile-value{
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--title);
+  text-align: center;
+  white-space: nowrap;
+}
   </style>
 </head>
 <body>
@@ -875,11 +1001,76 @@ body.modal-open{
 
     <div class="day-modal-layout">
   <section class="day-panel day-panel-summary">
-    <div class="day-panel-title">СВОДНАЯ ИНФОРМАЦИЯ ПО ЭТАПУ</div>
+<div class="summary-grid">
+
+<!-- 1 -->
+<div class="summary-tile">
+  <div class="tile-content tile-content-stage">
+    <div class="tile-value tile-stage-type" id="stageType">Горный</div>
+
+    <div class="stage-stars" id="stageStars">
+      <img src="./image/icon/star.png" alt="">
+      <img src="./image/icon/star.png" alt="">
+      <img src="./image/icon/star.png" alt="">
+    </div>
+  </div>
+</div>
+
+<!-- 2 -->
+<div class="summary-tile">
+  <div class="tile-content tile-content-metric">
+    <img class="tile-corner-icon" src="./image/icon/sumup.png" alt="">
+
+    <div class="tile-value" id="stageClimb">1089 м</div>
+  </div>
+</div>
+
+<!-- 3 -->
+<div class="summary-tile">
+  <div class="tile-content tile-content-metric">
+
+    <img class="tile-corner-icon" src="./image/icon/maxup.png" alt="">
+
+    <div class="tile-value" id="stageHeight">2100 м</div>
+
+  </div>
+</div>
+
+<!-- 4 -->
+<div class="summary-tile">
+  <div class="tile-content tile-content-metric">
+    <img class="tile-corner-icon" src="./image/icon/distance.png" alt="">
+
+    <div class="tile-value" id="stageDistance">56 км</div>
+  </div>
+</div>
+
+
+<!-- 5 -->
+<div class="summary-tile">
+  <div class="tile-content tile-content-metric">
+    <img class="tile-corner-icon" src="./image/icon/sumdawn.png" alt="">
+    <div class="tile-value" id="stageDown">−900 м</div>
+  </div>
+</div>
+
+
+<!-- 6 -->
+<div class="summary-tile">
+  <div class="tile-content tile-content-weather">
+
+    <img class="tile-weather-icon" id="stageWeatherIcon" src="" alt="">
+
+    <div class="tile-value" id="stageTemp">+18…+20</div>
+
+  </div>
+</div>
+
+</div>
   </section>
 
   <section class="day-panel day-panel-logistics">
-    <div class="day-panel-title">ЛОГИСТИКА</div>
+    <div class="day-panel-title">Особенности дня</div>
   </section>
 
   <section class="day-panel day-panel-map">
@@ -923,64 +1114,112 @@ const trips = {
     date: "28.09",
     km: 12,
     climb: 59,
+    height: 15,
+    down: 0,
     weather: "sun.png",
-    routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ"
+    tempMorning: "+10",
+    tempDay: "+18",
+    routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ",
+    stageType: "равнина",
+    stageStars: 1
   },
   {
     name: "Вс",
     date: "29.09",
     km: 56,
     climb: 1089,
+    height: 1400,
+    down: 1350,
     weather: "cloudsun.png",
-    routeTitle: "ДЕРБЕНТ — ХУЧНИ"
+    tempMorning: "+8",
+    tempDay: "+22",
+    routeTitle: "ДЕРБЕНТ — ХУЧНИ",
+    stageType: "горы",
+    stageStars: 2
   },
   {
     name: "Пн",
     date: "30.09",
     km: 39,
     climb: 1423,
+    height: 1700,
+    down: 2000,
     weather: "rain.png",
-    routeTitle: "ХУЧНИ - МАДЖАЛИС"
+    tempMorning: "+5",
+    tempDay: "+19",
+    routeTitle: "ХУЧНИ - МАДЖАЛИС",
+    stageType: "горы",
+    stageStars: 2
   },
   {
     name: "Вт",
     date: "01.10",
     km: 46,
     climb: 2123,
+    height: 2000,
+    down: 2200,
     weather: "cloud.png",
-    routeTitle: "МАДЖАЛИС - ГЕРХМАХИ"
+    tempMorning: "+5",
+    tempDay: "+17",
+    routeTitle: "МАДЖАЛИС - ГЕРХМАХИ",
+    stageType: "горы",
+    stageStars: 3
   },
   {
     name: "Ср",
     date: "02.10",
     km: 84,
     climb: 1080,
+    height: 1800,
+    down: 400,
     weather: "sun.png",
-    routeTitle: "ГЕРХМАХИ — ИРГАНАЙ"
+    tempMorning: "+3",
+    tempDay: "+15",
+    routeTitle: "ГЕРХМАХИ — ИРГАНАЙ",
+    stageType: "спуск",
+    stageStars: 2
   },
   {
     name: "Чт",
     date: "03.10",
     km: 29,
     climb: 1803,
+    height: 500,
+    down: 500,
     weather: "thinder.png",
-    routeTitle: "ИРГАНАЙ — ДУБКИ"
+    tempMorning: "+10",
+    tempDay: "+16",
+    routeTitle: "ИРГАНАЙ — ДУБКИ",
+    stageType: "спуск",
+    stageStars: 1
   },
   {
     name: "Пт",
     date: "04.10",
     km: 65,
     climb: 995,
+    height: 1000,
+    down: 900,
     weather: "cloudsun.png",
-    routeTitle: "ДУБКИ — МАХАЧКАЛА"
+    tempMorning: "+10",
+    tempDay: "+20",
+    routeTitle: "ДУБКИ — МАХАЧКАЛА",
+    stageType: "спуск",
+    stageStars: 2
   },
   {
     name: "Сб",
     date: "05.10",
     km: 15,
     climb: 30,
+    height: 50,
+    down: 0,
     weather: "sun.png",
-    routeTitle: "МАХАЧКАЛА"
+    tempMorning: "+8",
+    tempDay: "+24",
+    routeTitle: "МАХАЧКАЛА",
+    stageType: "отдых",
+    stageStars: 0
   }
 ]
 
@@ -1083,9 +1322,18 @@ const dayModal = document.getElementById("dayModal");
 const dayModalBackdrop = document.getElementById("dayModalBackdrop");
 const dayModalClose = document.getElementById("dayModalClose");
 
+const stageDistanceEl = document.getElementById("stageDistance");
+const stageClimbEl = document.getElementById("stageClimb");
+const stageHeightEl = document.getElementById("stageHeight");
+const stageDownEl = document.getElementById("stageDown");
+const stageWeatherIcon = document.getElementById("stageWeatherIcon");
+const stageTempEl = document.getElementById("stageTemp");
+
 const dayModalMeta = document.getElementById("dayModalMeta");
 const dayModalTitle = document.getElementById("dayModalTitle");
 
+const stageTypeEl = document.getElementById("stageType");
+const stageStarsEl = document.getElementById("stageStars");
 
 
 const badgeYear = document.getElementById("badgeYear");
@@ -1101,10 +1349,39 @@ const cdMinutes = document.getElementById("cdMinutes");
 const cdSeconds = document.getElementById("cdSeconds");
 const tripToggleBtn = document.getElementById("tripToggleBtn");
 
+function renderStageStars(count) {
+  const safeCount = Math.max(0, Math.min(3, Number(count) || 0));
+
+  stageStarsEl.innerHTML = "";
+
+  for (let i = 1; i <= 3; i++) {
+    const img = document.createElement("img");
+    img.src = i <= safeCount
+      ? "./image/icon/starall.png"
+      : "./image/icon/star.png";
+    img.alt = "";
+    stageStarsEl.appendChild(img);
+  }
+}
+
 
 function openDayModal(day, index) {
   dayModalMeta.textContent = `ЭТАП ${index + 1} · ${String(day.name).toUpperCase()} · ${day.date}`;
   dayModalTitle.textContent = (day.routeTitle || day.title || "МАРШРУТ ЭТАПА").toUpperCase();
+  
+  stageDistanceEl.textContent = `${day.km ?? "—"} км`;
+  stageClimbEl.textContent = `${day.climb ?? "—"} м`;
+  stageHeightEl.textContent = `${day.height ?? "—"} м`;
+  stageDownEl.textContent = `${day.down ?? "—"} м`;
+
+  stageTypeEl.textContent = day.stageType || "Горный";
+  renderStageStars(day.stageStars);
+  stageWeatherIcon.src = day.weather ? `./image/weather/${day.weather}` : "";
+  stageWeatherIcon.alt = day.weather ? "Погода" : "";
+  stageTempEl.textContent =
+    day.tempMorning && day.tempDay
+      ? `${day.tempMorning}…${day.tempDay}`
+      : "—";
 
   dayModal.setAttribute("aria-hidden", "false");
   dayModal.classList.add("is-open");
