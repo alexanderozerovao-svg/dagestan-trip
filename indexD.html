@@ -471,7 +471,7 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   left: 50%;
   transform: translateX(-50%);
 
-  width: min(720px, calc(100vw - 120px));
+  width: min(500px, calc(100vw - 120px));
   padding: 16px 24px;
 
   display: flex;
@@ -510,6 +510,32 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   text-align: center;
   max-width: 640px;
 }
+.trip-badge-logo{
+  width: 185px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.trip-badge-logo:hover{
+  transform: translateY(-1px);
+}
+
+.trip-badge-logo:active{
+  transform: translateY(1px);
+}
+
+.trip-badge-logo:focus-visible{
+  outline: 2px solid rgba(7, 78, 41, 0.35);
+  outline-offset: 6px;
+  border-radius: 12px;
+}
 
 
 
@@ -525,9 +551,10 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   <aside class="trip-badge">
     <div class="trip-badge-year" id="badgeYear"></div>
 
-    <div class="trip-badge-logo">
-      <img src="./image/logo.png" alt="Dagestan logo">
-    </div>
+   <button class="trip-badge-logo" id="tripToggleBtn" type="button" aria-label="Переключить поход">
+  <img src="./image/logo.png" alt="Dagestan logo">
+</button>
+
 
     <div class="trip-badge-name">DAGESTAN</div>
   </aside>
@@ -574,156 +601,116 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
 
   </main>
 
-  <script>
-
-const ACTIVE_TRIP = "2024";
-
-document.getElementById("badgeYear").textContent = ACTIVE_TRIP;
+  
+<script>
+let activeTrip = "2026";
+let countdownInterval = null;
 
 const trips = {
-
   "2024": {
-  title: "Dagestan 2024",
-  raceDate: null,
+    title: "Dagestan 2024",
+    raceDate: null,
 
-  summary: {
-    dates: "28.09 — 05.10",
-    meta: "8 этапов · 716 км · +15200 м · 4 участника",
-  },
+    summary: {
+  text: "Больше, чем просто путешествие"
+},
 
-  participants: [
-      {name:"Саша", img:"./image/people/sasha.png"},
-      {name:"Паша", img:"./image/people/pasha.png"},
-      {name:"Катя", img:"./image/people/kate.png"},
-      {name:"Олег", img:"./image/people/oleg.png"}
+
+    participants: [
+      { name: "Саша", img: "./image/people/sasha.png" },
+      { name: "Паша", img: "./image/people/pasha.png" },
+      { name: "Катя", img: "./image/people/kate.png" },
+      { name: "Олег", img: "./image/people/oleg.png" }
     ],
 
     days: [
-  {name:"Сб", date:"28.09", km:96, climb:2100, weather:"sun.png"},
-{name:"Вс", date:"29.09", km:82, climb:1600, weather:"cloudsun.png"},
-{name:"Пн", date:"30.09", km:110, climb:2400, weather:"rain.png"},
-{name:"Вт", date:"01.10", km:75, climb:1800, weather:"cloud.png"},
-{name:"Ср", date:"02.10", km:90, climb:2100, weather:"sun.png"},
-{name:"Чт", date:"03.10", km:105, climb:2500, weather:"thinder.png"},
-{name:"Пт", date:"04.10", km:88, climb:1700, weather:"cloudsun.png"},
-{name:"Сб", date:"05.10", km:70, climb:900, weather:"sun.png"}
-
-]
-
+      { name: "Сб", date: "28.09", km: 12, climb: 59, weather: "sun.png" },
+      { name: "Вс", date: "29.09", km: 56, climb: 1089, weather: "cloudsun.png" },
+      { name: "Пн", date: "30.09", km: 39, climb: 1423, weather: "rain.png" },
+      { name: "Вт", date: "01.10", km: 46, climb: 2123, weather: "cloud.png" },
+      { name: "Ср", date: "02.10", km: 84, climb: 1080, weather: "sun.png" },
+      { name: "Чт", date: "03.10", km: 29, climb: 1803, weather: "thinder.png" },
+      { name: "Пт", date: "04.10", km: 65, climb: 995, weather: "cloudsun.png" },
+      { name: "Сб", date: "05.10", km: 15, climb: 30, weather: "sun.png" }
+    ]
   },
 
   "2026": {
-
     title: "Dagestan 2026",
     raceDate: "2026-05-22T02:10:00",
 
     summary: {
-  dates: "22.05 — 30.05",
-  meta: "9 этапов · маршрут формируется",
   text: "Следующая экспедиция по Дагестану"
 },
 
 
     participants: [
-      {name:"Саша", img:"./image/people/sasha.png"},
-      {name:"Олег", img:"./image/people/olegT.png"}
+      { name: "Саша", img: "./image/people/sasha.png" },
+      { name: "Олег", img: "./image/people/olegT.png" }
     ],
 
     days: [
-      {name:"Пт", date:"22.05"},
-      {name:"Сб", date:"23.05"},
-      {name:"Вс", date:"24.05"},
-      {name:"Пн", date:"25.05"},
-      {name:"Вт", date:"26.05"},
-      {name:"Чт", date:"27.05"},
-      {name:"Пт", date:"28.05"},
-      {name:"Сб", date:"29.05"},
-      {name:"Вс", date:"30.05"},
+      { name: "Пт", date: "22.05" },
+      { name: "Сб", date: "23.05" },
+      { name: "Вс", date: "24.05" },
+      { name: "Пн", date: "25.05" },
+      { name: "Вт", date: "26.05" },
+      { name: "Чт", date: "27.05" },
+      { name: "Пт", date: "28.05" },
+      { name: "Сб", date: "29.05" },
+      { name: "Вс", date: "30.05" }
     ]
-
   }
-
 };
 
-
-const trip = trips[ACTIVE_TRIP];
-
-document.getElementById("tripDates").textContent = trip.summary?.dates || "";
-document.getElementById("tripMeta").textContent = trip.summary?.meta || "";
-document.getElementById("tripText").textContent = trip.summary?.text || "";
-
-
-document.documentElement.style.setProperty("--participants-count", trip.participants.length);
-document.documentElement.style.setProperty("--days-count", trip.days.length);
-
+const badgeYear = document.getElementById("badgeYear");
 const participantsEl = document.getElementById("participants");
-
-trip.participants.forEach(p => {
-
-  const el = document.createElement("article");
-  el.className = "participant";
-
-  el.innerHTML = `
-    <div class="participant-photo">
-      <img src="${p.img}" alt="${p.name}">
-    </div>
-    <div class="participant-name">${p.name}</div>
-  `;
-
-  participantsEl.appendChild(el);
-
-});
-
-
 const daysEl = document.getElementById("days");
-
-trip.days.forEach((d, i) => {
-
-  const el = document.createElement("article");
-  el.className = "day-card";
-
-  el.innerHTML = `
-  <div class="day-stage">${i + 1}</div>
-
-  <div class="day-weather">
-    <img src="./image/weather/${d.weather}">
-  </div>
-
-  <div class="day-name">${d.name}</div>
-  <div class="day-date">${d.date}</div>
-
-  <div class="day-stats">
-    <span>${d.km} км</span>
-    <span>↗ ${d.climb}</span>
-  </div>
-`;
-
-
-  daysEl.appendChild(el);
-
-});
+const tripDatesEl = document.getElementById("tripDates");
+const tripMetaEl = document.getElementById("tripMeta");
+const tripTextEl = document.getElementById("tripText");
 const countdownWrap = document.getElementById("countdownWrap");
 const cdDays = document.getElementById("cdDays");
 const cdHours = document.getElementById("cdHours");
 const cdMinutes = document.getElementById("cdMinutes");
 const cdSeconds = document.getElementById("cdSeconds");
+const tripToggleBtn = document.getElementById("tripToggleBtn");
 
-function pad(value){
+function pad(value) {
   return String(value).padStart(2, "0");
 }
 
-function startCountdown(targetDateString){
-  if (!targetDateString) return;
+function stopCountdown() {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+}
+
+function resetCountdownView() {
+  cdDays.textContent = "000";
+  cdHours.textContent = "00";
+  cdMinutes.textContent = "00";
+  cdSeconds.textContent = "00";
+  countdownWrap.classList.remove("show");
+}
+
+function startCountdown(targetDateString) {
+  stopCountdown();
+
+  if (!targetDateString) {
+    resetCountdownView();
+    return;
+  }
 
   countdownWrap.classList.add("show");
-
   const targetDate = new Date(targetDateString);
 
-  function updateCountdown(){
+  function updateCountdown() {
     const now = new Date();
     const diff = targetDate - now;
 
-    if (diff <= 0){
+    if (diff <= 0) {
       cdDays.textContent = "0";
       cdHours.textContent = "00";
       cdMinutes.textContent = "00";
@@ -744,10 +731,127 @@ function startCountdown(targetDateString){
   }
 
   updateCountdown();
-  setInterval(updateCountdown, 1000);
+  countdownInterval = setInterval(updateCountdown, 1000);
 }
 
-startCountdown(trip.raceDate);
+function formatNumber(value) {
+  return new Intl.NumberFormat("ru-RU").format(value);
+}
+
+function getTripSummary(trip) {
+  const days = Array.isArray(trip.days) ? trip.days : [];
+  const participantsCount = Array.isArray(trip.participants) ? trip.participants.length : 0;
+
+  const firstDate = days[0]?.date || "";
+  const lastDate = days[days.length - 1]?.date || "";
+
+  const totalKm = days.reduce((sum, day) => {
+    return sum + (Number(day.km) || 0);
+  }, 0);
+
+  const totalClimb = days.reduce((sum, day) => {
+    return sum + (Number(day.climb) || 0);
+  }, 0);
+
+  const hasRouteData = days.some(day => day.km !== undefined || day.climb !== undefined);
+
+  const dates =
+    firstDate && lastDate
+      ? `${firstDate} — ${lastDate}`
+      : trip.summary?.dates || "";
+
+  let meta = `${days.length} этапов`;
+
+  if (hasRouteData) {
+    meta += ` · ${formatNumber(totalKm)} км · +${formatNumber(totalClimb)} м`;
+  } else {
+    meta += ` · маршрут формируется`;
+  }
+
+  meta += ` · ${participantsCount} участника`;
+
+  return {
+    dates,
+    meta,
+    text: trip.summary?.text || ""
+  };
+}
+
+
+function renderTrip(year) {
+  const trip = trips[year];
+  if (!trip) return;
+
+  activeTrip = year;
+  badgeYear.textContent = activeTrip;
+
+  const computedSummary = getTripSummary(trip);
+
+tripDatesEl.textContent = computedSummary.dates;
+tripMetaEl.textContent = computedSummary.meta;
+tripTextEl.textContent = computedSummary.text;
+
+
+  document.documentElement.style.setProperty("--participants-count", trip.participants.length);
+  document.documentElement.style.setProperty("--days-count", trip.days.length);
+
+  participantsEl.innerHTML = "";
+  daysEl.innerHTML = "";
+
+  trip.participants.forEach((p) => {
+    const el = document.createElement("article");
+    el.className = "participant";
+    el.innerHTML = `
+      <div class="participant-photo">
+        <img src="${p.img}" alt="${p.name}">
+      </div>
+      <div class="participant-name">${p.name}</div>
+    `;
+    participantsEl.appendChild(el);
+  });
+
+  trip.days.forEach((d, i) => {
+    const weatherHtml = d.weather
+      ? `
+        <div class="day-weather">
+          <img src="./image/weather/${d.weather}" alt="">
+        </div>
+      `
+      : "";
+
+    const statsHtml = (d.km !== undefined || d.climb !== undefined)
+      ? `
+        <div class="day-stats">
+          <span>${d.km ?? "—"} км</span>
+          <span>↗ ${d.climb ?? "—"}</span>
+        </div>
+      `
+      : "";
+
+    const el = document.createElement("article");
+    el.className = "day-card";
+    el.innerHTML = `
+      <div class="day-stage">${i + 1}</div>
+      ${weatherHtml}
+      <div class="day-name">${d.name}</div>
+      <div class="day-date">${d.date}</div>
+      ${statsHtml}
+    `;
+    daysEl.appendChild(el);
+  });
+
+  startCountdown(trip.raceDate);
+}
+
+function toggleTrip() {
+  const nextTrip = activeTrip === "2026" ? "2024" : "2026";
+  renderTrip(nextTrip);
+}
+
+tripToggleBtn.addEventListener("click", toggleTrip);
+
+renderTrip(activeTrip);
 </script>
+
 </body>
 </html>
