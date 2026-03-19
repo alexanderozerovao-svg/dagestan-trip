@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ 
+  <style>
+    @font-face {
+      font-family: 'DagestanCustom';
+      src: url('./DagestaN%20.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root{
+  --bg: #f6f6f4;
+  --title: #074e29;
+  --text: #1e2a22;
+  --muted: rgba(30, 42, 34, 0.66);
+  --card: rgba(255, 255, 255, 0.68);
+  --card-border: rgba(7, 78, 41, 0.10);
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  --glass-strong: rgba(255,255,255,0.78);
+  --input-border: rgba(7, 78, 41, 0.10);
+  --input-bg: rgba(255,255,255,0.92);
+  --button-bg: #2f70d0;
+  --button-bg-hover: #2864bc;
+  --button-text: #ffffff;
+
+  --login-scale: 0.6; /* уменьшение на 20% */
+}
+
+    *{
+      box-sizing: border-box;
+    }
+
+    html, body{
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body{
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        url('./image/zas.png') center center / cover no-repeat;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before{
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.04);
+  pointer-events: none;
+  z-index: 0;
+}
+
+    .page{
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px 28px;
+    }
+
+    .hero{
+      width: 100%;
+      max-width: 1280px;
+      min-height: calc(100vh - 64px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .brand{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .brand-logo{
+      width: clamp(100px, 11vw, 150px);
+      display: block;
+      object-fit: contain;
+      opacity: 0.78;
+      filter: drop-shadow(0 6px 20px rgba(0,0,0,0.12));
+    }
+
+    .brand-title{
+      margin: 0;
+      font-family: 'DagestanCustom', serif;
+      font-size: clamp(34px, 4.8vw, 72px);
+      line-height: 1;
+      letter-spacing: 0.03em;
+      color: #ffffff;
+      text-align: center;
+      text-shadow: 0 4px 16px rgba(0,0,0,0.20);
+    }
+
+    .login-card{
+  width: min(100%, calc(460px * var(--login-scale)));
+  border-radius: calc(28px * var(--login-scale));
+  background: rgba(255,255,255,0.42);
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: 0 24px 50px rgba(0,0,0,0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: calc(34px * var(--login-scale)) calc(30px * var(--login-scale)) calc(24px * var(--login-scale));
+  position: relative;
+  overflow: hidden;
+}
+
+    .login-card::before{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.28), transparent 42%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,0.18), transparent 38%);
+      pointer-events: none;
+    }
+
+    .login-card-inner{
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-title{
+      margin: 0 0 24px;
+      font-size: clamp(34px, 5vw, 44px);
+      line-height: 1;
+      font-weight: 800;
+      color: #1f3f6c;
+    }
+
+    .login-form{
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+.input-wrap{
+  position: relative;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(7, 78, 41, 0.10);
+  overflow: hidden;
+}
+    .input-wrap:first-child{
+  border-radius: calc(18px * var(--login-scale)) calc(18px * var(--login-scale)) 0 0;
+}
+
+
+
+    .input-wrap:last-of-type{
+  border-top: 0;
+  border-radius: 0 0 calc(18px * var(--login-scale)) calc(18px * var(--login-scale));
+}
+
+
+    .input{
+  width: 100%;
+  height: calc(78px * var(--login-scale));
+  border: 0;
+  outline: 0;
+  background: transparent;
+  padding: 0 calc(58px * var(--login-scale)) 0 calc(62px * var(--login-scale));
+  font-size: calc(18px * var(--login-scale));
+  color: #44536b;
+}
+
+    .input::placeholder{
+      color: #7f8ea3;
+    }
+
+    .input-icon{
+  position: absolute;
+  left: calc(22px * var(--login-scale));
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(24px * var(--login-scale));
+  height: calc(24px * var(--login-scale));
+  opacity: 0.7;
+}
+
+    .toggle-password{
+  position: absolute;
+  right: calc(18px * var(--login-scale));
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(32px * var(--login-scale));
+  height: calc(32px * var(--login-scale));
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.72;
+  padding: 0;
+  color: #6f7f95;
+  font-size: calc(18px * var(--login-scale));
+}
+
+    .login-btn{
+  margin-top: calc(26px * var(--login-scale));
+  height: calc(68px * var(--login-scale));
+  border: 0;
+  border-radius: calc(18px * var(--login-scale));
+  background: linear-gradient(180deg, #3f82e7 0%, #2f70d0 100%);
+  color: var(--button-text);
+  font-size: calc(20px * var(--login-scale));
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(47, 112, 208, 0.28);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+    .login-btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(47, 112, 208, 0.34);
+      background: linear-gradient(180deg, #4a8df0 0%, #2864bc 100%);
+    }
+
+    .login-btn:active{
+      transform: translateY(1px);
+    }
+
+    .login-links{
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 18px;
+      color: #4e6078;
+      font-size: 16px;
+    }
+
+    .login-links a{
+      color: inherit;
+      text-decoration: none;
+      transition: opacity 0.18s ease;
+      text-align: center;
+    }
+
+    .login-links a:hover{
+      opacity: 0.72;
+    }
+
+    .login-divider{
+      width: 1px;
+      height: 24px;
+      background: rgba(78, 96, 120, 0.28);
+    }
+
+    .bottom-nav{
+      margin-top: 34px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.18);
+    }
+
+    .bottom-nav-item{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.95;
+    }
+
+    .bottom-nav-icon{
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+
+    @media (max-width: 640px){
+  :root{
+    --login-scale: 1;
+  }
+
+  .page{
+    padding: 20px 14px;
+  }
+
+  .hero{
+    min-height: 100vh;
+  }
+
+  .brand{
+    margin-bottom: 20px;
+  }
+
+  .login-card{
+    width: 100%;
+    padding: 24px 18px 18px;
+    border-radius: 22px;
+  }
+
+  .input{
+    height: 64px;
+    font-size: 16px;
+    padding-left: 56px;
+  }
+
+  .login-btn{
+    height: 60px;
+    font-size: 18px;
+  }
+}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+
+      <header class="brand">
+      </header>
+
+      <section class="login-card">
+        <div class="login-card-inner">
+    
+          <form class="login-form" action="#" method="post" autocomplete="on">
+            <div class="input-wrap">
+              <input
+                class="input"
+                type="login"
+                name="login"
+                placeholder="Логин"
+                autocomplete="login"
+              >
+            </div>
+
+            <div class="input-wrap">
+              <input
+                class="input"
+                id="passwordInput"
+                type="password"
+                name="password"
+                placeholder="Пароль"
+                autocomplete="current-password"
+              >
+              <button class="toggle-password" type="button" id="togglePassword" aria-label="Показать пароль">
+                ◉
+              </button>
+            </div>
+
+            <button class="login-btn" type="submit">Войти</button>
+          </form>
+
+
+        </div>
+            </section>
+    </section>
+  </main>
+
+  <script>
+  const form = document.querySelector('.login-form');
+
+  const allowedUsers = [
+    { login: 'admin', password: '12345' }
+  ];
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const login = form.login.value;
+    const password = form.password.value;
+
+    const user = allowedUsers.find(u =>
+      u.login === login && u.password === password
+    );
+
+    if (user) {
+      sessionStorage.setItem('auth', 'true'); // ← ВОТ ЭТО ВАЖНО
+      window.location.href = 'indexD.html';    // ← ПЕРЕХОД
+    } else {
+      alert('Неверный логин или пароль');
+    }
+  });
+</script>
+
+
+  <script>
+    const passwordInput = document.getElementById('passwordInput');
+    const togglePassword = document.getElementById('togglePassword');
+
+    togglePassword.addEventListener('click', () => {
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      togglePassword.setAttribute(
+        'aria-label',
+        isPassword ? 'Скрыть пароль' : 'Показать пароль'
+      );
+    });
+  </script>
+</body>
+</html>

@@ -1,5 +1,10 @@
 <!doctype html>
 <html lang="ru">
+<script>
+  if (sessionStorage.getItem('auth') !== 'true') {
+    window.location.href = 'loginD.html';
+  }
+</script>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -57,8 +62,8 @@
       bottom: 0;
       width: 100%;
       height: min(260px, 32vh);
-      background: url('./dagestan-footer.svg') bottom center / cover no-repeat;
-      opacity: 0.55;
+      background: var(--bg-image) bottom center / cover no-repeat;
+      opacity: 0.9;
       pointer-events: none;
       z-index: -2;
     }
@@ -580,9 +585,9 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
 .day-modal-dialog{
   position: relative;
   width: min(1020px, calc(100vw - 32px));
-  min-height: 760px;
-  max-height: min(85vh, 760px);
-  overflow: auto;
+  height: min(85vh, 760px);
+  max-height: 85vh;
+  overflow: hidden;
 
   padding: 28px 26px 24px;
   border-radius: 22px;
@@ -599,6 +604,9 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   transition:
     opacity 0.28s ease,
     transform 0.30s ease;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .day-modal.is-open{
@@ -724,11 +732,26 @@ body.modal-open{
   }
 }
 
+@media (max-height: 820px){
+  .day-panel-map{
+    height: clamp(200px, 28vh, 320px);
+  }
+
+  .day-panel-logistics{
+    min-height: 180px;
+  }
+}
 .day-modal-layout{
   display: grid;
   grid-template-columns: 0.9fr 1.6fr;
   gap: 18px;
   margin-top: 4px;
+
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
 }
 
 .day-panel{
@@ -751,8 +774,24 @@ body.modal-open{
 
 .day-panel-map{
   grid-column: 1 / -1;
-  min-height: 420px;
-  padding: 36px 28px;
+  height: clamp(220px, 34vh, 420px);
+  min-height: 220px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.map-frame-wrap{
+  width: 100%;
+  height: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.map-frame-wrap iframe{
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 .day-panel-title{
@@ -788,11 +827,7 @@ body.modal-open{
 
   .day-panel-map{
     grid-column: auto;
-    min-height: 320px;
-  }
-
-  .day-panel-title-map{
-    margin-top: 60px;
+    height: 320px;
   }
 }
 
@@ -1074,13 +1109,16 @@ body.modal-open{
   </section>
 
   <section class="day-panel day-panel-map">
-    <div class="day-panel-title day-panel-title-map">
-      КАРТА + ПРОФИЛЬ ВЫСОТ
-    </div>
-    <div class="day-panel-subtitle">
-      НА КАРТЕ БУДУТ ТОЧКИ: СТАРТ; ФИНИШ; НОЧЕВКА; ПИТАНИЕ
-    </div>
-  </section>
+  <div class="map-frame-wrap">
+    <iframe
+      src="https://mapmagic.app/embed?routes=VbeqPX9&surf=1"
+      title="MapMagic route"
+      loading="lazy"
+      frameborder="0"
+      allowfullscreen>
+    </iframe>
+  </div>
+</section>
 </div>
 
   </div>
@@ -1236,7 +1274,10 @@ const trips = {
 
     participants: [
       { name: "Саша", img: "./image/people/sasha.png" },
-      { name: "Олег", img: "./image/people/olegT.png" }
+      { name: "Олег", img: "./image/people/olegT.png" },
+      { name: "Сергей", img: "./image/people/sergey.png" },
+      { name: "Паша", img: "./image/people/pasha.png" },
+      { name: "Виталий", img: "./image/people/vitalii.png" }
     ],
 
     days: [
@@ -1588,6 +1629,22 @@ document.addEventListener("keydown", (event) => {
 
 
 renderTrip(activeTrip);
+
+const backgrounds = [
+  "./image/ornament/avar.png",
+  "./image/ornament/dar.png",
+  "./image/ornament/kum2.png",
+  "./image/ornament/lac.png",
+  "./image/ornament/lez.png",
+  "./image/ornament/tab2.png"
+];
+
+// случайный выбор
+const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+
+// применяем к body::after
+document.body.style.setProperty("--bg-image", `url('${randomBg}')`);
+
 </script>
 
 </body>

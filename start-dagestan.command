@@ -8,7 +8,7 @@ echo "Запуск проекта Dagestan..."
 echo "---------------------------------------"
 
 PORT=8080
-URL="http://127.0.0.1:${PORT}/indexD.html"
+URL="http://127.0.0.1:${PORT}/login.html"
 
 # Запускаем простой локальный сервер
 python3 -m http.server "$PORT" --bind 127.0.0.1 >/tmp/dagestan-localhost.log 2>&1 &
