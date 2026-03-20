@@ -1107,14 +1107,7 @@ body.modal-open{
   </section>
 
   <section class="day-panel day-panel-map">
-  <div class="map-frame-wrap">
-    <iframe
-  data-src="https://mapmagic.app/embed?routes=VbeqPX9&surf=1"
-  title="MapMagic route"
-  frameborder="0"
-  allowfullscreen>
-</iframe>
-  </div>
+  <div class="map-frame-wrap" id="mapFrameWrap"></div>
 </section>
 </div>
 
@@ -1284,7 +1277,8 @@ const trips = {
     km: 12,
     climb: 59,
     weather: "sun.png",
-    routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ"
+    routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ",
+    mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1"
   },
   {
     name: "Сб",
@@ -1292,7 +1286,8 @@ const trips = {
     km: 56,
     climb: 1089,
     weather: "cloudsun.png",
-    routeTitle: "ДЕРБЕНТ — ХУЧНИ"
+    routeTitle: "ДЕРБЕНТ — ХУЧНИ",
+    mapUrl: "https://mapmagic.app/embed?routes=6ZAmlb0"
   },
   {
     name: "Вс",
@@ -1355,7 +1350,8 @@ const trips = {
 
   }
 };
-const mapIframe = document.querySelector(".map-frame-wrap iframe");
+const mapFrameWrap = document.getElementById("mapFrameWrap");
+const mapFramesCache = new Map();
 
 const dayModal = document.getElementById("dayModal");
 const dayModalBackdrop = document.getElementById("dayModalBackdrop");
@@ -1388,6 +1384,34 @@ const cdMinutes = document.getElementById("cdMinutes");
 const cdSeconds = document.getElementById("cdSeconds");
 const tripToggleBtn = document.getElementById("tripToggleBtn");
 
+function showDayMap(dayKey, mapUrl) {
+  if (!mapUrl) {
+    mapFrameWrap.innerHTML = "";
+    return;
+  }
+
+  mapFramesCache.forEach((iframe) => {
+    iframe.style.display = "none";
+  });
+
+  if (mapFramesCache.has(dayKey)) {
+    mapFramesCache.get(dayKey).style.display = "block";
+    return;
+  }
+
+  const iframe = document.createElement("iframe");
+  iframe.src = mapUrl;
+  iframe.title = "MapMagic route";
+  iframe.frameBorder = "0";
+  iframe.allowFullscreen = true;
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.display = "block";
+
+  mapFrameWrap.appendChild(iframe);
+  mapFramesCache.set(dayKey, iframe);
+}
+
 function renderStageStars(count) {
   const safeCount = Math.max(0, Math.min(3, Number(count) || 0));
 
@@ -1407,7 +1431,7 @@ function renderStageStars(count) {
 function openDayModal(day, index) {
   dayModalMeta.textContent = `ЭТАП ${index + 1} · ${String(day.name).toUpperCase()} · ${day.date}`;
   dayModalTitle.textContent = (day.routeTitle || day.title || "МАРШРУТ ЭТАПА").toUpperCase();
-  
+
   stageDistanceEl.textContent = `${day.km ?? "—"} км`;
   stageClimbEl.textContent = `${day.climb ?? "—"} м`;
   stageHeightEl.textContent = `${day.height ?? "—"} м`;
@@ -1422,13 +1446,14 @@ function openDayModal(day, index) {
       ? `${day.tempMorning}…${day.tempDay}`
       : "—";
 
+  const dayKey = `${activeTrip}-${index}`;
+  showDayMap(dayKey, day.mapUrl);
+
   dayModal.setAttribute("aria-hidden", "false");
   dayModal.classList.add("is-open");
   document.body.classList.add("modal-open");
-  if (!mapIframe.src) {
-  mapIframe.src = mapIframe.dataset.src;
 }
-}
+
 
 
 
