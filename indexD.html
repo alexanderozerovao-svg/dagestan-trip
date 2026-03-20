@@ -743,7 +743,10 @@ body.modal-open{
 }
 .day-modal-layout{
   display: grid;
-  grid-template-columns: 0.9fr 1.6fr;
+  grid-template-columns: minmax(320px, 0.95fr) minmax(420px, 1.35fr);
+  grid-template-areas:
+    "summary map"
+    "logistics map";
   gap: 18px;
   margin-top: 4px;
 
@@ -752,6 +755,8 @@ body.modal-open{
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 4px;
+
+  align-items: stretch;
 }
 
 .day-panel{
@@ -764,18 +769,20 @@ body.modal-open{
 }
 
 .day-panel-summary{
+  grid-area: summary;
   padding: 18px 18px 18px;
 }
 
 .day-panel-logistics{
+  grid-area: logistics;
   min-height: 220px;
   padding: 28px 24px;
 }
 
 .day-panel-map{
-  grid-column: 1 / -1;
-  height: clamp(220px, 34vh, 420px);
-  min-height: 220px;
+  grid-area: map;
+  height: 100%;
+  min-height: 458px;
   padding: 0;
   overflow: hidden;
 }
@@ -823,34 +830,25 @@ body.modal-open{
 @media (max-width: 900px){
   .day-modal-layout{
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "summary"
+      "logistics"
+      "map";
   }
 
   .day-panel-map{
-    grid-column: auto;
     height: 320px;
+    min-height: 320px;
   }
 }
 
 .summary-grid{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-top: 22px;
+  gap: 12px;
+  margin-top: 18px;
 }
 
 .summary-tile{
-  width: 100%;
-  aspect-ratio: 1 / 1;
-
-  border-radius: 22px;
-
-  background: rgba(255,255,255,0.95);
-
-  border: 1px solid rgba(7,78,41,0.14);
-
-  box-shadow:
-    0 6px 16px rgba(0,0,0,0.06),
-    inset 0 1px 0 rgba(255,255,255,0.9);
+  border-radius: 20px;
 }
 
 .summary-tile:hover{
