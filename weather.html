@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Погода на дату — май 2026</title>
+  <style>
+    :root{
+      --bg:#f4f6f8;
+      --card:#ffffff;
+      --text:#18222d;
+      --muted:#667788;
+      --accent:#1f7aec;
+      --border:#d9e2ec;
+      --ok:#17803d;
+      --warn:#b26a00;
+      --shadow:0 10px 30px rgba(0,0,0,0.08);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,#eef4fa 0%, #f7f9fb 100%);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .app{
+      width:100%;
+      max-width:760px;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .header{
+      padding:24px 24px 12px;
+      border-bottom:1px solid var(--border);
+    }
+
+    .title{
+      margin:0 0 8px;
+      font-size:28px;
+      line-height:1.2;
+    }
+
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.5;
+    }
+
+    .content{
+      padding:24px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:16px;
+      margin-bottom:16px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    label{
+      font-size:14px;
+      font-weight:700;
+    }
+
+    input{
+      width:100%;
+      height:46px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:0 14px;
+      font-size:15px;
+      outline:none;
+      background:#fff;
+      color:var(--text);
+    }
+
+    input:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(31,122,236,0.12);
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    button{
+      border:none;
+      border-radius:12px;
+      height:46px;
+      padding:0 18px;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.2s ease;
+    }
+
+    .primary{
+      background:var(--accent);
+      color:#fff;
+    }
+
+    .primary:hover{
+      transform:translateY(-1px);
+      filter:brightness(1.03);
+    }
+
+    .secondary{
+      background:#eef4ff;
+      color:#2257b7;
+    }
+
+    .secondary:hover{
+      transform:translateY(-1px);
+    }
+
+    .note{
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:12px;
+      background:#fff8e8;
+      border:1px solid #f0d9a8;
+      color:#7d5700;
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .result{
+      margin-top:20px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:18px;
+      background:#fbfdff;
+      display:none;
+    }
+
+    .result.show{
+      display:block;
+    }
+
+    .result-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+
+    .result-title{
+      margin:0;
+      font-size:20px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      min-height:32px;
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .badge.climate{
+      background:#fff3d9;
+      color:var(--warn);
+    }
+
+    .badge.forecast{
+      background:#e8f7ee;
+      color:var(--ok);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+
+    .stat{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+      background:#fff;
+    }
+
+    .stat-label{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    .stat-value{
+      font-size:24px;
+      font-weight:700;
+      line-height:1.2;
+    }
+
+    .muted{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+      margin-top:14px;
+    }
+
+    .error{
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:12px;
+      background:#fff0f0;
+      border:1px solid #f0c7c7;
+      color:#a12727;
+      display:none;
+    }
+
+    .error.show{
+      display:block;
+    }
+
+    .loader{
+      display:none;
+      margin-top:16px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .loader.show{
+      display:block;
+    }
+
+    @media (max-width:640px){
+      .grid,
+      .stats{
+        grid-template-columns:1fr;
+      }
+
+      .title{
+        font-size:24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <h1 class="title">Погода на конкретную дату</h1>
+      <p class="subtitle">
+        Для дальних дат в мае 2026 будет показана долгосрочная климатическая оценка, а не точный ежедневный прогноз.
+      </p>
+    </div>
+
+    <div class="content">
+      <div class="grid">
+        <div class="field">
+          <label for="date">Дата</label>
+          <input id="date" type="date" value="2026-05-12" min="2026-05-01" max="2026-05-31" />
+        </div>
+
+        <div class="field">
+          <label for="place">Название места</label>
+          <input id="place" type="text" value="Махачкала" placeholder="Например: Махачкала" />
+        </div>
+
+        <div class="field">
+          <label for="lat">Широта</label>
+          <input id="lat" type="number" step="0.0001" value="42.9849" placeholder="Например: 42.9849" />
+        </div>
+
+        <div class="field">
+          <label for="lon">Долгота</label>
+          <input id="lon" type="number" step="0.0001" value="47.5047" placeholder="Например: 47.5047" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="getWeatherBtn">Получить погоду</button>
+        <button class="secondary" id="fillMakhachkalaBtn" type="button">Подставить Махачкалу</button>
+      </div>
+
+      <div class="note">
+        Если дата дальше ближайших 16 дней, блок покажет не “точный прогноз”, а ориентир по климатической модели.
+      </div>
+
+      <div class="loader" id="loader">Загрузка данных...</div>
+      <div class="error" id="errorBox"></div>
+
+      <div class="result" id="resultBox">
+        <div class="result-top">
+          <div>
+            <h2 class="result-title" id="resultTitle">Результат</h2>
+          </div>
+          <div class="badge climate" id="resultBadge">Климатическая оценка</div>
+        </div>
+
+        <div class="stats" id="statsWrap"></div>
+
+        <div class="muted" id="resultDescription"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const dateEl = document.getElementById("date");
+    const placeEl = document.getElementById("place");
+    const latEl = document.getElementById("lat");
+    const lonEl = document.getElementById("lon");
+    const getWeatherBtn = document.getElementById("getWeatherBtn");
+    const fillMakhachkalaBtn = document.getElementById("fillMakhachkalaBtn");
+    const loader = document.getElementById("loader");
+    const errorBox = document.getElementById("errorBox");
+    const resultBox = document.getElementById("resultBox");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultBadge = document.getElementById("resultBadge");
+    const statsWrap = document.getElementById("statsWrap");
+    const resultDescription = document.getElementById("resultDescription");
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.classList.add("show");
+    }
+
+    function hideError() {
+      errorBox.textContent = "";
+      errorBox.classList.remove("show");
+    }
+
+    function showLoader() {
+      loader.classList.add("show");
+    }
+
+    function hideLoader() {
+      loader.classList.remove("show");
+    }
+
+    function showResult() {
+      resultBox.classList.add("show");
+    }
+
+    function hideResult() {
+      resultBox.classList.remove("show");
+    }
+
+    function formatNumber(value, suffix = "") {
+      if (value === null || value === undefined || Number.isNaN(value)) {
+        return "—";
+      }
+      return `${Number(value).toFixed(1)}${suffix}`;
+    }
+
+    function formatDateRu(isoDate) {
+      const d = new Date(isoDate + "T00:00:00");
+      return d.toLocaleDateString("ru-RU", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+    }
+
+    function weatherCodeToText(code) {
+      const map = {
+        0: "Ясно",
+        1: "Преимущественно ясно",
+        2: "Переменная облачность",
+        3: "Пасмурно",
+        45: "Туман",
+        48: "Изморозевый туман",
+        51: "Слабая морось",
+        53: "Морось",
+        55: "Сильная морось",
+        56: "Слабая ледяная морось",
+        57: "Сильная ледяная морось",
+        61: "Слабый дождь",
+        63: "Дождь",
+        65: "Сильный дождь",
+        66: "Слабый ледяной дождь",
+        67: "Сильный ледяной дождь",
+        71: "Слабый снег",
+        73: "Снег",
+        75: "Сильный снег",
+        77: "Снежные зерна",
+        80: "Слабые ливни",
+        81: "Ливни",
+        82: "Сильные ливни",
+        85: "Слабые снегопады",
+        86: "Сильные снегопады",
+        95: "Гроза",
+        96: "Гроза с градом",
+        99: "Сильная гроза с градом"
+      };
+      return map[code] || "Нет описания";
+    }
+
+    function renderStats(items) {
+      statsWrap.innerHTML = items.map(item => `
+        <div class="stat">
+          <div class="stat-label">${item.label}</div>
+          <div class="stat-value">${item.value}</div>
+        </div>
+      `).join("");
+    }
+
+    async function getWeatherForDate(lat, lon, targetDate, placeName) {
+      const today = new Date();
+      const selectedDate = new Date(targetDate + "T00:00:00");
+      const diffDays = Math.floor((selectedDate - today) / (1000 * 60 * 60 * 24));
+
+      // Близкая дата: точный прогноз
+      if (diffDays >= 0 && diffDays <= 16) {
+        const forecastUrl =
+          `https://api.open-meteo.com/v1/forecast` +
+          `?latitude=${encodeURIComponent(lat)}` +
+          `&longitude=${encodeURIComponent(lon)}` +
+          `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max` +
+          `&timezone=auto` +
+          `&start_date=${encodeURIComponent(targetDate)}` +
+          `&end_date=${encodeURIComponent(targetDate)}`;
+
+        const response = await fetch(forecastUrl);
+        if (!response.ok) {
+          throw new Error("Не удалось получить прогноз.");
+        }
+
+        const data = await response.json();
+
+        return {
+          mode: "forecast",
+          place: placeName,
+          date: targetDate,
+          weatherCode: data.daily?.weather_code?.[0] ?? null,
+          tMax: data.daily?.temperature_2m_max?.[0] ?? null,
+          tMin: data.daily?.temperature_2m_min?.[0] ?? null,
+          precipitation: data.daily?.precipitation_sum?.[0] ?? null,
+          windMax: data.daily?.wind_speed_10m_max?.[0] ?? null
+        };
+      }
+
+      // Дальняя дата: климатическая оценка
+      const climateUrl =
+        `https://climate-api.open-meteo.com/v1/climate` +
+        `?latitude=${encodeURIComponent(lat)}` +
+        `&longitude=${encodeURIComponent(lon)}` +
+        `&start_date=${encodeURIComponent(targetDate)}` +
+        `&end_date=${encodeURIComponent(targetDate)}` +
+        `&models=CMCC_CM2_VHR4` +
+        `&daily=temperature_2m_mean,temperature_2m_max,temperature_2m_min,precipitation_sum` +
+        `&timezone=auto`;
+
+      const response = await fetch(climateUrl);
+      if (!response.ok) {
+        throw new Error("Не удалось получить климатическую оценку.");
+      }
+
+      const data = await response.json();
+
+      return {
+        mode: "climate",
+        place: placeName,
+        date: targetDate,
+        tMean: data.daily?.temperature_2m_mean?.[0] ?? null,
+        tMax: data.daily?.temperature_2m_max?.[0] ?? null,
+        tMin: data.daily?.temperature_2m_min?.[0] ?? null,
+        precipitation: data.daily?.precipitation_sum?.[0] ?? null
+      };
+    }
+
+    async function handleGetWeather() {
+      hideError();
+      hideResult();
+
+      const date = dateEl.value;
+      const place = placeEl.value.trim() || "Выбранная точка";
+      const lat = parseFloat(latEl.value);
+      const lon = parseFloat(lonEl.value);
+
+      if (!date) {
+        showError("Укажи дату.");
+        return;
+      }
+
+      if (!date.startsWith("2026-05-")) {
+        showError("Этот пример рассчитан именно на даты в мае 2026.");
+        return;
+      }
+
+      if (Number.isNaN(lat) || Number.isNaN(lon)) {
+        showError("Укажи корректные координаты широты и долготы.");
+        return;
+      }
+
+      showLoader();
+
+      try {
+        const result = await getWeatherForDate(lat, lon, date, place);
+
+        resultTitle.textContent = `${result.place} — ${formatDateRu(result.date)}`;
+
+        if (result.mode === "forecast") {
+          resultBadge.textContent = "Точный прогноз";
+          resultBadge.className = "badge forecast";
+
+          renderStats([
+            { label: "Макс. температура", value: formatNumber(result.tMax, "°C") },
+            { label: "Мин. температура", value: formatNumber(result.tMin, "°C") },
+            { label: "Осадки", value: formatNumber(result.precipitation, " мм") },
+            { label: "Ветер, максимум", value: formatNumber(result.windMax, " км/ч") },
+            { label: "Состояние", value: weatherCodeToText(result.weatherCode) }
+          ]);
+
+          resultDescription.textContent =
+            "Показан обычный погодный прогноз, потому что дата попадает в доступный краткосрочный диапазон.";
+        } else {
+          resultBadge.textContent = "Климатическая оценка";
+          resultBadge.className = "badge climate";
+
+          renderStats([
+            { label: "Средняя температура", value: formatNumber(result.tMean, "°C") },
+            { label: "Макс. температура", value: formatNumber(result.tMax, "°C") },
+            { label: "Мин. температура", value: formatNumber(result.tMin, "°C") },
+            { label: "Осадки", value: formatNumber(result.precipitation, " мм") }
+          ]);
+
+          resultDescription.textContent =
+            "Это ориентировочная долгосрочная модельная оценка для выбранной даты, а не точный ежедневный прогноз.";
+        }
+
+        showResult();
+      } catch (error) {
+        showError(error.message || "Произошла ошибка при загрузке данных.");
+      } finally {
+        hideLoader();
+      }
+    }
+
+    fillMakhachkalaBtn.addEventListener("click", () => {
+      placeEl.value = "Махачкала";
+      latEl.value = "42.9849";
+      lonEl.value = "47.5047";
+    });
+
+    getWeatherBtn.addEventListener("click", handleGetWeather);
+  </script>
+</body>
+</html>

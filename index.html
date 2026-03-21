@@ -635,6 +635,8 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   line-height: 1;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
+
+  z-index: 20;
 }
 
 .day-modal-close:hover{
@@ -662,9 +664,9 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
 
 .day-modal-meta{
   position: absolute;
-  right: 40px;
+  right: 60px;
   top: 2px;
-  height: 28px;
+  height: 24px;
   display: flex;
   align-items: center;
   font-size: 16px;
@@ -675,6 +677,8 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   line-height: 1;
   white-space: nowrap;
   transform: none;
+
+  pointer-events: none;
 }
 
 .day-modal-route-title{
@@ -1385,17 +1389,22 @@ const cdSeconds = document.getElementById("cdSeconds");
 const tripToggleBtn = document.getElementById("tripToggleBtn");
 
 function showDayMap(dayKey, mapUrl) {
-  if (!mapUrl) {
-    mapFrameWrap.innerHTML = "";
-    return;
-  }
-
   mapFramesCache.forEach((iframe) => {
     iframe.style.display = "none";
   });
 
+  if (!mapUrl) {
+    return;
+  }
+
   if (mapFramesCache.has(dayKey)) {
-    mapFramesCache.get(dayKey).style.display = "block";
+    const existingIframe = mapFramesCache.get(dayKey);
+
+    if (!mapFrameWrap.contains(existingIframe)) {
+      mapFrameWrap.appendChild(existingIframe);
+    }
+
+    existingIframe.style.display = "block";
     return;
   }
 
@@ -1406,6 +1415,7 @@ function showDayMap(dayKey, mapUrl) {
   iframe.allowFullscreen = true;
   iframe.style.width = "100%";
   iframe.style.height = "100%";
+  iframe.style.border = "0";
   iframe.style.display = "block";
 
   mapFrameWrap.appendChild(iframe);
