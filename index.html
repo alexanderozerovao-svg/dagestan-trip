@@ -8,6 +8,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./image/favicon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./image/favicon.png">
+  <link rel="apple-touch-icon" href="./image/favicon.png">
   
   <style>
     @font-face {
@@ -1129,9 +1133,8 @@ const trips = {
     raceDate: null,
 
     summary: {
-  text: "Больше, чем просто путешествие"
-},
-
+      text: "Больше, чем просто путешествие"
+    },
 
     participants: [
       { name: "Саша", img: "./image/people/sasha.png" },
@@ -1141,120 +1144,167 @@ const trips = {
     ],
 
     days: [
-  {
-    name: "Сб",
-    date: "28.09",
-    km: 12,
-    climb: 59,
-    height: 15,
-    down: 0,
-    weather: "sun.png",
-    tempMorning: "+10",
-    tempDay: "+18",
-    routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ",
-    stageType: "равнина",
-    stageStars: 1
-  },
-  {
-    name: "Вс",
-    date: "29.09",
-    km: 56,
-    climb: 1089,
-    height: 1400,
-    down: 1350,
-    weather: "cloudsun.png",
-    tempMorning: "+8",
-    tempDay: "+22",
-    routeTitle: "ДЕРБЕНТ — ХУЧНИ",
-    stageType: "горы",
-    stageStars: 2
-  },
-  {
-    name: "Пн",
-    date: "30.09",
-    km: 39,
-    climb: 1423,
-    height: 1700,
-    down: 2000,
-    weather: "rain.png",
-    tempMorning: "+5",
-    tempDay: "+19",
-    routeTitle: "ХУЧНИ - МАДЖАЛИС",
-    stageType: "горы",
-    stageStars: 2
-  },
-  {
-    name: "Вт",
-    date: "01.10",
-    km: 46,
-    climb: 2123,
-    height: 2000,
-    down: 2200,
-    weather: "cloud.png",
-    tempMorning: "+5",
-    tempDay: "+17",
-    routeTitle: "МАДЖАЛИС - ГЕРХМАХИ",
-    stageType: "горы",
-    stageStars: 3
-  },
-  {
-    name: "Ср",
-    date: "02.10",
-    km: 84,
-    climb: 1080,
-    height: 1800,
-    down: 400,
-    weather: "sun.png",
-    tempMorning: "+3",
-    tempDay: "+15",
-    routeTitle: "ГЕРХМАХИ — ИРГАНАЙ",
-    stageType: "спуск",
-    stageStars: 2
-  },
-  {
-    name: "Чт",
-    date: "03.10",
-    km: 29,
-    climb: 1803,
-    height: 500,
-    down: 500,
-    weather: "thinder.png",
-    tempMorning: "+10",
-    tempDay: "+16",
-    routeTitle: "ИРГАНАЙ — ДУБКИ",
-    stageType: "спуск",
-    stageStars: 1
-  },
-  {
-    name: "Пт",
-    date: "04.10",
-    km: 65,
-    climb: 995,
-    height: 1000,
-    down: 900,
-    weather: "cloudsun.png",
-    tempMorning: "+10",
-    tempDay: "+20",
-    routeTitle: "ДУБКИ — МАХАЧКАЛА",
-    stageType: "спуск",
-    stageStars: 2
-  },
-  {
-    name: "Сб",
-    date: "05.10",
-    km: 15,
-    climb: 30,
-    height: 50,
-    down: 0,
-    weather: "sun.png",
-    tempMorning: "+8",
-    tempDay: "+24",
-    routeTitle: "МАХАЧКАЛА",
-    stageType: "отдых",
-    stageStars: 0
-  }
-]
-
+      {
+        name: "Сб",
+        date: "28.09",
+        km: 12,
+        climb: 59,
+        height: 15,
+        down: 0,
+        weather: "sun.png",
+        tempMorning: "+10",
+        tempDay: "+18",
+        routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ",
+        stageType: "равнина",
+        stageStars: 1,
+        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        weatherPoints: {
+          morning: { name: "МАХАЧКАЛА", lat: null, lon: null },
+          day: { name: "ДЕРБЕНТ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Вс",
+        date: "29.09",
+        km: 56,
+        climb: 1089,
+        height: 1400,
+        down: 1350,
+        weather: "cloudsun.png",
+        tempMorning: "+8",
+        tempDay: "+22",
+        routeTitle: "ДЕРБЕНТ — ХУЧНИ",
+        stageType: "горы",
+        stageStars: 2,
+        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        weatherPoints: {
+          morning: { name: "ДЕРБЕНТ", lat: null, lon: null },
+          day: { name: "ХУЧНИ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Пн",
+        date: "30.09",
+        km: 39,
+        climb: 1423,
+        height: 1700,
+        down: 2000,
+        weather: "rain.png",
+        tempMorning: "+5",
+        tempDay: "+19",
+        routeTitle: "ХУЧНИ — МАДЖАЛИС",
+        stageType: "горы",
+        stageStars: 2,
+        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        weatherPoints: {
+          morning: { name: "ХУЧНИ", lat: null, lon: null },
+          day: { name: "МАДЖАЛИС", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Вт",
+        date: "01.10",
+        km: 46,
+        climb: 2123,
+        height: 2000,
+        down: 2200,
+        weather: "cloud.png",
+        tempMorning: "+5",
+        tempDay: "+17",
+        routeTitle: "МАДЖАЛИС — ГЕРХМАХИ",
+        stageType: "горы",
+        stageStars: 3,
+        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        weatherPoints: {
+          morning: { name: "МАДЖАЛИС", lat: null, lon: null },
+          day: { name: "ГЕРХМАХИ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Ср",
+        date: "02.10",
+        km: 84,
+        climb: 1080,
+        height: 1800,
+        down: 400,
+        weather: "sun.png",
+        tempMorning: "+3",
+        tempDay: "+15",
+        routeTitle: "ГЕРХМАХИ — ИРГАНАЙ",
+        stageType: "спуск",
+        stageStars: 2,
+        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        weatherPoints: {
+          morning: { name: "ГЕРХМАХИ", lat: null, lon: null },
+          day: { name: "ИРГАНАЙ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Чт",
+        date: "03.10",
+        km: 29,
+        climb: 1803,
+        height: 500,
+        down: 500,
+        weather: "thinder.png",
+        tempMorning: "+10",
+        tempDay: "+16",
+        routeTitle: "ИРГАНАЙ — ДУБКИ",
+        stageType: "спуск",
+        stageStars: 1,
+        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        weatherPoints: {
+          morning: { name: "ИРГАНАЙ", lat: null, lon: null },
+          day: { name: "ДУБКИ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Пт",
+        date: "04.10",
+        km: 65,
+        climb: 995,
+        height: 1000,
+        down: 900,
+        weather: "cloudsun.png",
+        tempMorning: "+10",
+        tempDay: "+20",
+        routeTitle: "ДУБКИ — МАХАЧКАЛА",
+        stageType: "спуск",
+        stageStars: 2,
+        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        weatherPoints: {
+          morning: { name: "ДУБКИ", lat: null, lon: null },
+          day: { name: "МАХАЧКАЛА", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Сб",
+        date: "05.10",
+        km: 15,
+        climb: 30,
+        height: 50,
+        down: 0,
+        weather: "sun.png",
+        tempMorning: "+8",
+        tempDay: "+24",
+        routeTitle: "МАХАЧКАЛА — АЭРОПОРТ",
+        stageType: "отдых",
+        stageStars: 0,
+        mapUrl: null,
+        weatherPoints: {
+          morning: { name: "МАХАЧКАЛА", lat: null, lon: null },
+          day: { name: "МАХАЧКАЛА", lat: null, lon: null }
+        },
+        weatherFetched: null
+      }
+    ]
   },
 
   "2026": {
@@ -1262,9 +1312,8 @@ const trips = {
     raceDate: "2026-05-22T02:10:00",
 
     summary: {
-  text: "Следующая экспедиция по Дагестану"
-},
-
+      text: "Следующая экспедиция по Дагестану"
+    },
 
     participants: [
       { name: "Саша", img: "./image/people/sasha.png" },
@@ -1275,83 +1324,187 @@ const trips = {
     ],
 
     days: [
-  {
-    name: "Пт",
-    date: "22.05",
-    km: 12,
-    climb: 59,
-    weather: "sun.png",
-    routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ",
-    mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1"
-  },
-  {
-    name: "Сб",
-    date: "23.05",
-    km: 56,
-    climb: 1089,
-    weather: "cloudsun.png",
-    routeTitle: "ДЕРБЕНТ — ХУЧНИ",
-    mapUrl: "https://mapmagic.app/embed?routes=6ZAmlb0"
-  },
-  {
-    name: "Вс",
-    date: "24.05",
-    km: 39,
-    climb: 1423,
-    weather: "rain.png",
-    routeTitle: "ХУЧНИ — КУБАЧИ"
-  },
-  {
-    name: "Пн",
-    date: "25.05",
-    km: 46,
-    climb: 2123,
-    weather: "cloud.png",
-    routeTitle: "КУБАЧИ — ГУНИБ"
-  },
-  {
-    name: "Вт",
-    date: "26.05",
-    km: 84,
-    climb: 1080,
-    weather: "sun.png",
-    routeTitle: "ГУНИБ — ЧОХ"
-  },
-  {
-    name: "Ср",
-    date: "27.05",
-    km: 29,
-    climb: 1803,
-    weather: "thinder.png",
-    routeTitle: "ЧОХ — ГАМСУТЛЬ"
-  },
-  {
-    name: "Чт",
-    date: "28.05",
-    km: 65,
-    climb: 995,
-    weather: "cloudsun.png",
-    routeTitle: "ГАМСУТЛЬ — САЛТА"
-  },
-  {
-    name: "Пт",
-    date: "29.05",
-    km: 15,
-    climb: 30,
-    weather: "sun.png",
-    routeTitle: "САЛТА — ФИНИШ"
-    
-  },
-  {
-    name: "Сб",
-    date: "30.05",
-    km: 15,
-    climb: 30,
-    weather: "sun.png",
-    routeTitle: "САЛТА — ФИНИШ"
-  }
-]
-
+      {
+        name: "Пт",
+        date: "22.05",
+        km: 12,
+        climb: 59,
+        height: null,
+        down: null,
+        weather: "sun.png",
+        tempMorning: null,
+        tempDay: null,
+        routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ",
+        stageType: null,
+        stageStars: null,
+        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        weatherPoints: {
+          morning: { name: "МАХАЧКАЛА", lat: null, lon: null },
+          day: { name: "ДЕРБЕНТ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Сб",
+        date: "23.05",
+        km: 56,
+        climb: 1089,
+        height: null,
+        down: null,
+        weather: "cloudsun.png",
+        tempMorning: null,
+        tempDay: null,
+        routeTitle: "ДЕРБЕНТ — ХУЧНИ",
+        stageType: null,
+        stageStars: null,
+        mapUrl: "https://mapmagic.app/embed?routes=6ZAmlb0",
+        weatherPoints: {
+          morning: { name: "ДЕРБЕНТ", lat: null, lon: null },
+          day: { name: "ХУЧНИ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Вс",
+        date: "24.05",
+        km: 39,
+        climb: 1423,
+        height: null,
+        down: null,
+        weather: "rain.png",
+        tempMorning: null,
+        tempDay: null,
+        routeTitle: "ХУЧНИ — КУБАЧИ",
+        stageType: null,
+        stageStars: null,
+        mapUrl: null,
+        weatherPoints: {
+          morning: { name: "ХУЧНИ", lat: null, lon: null },
+          day: { name: "КУБАЧИ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Пн",
+        date: "25.05",
+        km: 46,
+        climb: 2123,
+        height: null,
+        down: null,
+        weather: "cloud.png",
+        tempMorning: null,
+        tempDay: null,
+        routeTitle: "КУБАЧИ — ГУНИБ",
+        stageType: null,
+        stageStars: null,
+        mapUrl: null,
+        weatherPoints: {
+          morning: { name: "КУБАЧИ", lat: null, lon: null },
+          day: { name: "ГУНИБ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Вт",
+        date: "26.05",
+        km: 84,
+        climb: 1080,
+        height: null,
+        down: null,
+        weather: "sun.png",
+        tempMorning: null,
+        tempDay: null,
+        routeTitle: "ГУНИБ — ЧОХ",
+        stageType: null,
+        stageStars: null,
+        mapUrl: null,
+        weatherPoints: {
+          morning: { name: "ГУНИБ", lat: null, lon: null },
+          day: { name: "ЧОХ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Ср",
+        date: "27.05",
+        km: 29,
+        climb: 1803,
+        height: null,
+        down: null,
+        weather: "thinder.png",
+        tempMorning: null,
+        tempDay: null,
+        routeTitle: "ЧОХ — ГАМСУТЛЬ",
+        stageType: null,
+        stageStars: null,
+        mapUrl: null,
+        weatherPoints: {
+          morning: { name: "ЧОХ", lat: null, lon: null },
+          day: { name: "ГАМСУТЛЬ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Чт",
+        date: "28.05",
+        km: 65,
+        climb: 995,
+        height: null,
+        down: null,
+        weather: "cloudsun.png",
+        tempMorning: null,
+        tempDay: null,
+        routeTitle: "ГАМСУТЛЬ — САЛТА",
+        stageType: null,
+        stageStars: null,
+        mapUrl: null,
+        weatherPoints: {
+          morning: { name: "ГАМСУТЛЬ", lat: null, lon: null },
+          day: { name: "САЛТА", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Пт",
+        date: "29.05",
+        km: 15,
+        climb: 30,
+        height: null,
+        down: null,
+        weather: "sun.png",
+        tempMorning: null,
+        tempDay: null,
+        routeTitle: "САЛТА — ФИНИШ",
+        stageType: null,
+        stageStars: null,
+        mapUrl: null,
+        weatherPoints: {
+          morning: { name: "САЛТА", lat: null, lon: null },
+          day: { name: "ФИНИШ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      },
+      {
+        name: "Сб",
+        date: "30.05",
+        km: 15,
+        climb: 30,
+        height: null,
+        down: null,
+        weather: "sun.png",
+        tempMorning: null,
+        tempDay: null,
+        routeTitle: "САЛТА — ФИНИШ",
+        stageType: null,
+        stageStars: null,
+        mapUrl: null,
+        weatherPoints: {
+          morning: { name: "САЛТА", lat: null, lon: null },
+          day: { name: "ФИНИШ", lat: null, lon: null }
+        },
+        weatherFetched: null
+      }
+    ]
   }
 };
 const mapFrameWrap = document.getElementById("mapFrameWrap");
@@ -1437,8 +1590,142 @@ function renderStageStars(count) {
   }
 }
 
+function buildIsoDate(dayDate, tripYear) {
+  const [dd, mm] = String(dayDate).split(".");
+  return `${tripYear}-${mm}-${dd}`;
+}
 
-function openDayModal(day, index) {
+function formatTemp(value) {
+  if (value === null || value === undefined || Number.isNaN(value)) return null;
+  const rounded = Math.round(Number(value));
+  return `${rounded >= 0 ? "+" : ""}${rounded}`;
+}
+
+function weatherCodeToIcon(code) {
+  if (code === 0 || code === 1) return "sun.png";
+  if (code === 2) return "cloudsun.png";
+  if (code === 3 || code === 45 || code === 48) return "cloud.png";
+  if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return "rain.png";
+  if ([95,96,99].includes(code)) return "thinder.png";
+  return "cloudsun.png";
+}
+
+async function getWeatherPoint(lat, lon, targetDate, placeName) {
+  const today = new Date();
+  const selectedDate = new Date(targetDate + "T00:00:00");
+  const diffDays = Math.floor((selectedDate - today) / (1000 * 60 * 60 * 24));
+
+  if (diffDays >= 0 && diffDays <= 16) {
+    const forecastUrl =
+      `https://api.open-meteo.com/v1/forecast` +
+      `?latitude=${encodeURIComponent(lat)}` +
+      `&longitude=${encodeURIComponent(lon)}` +
+      `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+      `&timezone=auto` +
+      `&start_date=${encodeURIComponent(targetDate)}` +
+      `&end_date=${encodeURIComponent(targetDate)}`;
+
+    const response = await fetch(forecastUrl);
+    if (!response.ok) throw new Error("Не удалось получить прогноз.");
+
+    const data = await response.json();
+
+    return {
+      mode: "forecast",
+      place: placeName,
+      date: targetDate,
+      weatherCode: data.daily?.weather_code?.[0] ?? null,
+      tMax: data.daily?.temperature_2m_max?.[0] ?? null,
+      tMin: data.daily?.temperature_2m_min?.[0] ?? null
+    };
+  }
+
+  const climateUrl =
+    `https://climate-api.open-meteo.com/v1/climate` +
+    `?latitude=${encodeURIComponent(lat)}` +
+    `&longitude=${encodeURIComponent(lon)}` +
+    `&start_date=${encodeURIComponent(targetDate)}` +
+    `&end_date=${encodeURIComponent(targetDate)}` +
+    `&models=CMCC_CM2_VHR4` +
+    `&daily=temperature_2m_max,temperature_2m_min` +
+    `&timezone=auto`;
+
+  const response = await fetch(climateUrl);
+  if (!response.ok) throw new Error("Не удалось получить климатическую оценку.");
+
+  const data = await response.json();
+
+  return {
+    mode: "climate",
+    place: placeName,
+    date: targetDate,
+    weatherCode: null,
+    tMax: data.daily?.temperature_2m_max?.[0] ?? null,
+    tMin: data.daily?.temperature_2m_min?.[0] ?? null
+  };
+}
+
+async function resolveDayWeather(day, tripYear) {
+  if (!day?.weatherPoints?.morning || !day?.weatherPoints?.day) return null;
+
+  const morningPoint = day.weatherPoints.morning;
+  const dayPoint = day.weatherPoints.day;
+
+  if (
+    !morningPoint.lat || !morningPoint.lon ||
+    !dayPoint.lat || !dayPoint.lon
+  ) {
+    return null;
+  }
+
+  if (day.weatherFetched) {
+    return day.weatherFetched;
+  }
+
+  const isoDate = buildIsoDate(day.date, tripYear);
+
+  try {
+    const [morningResult, dayResult] = await Promise.all([
+      getWeatherPoint(
+        morningPoint.lat,
+        morningPoint.lon,
+        isoDate,
+        morningPoint.name || "Утро"
+      ),
+      getWeatherPoint(
+        dayPoint.lat,
+        dayPoint.lon,
+        isoDate,
+        dayPoint.name || "День"
+      )
+    ]);
+
+    const merged = {
+      morning: morningResult,
+      day: dayResult
+    };
+
+    day.weatherFetched = merged;
+
+    day.tempMorning = formatTemp(morningResult?.tMin ?? morningResult?.tMax);
+    day.tempDay = formatTemp(dayResult?.tMax ?? dayResult?.tMin);
+
+    if (dayResult?.weatherCode !== null && dayResult?.weatherCode !== undefined) {
+      day.weather = weatherCodeToIcon(dayResult.weatherCode);
+    } else if (morningResult?.weatherCode !== null && morningResult?.weatherCode !== undefined) {
+      day.weather = weatherCodeToIcon(morningResult.weatherCode);
+    }
+
+    return merged;
+  } catch (error) {
+    console.error("Ошибка получения погоды:", error);
+    return null;
+  }
+}
+
+async function openDayModal(day, index) {
+  await resolveDayWeather(day, activeTrip);
+
   dayModalMeta.textContent = `ЭТАП ${index + 1} · ${String(day.name).toUpperCase()} · ${day.date}`;
   dayModalTitle.textContent = (day.routeTitle || day.title || "МАРШРУТ ЭТАПА").toUpperCase();
 
@@ -1449,8 +1736,10 @@ function openDayModal(day, index) {
 
   stageTypeEl.textContent = day.stageType || "Горный";
   renderStageStars(day.stageStars);
+
   stageWeatherIcon.src = day.weather ? `./image/weather/${day.weather}` : "";
   stageWeatherIcon.alt = day.weather ? "Погода" : "";
+
   stageTempEl.textContent =
     day.tempMorning && day.tempDay
       ? `${day.tempMorning}…${day.tempDay}`
