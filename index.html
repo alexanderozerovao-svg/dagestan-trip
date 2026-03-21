@@ -1,10 +1,6 @@
 <!doctype html>
 <html lang="ru">
-<script>
-  if (sessionStorage.getItem('auth') !== 'true') {
-    window.location.href = 'login.html';
-  }
-</script>
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -967,9 +963,223 @@ body.modal-open{
   text-align: center;
   white-space: nowrap;
 }
+
+.mobile-block {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+}
+
+.mobile-block__title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.mobile-block__text {
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+.mobile-block__content {
+  max-width: 320px;
+}
+
+.login-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('./image/zas.png') center center / cover no-repeat;
+}
+
+.login-overlay[aria-hidden="true"]{
+  display: none;
+}
+
+.login-overlay::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.04);
+  pointer-events: none;
+}
+
+.login-overlay.is-visible{
+  display: flex;
+}
+
+.login-page{
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px 28px;
+}
+
+.login-hero{
+  width: 100%;
+  max-width: 1280px;
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-overlay .login-card{
+  width: min(100%, calc(460px * 0.6));
+  border-radius: calc(28px * 0.6);
+  background: rgba(255,255,255,0.42);
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: 0 24px 50px rgba(0,0,0,0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: calc(34px * 0.6) calc(30px * 0.6) calc(24px * 0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-overlay .login-card::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,0.28), transparent 42%),
+    radial-gradient(circle at bottom right, rgba(255,255,255,0.18), transparent 38%);
+  pointer-events: none;
+}
+
+.login-card-inner{
+  position: relative;
+  z-index: 1;
+}
+
+.login-form{
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.login-overlay .input-wrap{
+  position: relative;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(7, 78, 41, 0.10);
+  overflow: hidden;
+}
+
+.login-overlay .input-wrap:first-child{
+  border-radius: calc(18px * 0.6) calc(18px * 0.6) 0 0;
+}
+
+.login-overlay .input-wrap:last-of-type{
+  border-top: 0;
+  border-radius: 0 0 calc(18px * 0.6) calc(18px * 0.6);
+}
+
+.login-overlay .input{
+  width: 100%;
+  height: calc(78px * 0.6);
+  border: 0;
+  outline: 0;
+  background: transparent;
+  padding: 0 calc(58px * 0.6) 0 calc(22px * 0.6);
+  font-size: calc(18px * 0.6);
+  color: #44536b;
+}
+
+.login-overlay .input::placeholder{
+  color: #7f8ea3;
+}
+
+.login-overlay .toggle-password{
+  position: absolute;
+  right: calc(18px * 0.6);
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(32px * 0.6);
+  height: calc(32px * 0.6);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.72;
+  padding: 0;
+  color: #6f7f95;
+  font-size: calc(18px * 0.6);
+}
+
+.login-overlay .login-btn{
+  margin-top: calc(26px * 0.6);
+  height: calc(68px * 0.6);
+  border: 0;
+  border-radius: calc(18px * 0.6);
+  background: linear-gradient(180deg, #3f82e7 0%, #2f70d0 100%);
+  color: #fff;
+  font-size: calc(20px * 0.6);
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(47, 112, 208, 0.28);
+}
+
+body.auth-locked{
+  overflow: hidden;
+}
+
+@media (max-width: 640px){
+  .login-overlay .login-card{
+    width: 100%;
+    padding: 24px 18px 18px;
+    border-radius: 22px;
+  }
+
+  .login-overlay .input{
+    height: 64px;
+    font-size: 16px;
+    padding-left: 16px;
+    padding-right: 48px;
+  }
+
+  .login-overlay .login-btn{
+    height: 60px;
+    font-size: 18px;
+  }
+}
+
+body.auth-pending{
+  overflow: hidden;
+}
+
+body.auth-pending::before,
+body.auth-pending::after{
+  opacity: 0 !important;
+}
+
+body.auth-pending .page{
+  visibility: hidden;
+}
+
+body.auth-pending .day-modal{
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body.auth-pending .login-overlay{
+  display: flex !important;
+}
+
   </style>
 </head>
-<body>
+<body class="auth-pending">
   <main class="page">
 
 <section class="top">
@@ -1122,9 +1332,48 @@ body.modal-open{
   </div>
 </div>
 
+<div id="loginOverlay" class="login-overlay is-visible" aria-hidden="false">
+  <main class="login-page">
+    <section class="login-hero">
+      <section class="login-card">
+        <div class="login-card-inner">
+          <form class="login-form" id="loginForm" action="#" method="post" autocomplete="on">
+            <div class="input-wrap">
+              <input
+                class="input"
+                type="text"
+                name="login"
+                placeholder="Логин"
+                autocomplete="username"
+              >
+            </div>
+
+            <div class="input-wrap">
+              <input
+                class="input"
+                id="passwordInput"
+                type="password"
+                name="password"
+                placeholder="Пароль"
+                autocomplete="current-password"
+              >
+              <button class="toggle-password" type="button" id="togglePassword" aria-label="Показать пароль">
+                ◉
+              </button>
+            </div>
+
+            <button class="login-btn" type="submit">Войти</button>
+          </form>
+        </div>
+      </section>
+    </section>
+  </main>
+</div>
 
 <script>
 let activeTrip = "2026";
+
+sessionStorage.removeItem("auth");
 let countdownInterval = null;
 
 const trips = {
@@ -1147,17 +1396,39 @@ const trips = {
       {
         name: "Сб",
         date: "28.09",
-        km: 12,
-        climb: 59,
+        km: null,
+        climb: null,
         height: 15,
         down: 0,
-        weather: "sun.png",
-        tempMorning: "+10",
-        tempDay: "+18",
+        weather: null,
+        tempMorning: null,
+        tempDay: null,
         routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ",
         stageType: "равнина",
         stageStars: 1,
         mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "МАХАЧКАЛА", lat: null, lon: null },
           day: { name: "ДЕРБЕНТ", lat: null, lon: null }
@@ -1177,7 +1448,29 @@ const trips = {
         routeTitle: "ДЕРБЕНТ — ХУЧНИ",
         stageType: "горы",
         stageStars: 2,
-        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        mapUrl: "https://mapmagic.app/embed?routes=6qKorXV",
+        gpxTracks: [
+        {
+        id: "2024-day2-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day2-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day2-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day2-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "ДЕРБЕНТ", lat: null, lon: null },
           day: { name: "ХУЧНИ", lat: null, lon: null }
@@ -1198,6 +1491,28 @@ const trips = {
         stageType: "горы",
         stageStars: 2,
         mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "ХУЧНИ", lat: null, lon: null },
           day: { name: "МАДЖАЛИС", lat: null, lon: null }
@@ -1218,6 +1533,28 @@ const trips = {
         stageType: "горы",
         stageStars: 3,
         mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "МАДЖАЛИС", lat: null, lon: null },
           day: { name: "ГЕРХМАХИ", lat: null, lon: null }
@@ -1238,6 +1575,28 @@ const trips = {
         stageType: "спуск",
         stageStars: 2,
         mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "ГЕРХМАХИ", lat: null, lon: null },
           day: { name: "ИРГАНАЙ", lat: null, lon: null }
@@ -1258,6 +1617,28 @@ const trips = {
         stageType: "спуск",
         stageStars: 1,
         mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "ИРГАНАЙ", lat: null, lon: null },
           day: { name: "ДУБКИ", lat: null, lon: null }
@@ -1278,6 +1659,28 @@ const trips = {
         stageType: "спуск",
         stageStars: 2,
         mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "ДУБКИ", lat: null, lon: null },
           day: { name: "МАХАЧКАЛА", lat: null, lon: null }
@@ -1298,6 +1701,28 @@ const trips = {
         stageType: "отдых",
         stageStars: 0,
         mapUrl: null,
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "МАХАЧКАЛА", lat: null, lon: null },
           day: { name: "МАХАЧКАЛА", lat: null, lon: null }
@@ -1312,7 +1737,7 @@ const trips = {
     raceDate: "2026-05-22T02:10:00",
 
     summary: {
-      text: "Следующая экспедиция по Дагестану"
+      text: "Горы — только в твоей голове!"
     },
 
     participants: [
@@ -1337,7 +1762,29 @@ const trips = {
         routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ",
         stageType: null,
         stageStars: null,
-        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1", 
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "МАХАЧКАЛА", lat: null, lon: null },
           day: { name: "ДЕРБЕНТ", lat: null, lon: null }
@@ -1358,6 +1805,28 @@ const trips = {
         stageType: null,
         stageStars: null,
         mapUrl: "https://mapmagic.app/embed?routes=6ZAmlb0",
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "ДЕРБЕНТ", lat: null, lon: null },
           day: { name: "ХУЧНИ", lat: null, lon: null }
@@ -1378,6 +1847,28 @@ const trips = {
         stageType: null,
         stageStars: null,
         mapUrl: null,
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "ХУЧНИ", lat: null, lon: null },
           day: { name: "КУБАЧИ", lat: null, lon: null }
@@ -1398,6 +1889,28 @@ const trips = {
         stageType: null,
         stageStars: null,
         mapUrl: null,
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "КУБАЧИ", lat: null, lon: null },
           day: { name: "ГУНИБ", lat: null, lon: null }
@@ -1418,6 +1931,28 @@ const trips = {
         stageType: null,
         stageStars: null,
         mapUrl: null,
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "ГУНИБ", lat: null, lon: null },
           day: { name: "ЧОХ", lat: null, lon: null }
@@ -1438,6 +1973,28 @@ const trips = {
         stageType: null,
         stageStars: null,
         mapUrl: null,
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "ЧОХ", lat: null, lon: null },
           day: { name: "ГАМСУТЛЬ", lat: null, lon: null }
@@ -1458,6 +2015,28 @@ const trips = {
         stageType: null,
         stageStars: null,
         mapUrl: null,
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "ГАМСУТЛЬ", lat: null, lon: null },
           day: { name: "САЛТА", lat: null, lon: null }
@@ -1478,6 +2057,28 @@ const trips = {
         stageType: null,
         stageStars: null,
         mapUrl: null,
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "САЛТА", lat: null, lon: null },
           day: { name: "ФИНИШ", lat: null, lon: null }
@@ -1498,6 +2099,28 @@ const trips = {
         stageType: null,
         stageStars: null,
         mapUrl: null,
+        gpxTracks: [
+        {
+        id: "2024-day1-planned",
+        title: "Плановый трек",
+        file: "./gpx/2024/2024-day1-planned.gpx",
+        role: "main",
+        kind: "planned",
+        source: "mapmagic"
+        },
+        {
+        id: "2024-day1-actual",
+        title: "Фактический трек",
+        file: "./gpx/2024/2024-day1-actual.gpx",
+        role: "main",
+        kind: "actual",
+        source: "garmin"
+        }
+        ],
+        gpxData: {
+        planned: null,
+        actual: null
+        },
         weatherPoints: {
           morning: { name: "САЛТА", lat: null, lon: null },
           day: { name: "ФИНИШ", lat: null, lon: null }
@@ -1540,6 +2163,7 @@ const cdHours = document.getElementById("cdHours");
 const cdMinutes = document.getElementById("cdMinutes");
 const cdSeconds = document.getElementById("cdSeconds");
 const tripToggleBtn = document.getElementById("tripToggleBtn");
+
 
 function showDayMap(dayKey, mapUrl) {
   mapFramesCache.forEach((iframe) => {
@@ -1612,9 +2236,42 @@ function weatherCodeToIcon(code) {
 
 async function getWeatherPoint(lat, lon, targetDate, placeName) {
   const today = new Date();
-  const selectedDate = new Date(targetDate + "T00:00:00");
-  const diffDays = Math.floor((selectedDate - today) / (1000 * 60 * 60 * 24));
+  today.setHours(0, 0, 0, 0);
 
+  const selectedDate = new Date(targetDate + "T00:00:00");
+  selectedDate.setHours(0, 0, 0, 0);
+
+  const diffDays = Math.round(
+    (selectedDate - today) / (1000 * 60 * 60 * 24)
+  );
+
+  // 1. Прошлое -> архив фактической погоды
+  if (diffDays < 0) {
+    const archiveUrl =
+      `https://archive-api.open-meteo.com/v1/archive` +
+      `?latitude=${encodeURIComponent(lat)}` +
+      `&longitude=${encodeURIComponent(lon)}` +
+      `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+      `&timezone=auto` +
+      `&start_date=${encodeURIComponent(targetDate)}` +
+      `&end_date=${encodeURIComponent(targetDate)}`;
+
+    const response = await fetch(archiveUrl);
+    if (!response.ok) throw new Error("Не удалось получить архивную погоду.");
+
+    const data = await response.json();
+
+    return {
+      mode: "archive",
+      place: placeName,
+      date: targetDate,
+      weatherCode: data.daily?.weather_code?.[0] ?? null,
+      tMax: data.daily?.temperature_2m_max?.[0] ?? null,
+      tMin: data.daily?.temperature_2m_min?.[0] ?? null
+    };
+  }
+
+  // 2. Ближайшее будущее -> обычный прогноз
   if (diffDays >= 0 && diffDays <= 16) {
     const forecastUrl =
       `https://api.open-meteo.com/v1/forecast` +
@@ -1640,6 +2297,7 @@ async function getWeatherPoint(lat, lon, targetDate, placeName) {
     };
   }
 
+  // 3. Далёкое будущее -> климатическая оценка
   const climateUrl =
     `https://climate-api.open-meteo.com/v1/climate` +
     `?latitude=${encodeURIComponent(lat)}` +
@@ -1723,9 +2381,325 @@ async function resolveDayWeather(day, tripYear) {
   }
 }
 
-async function openDayModal(day, index) {
-  await resolveDayWeather(day, activeTrip);
+async function loadTextFile(url) {
+  const response = await fetch(url);
 
+  if (!response.ok) {
+    throw new Error(`Не удалось загрузить файл: ${url} (HTTP ${response.status})`);
+  }
+
+  return await response.text();
+}
+
+function parseTrackPoint(pt) {
+  const lat = Number(pt.getAttribute("lat"));
+  const lon = Number(pt.getAttribute("lon"));
+
+  if (Number.isNaN(lat) || Number.isNaN(lon)) {
+    return null;
+  }
+
+  const eleNode = pt.querySelector(":scope > ele");
+  const timeNode = pt.querySelector(":scope > time");
+
+  const hrNode =
+    pt.querySelector("extensions TrackPointExtension hr") ||
+    pt.querySelector("extensions hr");
+
+  const tempNode =
+    pt.querySelector("extensions TrackPointExtension atemp") ||
+    pt.querySelector("extensions atemp");
+
+  const ele = eleNode ? Number(eleNode.textContent) : null;
+  const time = timeNode ? timeNode.textContent.trim() : null;
+  const hr = hrNode ? Number(hrNode.textContent) : null;
+  const atemp = tempNode ? Number(tempNode.textContent) : null;
+
+  return {
+    lat,
+    lon,
+    ele: Number.isNaN(ele) ? null : ele,
+    time,
+    hr: Number.isNaN(hr) ? null : hr,
+    atemp: Number.isNaN(atemp) ? null : atemp
+  };
+}
+
+function parseGpx(xmlText) {
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(xmlText, "application/xml");
+
+  const parserError = xml.querySelector("parsererror");
+  if (parserError) {
+    throw new Error("Ошибка разбора GPX.");
+  }
+
+  const trksegNodes = Array.from(xml.querySelectorAll("trkseg"));
+
+  const segments = trksegNodes.map((segNode, segIndex) => {
+    const points = Array.from(segNode.querySelectorAll("trkpt"))
+      .map(parseTrackPoint)
+      .filter(Boolean);
+
+    return {
+      index: segIndex,
+      points
+    };
+  }).filter(seg => seg.points.length > 0);
+
+  const allPoints = segments.flatMap(seg => seg.points);
+
+  return {
+    segments,
+    points: allPoints
+  };
+}
+
+function getDistanceMeters(a, b) {
+  const R = 6371000;
+  const toRad = (deg) => deg * Math.PI / 180;
+
+  const dLat = toRad(b.lat - a.lat);
+  const dLon = toRad(b.lon - a.lon);
+  const lat1 = toRad(a.lat);
+  const lat2 = toRad(b.lat);
+
+  const sinLat = Math.sin(dLat / 2);
+  const sinLon = Math.sin(dLon / 2);
+
+  const h =
+    sinLat * sinLat +
+    Math.cos(lat1) * Math.cos(lat2) * sinLon * sinLon;
+
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+function summarizePoints(points) {
+  if (!Array.isArray(points) || points.length < 2) {
+    return {
+      pointCount: Array.isArray(points) ? points.length : 0,
+      distanceKm: 0,
+      climb: 0,
+      down: 0,
+      minElevation: null,
+      maxElevation: null,
+      start: points?.[0] || null,
+      mid: points?.[0] || null,
+      finish: points?.[points.length - 1] || null,
+      hasElevation: false,
+      hasTime: false,
+      hasHeartRate: false,
+      hasTemperature: false,
+      startTimeUtc: points?.find(p => p.time)?.time || null,
+      finishTimeUtc: [...(points || [])].reverse().find(p => p.time)?.time || null
+    };
+  }
+
+  let distance = 0;
+  let climb = 0;
+  let down = 0;
+
+  const elevations = [];
+  const hrs = [];
+  const temps = [];
+  let hasTime = false;
+
+  for (let i = 0; i < points.length; i++) {
+    const p = points[i];
+
+    if (p.ele !== null) elevations.push(p.ele);
+    if (p.hr !== null) hrs.push(p.hr);
+    if (p.atemp !== null) temps.push(p.atemp);
+    if (p.time) hasTime = true;
+
+    if (i === 0) continue;
+
+    const prev = points[i - 1];
+    const curr = points[i];
+
+    distance += getDistanceMeters(prev, curr);
+
+    if (prev.ele !== null && curr.ele !== null) {
+      const diff = curr.ele - prev.ele;
+      if (diff > 0) climb += diff;
+      if (diff < 0) down += Math.abs(diff);
+    }
+  }
+
+  const middleIndex = Math.floor(points.length / 2);
+
+  const firstTimed = points.find(p => p.time) || null;
+  const lastTimed = [...points].reverse().find(p => p.time) || null;
+
+  return {
+    pointCount: points.length,
+    distanceKm: Math.round((distance / 1000) * 10) / 10,
+    climb: Math.round(climb),
+    down: Math.round(down),
+    minElevation: elevations.length ? Math.round(Math.min(...elevations)) : null,
+    maxElevation: elevations.length ? Math.round(Math.max(...elevations)) : null,
+    start: points[0],
+    mid: points[middleIndex],
+    finish: points[points.length - 1],
+    hasElevation: elevations.length > 0,
+    hasTime,
+    hasHeartRate: hrs.length > 0,
+    hasTemperature: temps.length > 0,
+    startTimeUtc: firstTimed?.time || null,
+    finishTimeUtc: lastTimed?.time || null
+  };
+}
+
+function summarizeSegments(segments) {
+  const segmentSummaries = segments.map((segment) => ({
+    ...segment,
+    summary: summarizePoints(segment.points)
+  }));
+
+  const allPoints = segmentSummaries.flatMap(seg => seg.points);
+  const summary = summarizePoints(allPoints);
+
+  summary.segmentCount = segmentSummaries.length;
+
+  return {
+    segments: segmentSummaries,
+    summary
+  };
+}
+
+async function loadSingleGpxTrack(track) {
+  const xmlText = await loadTextFile(track.file);
+  const parsed = parseGpx(xmlText);
+  const summarized = summarizeSegments(parsed.segments);
+
+  return {
+    ...track,
+    ...summarized
+  };
+}
+
+async function loadDayGpx(day) {
+  if (!day || !Array.isArray(day.gpxTracks) || !day.gpxTracks.length) {
+    return null;
+  }
+
+  if (!day.gpxData || typeof day.gpxData !== "object") {
+    day.gpxData = {
+      planned: null,
+      actual: null
+    };
+  }
+
+  const plannedTracks = day.gpxTracks.filter(track => track.kind === "planned");
+  const actualTracks = day.gpxTracks.filter(track => track.kind === "actual");
+
+  async function loadTracksSafe(tracks, label) {
+    const results = await Promise.allSettled(
+      tracks.map(loadSingleGpxTrack)
+    );
+
+    const success = [];
+    const failed = [];
+
+    results.forEach((result, index) => {
+      const track = tracks[index];
+
+      if (result.status === "fulfilled") {
+        success.push(result.value);
+      } else {
+        failed.push({
+          track,
+          error: result.reason
+        });
+      }
+    });
+
+    if (failed.length) {
+      console.warn(`Не удалось загрузить ${label} GPX:`, failed);
+    }
+
+    return success;
+  }
+
+  if (day.gpxData.planned === null && plannedTracks.length) {
+    day.gpxData.planned = await loadTracksSafe(plannedTracks, "planned");
+  }
+
+  if (day.gpxData.actual === null && actualTracks.length) {
+    day.gpxData.actual = await loadTracksSafe(actualTracks, "actual");
+  }
+
+  return day.gpxData;
+}
+
+function getPrimaryTrack(day) {
+  const actualMain = Array.isArray(day?.gpxData?.actual)
+    ? day.gpxData.actual.find(track => track.role === "main")
+    : null;
+
+  if (actualMain) return actualMain;
+
+  const plannedMain = Array.isArray(day?.gpxData?.planned)
+    ? day.gpxData.planned.find(track => track.role === "main")
+    : null;
+
+  if (plannedMain) return plannedMain;
+
+  return null;
+}
+
+function getForecastTrack(day) {
+  const plannedMain = Array.isArray(day?.gpxData?.planned)
+    ? day.gpxData.planned.find(track => track.role === "main")
+    : null;
+
+  if (plannedMain) return plannedMain;
+
+  const actualMain = Array.isArray(day?.gpxData?.actual)
+    ? day.gpxData.actual.find(track => track.role === "main")
+    : null;
+
+  if (actualMain) return actualMain;
+
+  return null;
+}
+
+function applyDayDataFromGpx(day) {
+  const primaryTrack = getPrimaryTrack(day);
+  if (!primaryTrack?.summary) return;
+
+  const forecastTrack = getForecastTrack(day) || primaryTrack;
+  const summary = primaryTrack.summary;
+  const forecastSummary = forecastTrack.summary;
+
+  if (summary.distanceKm) {
+    day.km = summary.distanceKm;
+  }
+
+  if (summary.climb !== null && summary.climb !== undefined) {
+    day.climb = summary.climb;
+  }
+
+  if (summary.down !== null && summary.down !== undefined) {
+    day.down = summary.down;
+  }
+
+  if (summary.maxElevation !== null && summary.maxElevation !== undefined) {
+    day.height = summary.maxElevation;
+  }
+
+  if (forecastSummary?.start) {
+    day.weatherPoints.morning.lat = forecastSummary.start.lat;
+    day.weatherPoints.morning.lon = forecastSummary.start.lon;
+  }
+
+  if (forecastSummary?.mid) {
+    day.weatherPoints.day.lat = forecastSummary.mid.lat;
+    day.weatherPoints.day.lon = forecastSummary.mid.lon;
+  }
+}
+
+async function openDayModal(day, index) {
   dayModalMeta.textContent = `ЭТАП ${index + 1} · ${String(day.name).toUpperCase()} · ${day.date}`;
   dayModalTitle.textContent = (day.routeTitle || day.title || "МАРШРУТ ЭТАПА").toUpperCase();
 
@@ -1751,17 +2725,53 @@ async function openDayModal(day, index) {
   dayModal.setAttribute("aria-hidden", "false");
   dayModal.classList.add("is-open");
   document.body.classList.add("modal-open");
+
+  try {
+    await loadDayGpx(day);
+    applyDayDataFromGpx(day);
+
+    stageDistanceEl.textContent = `${day.km ?? "—"} км`;
+    stageClimbEl.textContent = `${day.climb ?? "—"} м`;
+    stageHeightEl.textContent = `${day.height ?? "—"} м`;
+    stageDownEl.textContent = `${day.down ?? "—"} м`;
+
+    refreshDayCard(day, index);
+
+    console.log("GPX data:", day.gpxData);
+    console.log("Weather points after GPX:", day.weatherPoints);
+  } catch (error) {
+    console.error("Ошибка загрузки GPX для дня:", day.date, error);
+  }
+
+  try {
+    await resolveDayWeather(day, activeTrip);
+
+    stageWeatherIcon.src = day.weather ? `./image/weather/${day.weather}` : "";
+    stageWeatherIcon.alt = day.weather ? "Погода" : "";
+
+    stageTempEl.textContent =
+    day.tempMorning && day.tempDay
+    ? `${day.tempMorning}…${day.tempDay}`
+    : "—";
+
+    refreshDayCard(day, index);
+
+    console.log("Weather after resolve:", {
+      tempMorning: day.tempMorning,
+      tempDay: day.tempDay,
+      weather: day.weather,
+      weatherFetched: day.weatherFetched
+});
+  } catch (error) {
+    console.error("Ошибка получения погоды:", day.date, error);
+  }
 }
-
-
-
 
 function closeDayModal() {
   dayModal.setAttribute("aria-hidden", "true");
   dayModal.classList.remove("is-open");
   document.body.classList.remove("modal-open");
 }
-
 
 function pad(value) {
   return String(value).padStart(2, "0");
@@ -1864,6 +2874,50 @@ function getTripSummary(trip) {
   };
 }
 
+function buildDayCard(day, index) {
+  const weatherHtml = day.weather
+    ? `
+      <div class="day-weather">
+        <img src="./image/weather/${day.weather}" alt="">
+      </div>
+    `
+    : "";
+
+  const statsHtml = (day.km !== undefined || day.climb !== undefined)
+    ? `
+      <div class="day-stats">
+        <span>${day.km ?? "—"} км</span>
+        <span>↗ ${day.climb ?? "—"}</span>
+      </div>
+    `
+    : "";
+
+  const el = document.createElement("article");
+  el.className = "day-card";
+  el.dataset.dayIndex = String(index);
+
+  el.innerHTML = `
+    <div class="day-stage">${index + 1}</div>
+    ${weatherHtml}
+    <div class="day-name">${day.name}</div>
+    <div class="day-date">${day.date}</div>
+    ${statsHtml}
+  `;
+
+  el.addEventListener("click", () => {
+    openDayModal(day, index);
+  });
+
+  return el;
+}
+
+function refreshDayCard(day, index) {
+  const oldCard = daysEl.querySelector(`.day-card[data-day-index="${index}"]`);
+  if (!oldCard) return;
+
+  const newCard = buildDayCard(day, index);
+  oldCard.replaceWith(newCard);
+}
 
 function renderTrip(year) {
   const trip = trips[year];
@@ -1874,10 +2928,9 @@ function renderTrip(year) {
 
   const computedSummary = getTripSummary(trip);
 
-tripDatesEl.textContent = computedSummary.dates;
-tripMetaEl.textContent = computedSummary.meta;
-tripTextEl.textContent = computedSummary.text;
-
+  tripDatesEl.textContent = computedSummary.dates;
+  tripMetaEl.textContent = computedSummary.meta;
+  tripTextEl.textContent = computedSummary.text;
 
   document.documentElement.style.setProperty("--participants-count", trip.participants.length);
   document.documentElement.style.setProperty("--days-count", trip.days.length);
@@ -1898,40 +2951,8 @@ tripTextEl.textContent = computedSummary.text;
   });
 
   trip.days.forEach((d, i) => {
-  const weatherHtml = d.weather
-    ? `
-      <div class="day-weather">
-        <img src="./image/weather/${d.weather}" alt="">
-      </div>
-    `
-    : "";
-
-  const statsHtml = (d.km !== undefined || d.climb !== undefined)
-    ? `
-      <div class="day-stats">
-        <span>${d.km ?? "—"} км</span>
-        <span>↗ ${d.climb ?? "—"}</span>
-      </div>
-    `
-    : "";
-
-  const el = document.createElement("article");
-  el.className = "day-card";
-  el.innerHTML = `
-    <div class="day-stage">${i + 1}</div>
-    ${weatherHtml}
-    <div class="day-name">${d.name}</div>
-    <div class="day-date">${d.date}</div>
-    ${statsHtml}
-  `;
-
-  el.addEventListener("click", () => {
-    openDayModal(d, i);
+    daysEl.appendChild(buildDayCard(d, i));
   });
-
-  daysEl.appendChild(el);
-});
- 
 
   startCountdown(trip.raceDate);
 }
@@ -1939,6 +2960,101 @@ tripTextEl.textContent = computedSummary.text;
 function toggleTrip() {
   const nextTrip = activeTrip === "2026" ? "2024" : "2026";
   renderTrip(nextTrip);
+}
+
+function toLocalTime(utcString) {
+  if (!utcString) return null;
+
+  const date = new Date(utcString);
+
+  return date.toLocaleTimeString("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+const loginOverlay = document.getElementById("loginOverlay");
+const loginForm = document.getElementById("loginForm");
+const passwordInput = document.getElementById("passwordInput");
+const togglePassword = document.getElementById("togglePassword");
+
+const allowedUsers = [
+  { login: "admin", password: "234455" }
+];
+
+let preloadPromise = null;
+
+function startInitialPreload() {
+  if (!preloadPromise) {
+    preloadPromise = preloadTripDays(activeTrip);
+  }
+  return preloadPromise;
+}
+
+
+function showLoginOverlay() {
+  loginOverlay.classList.add("is-visible");
+  loginOverlay.setAttribute("aria-hidden", "false");
+  document.body.classList.add("auth-locked");
+}
+
+function hideLoginOverlay() {
+  loginOverlay.classList.remove("is-visible");
+  loginOverlay.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("auth-locked");
+}
+
+
+togglePassword.addEventListener("click", () => {
+  const isPassword = passwordInput.type === "password";
+  passwordInput.type = isPassword ? "text" : "password";
+  togglePassword.setAttribute(
+    "aria-label",
+    isPassword ? "Скрыть пароль" : "Показать пароль"
+  );
+});
+
+loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const login = loginForm.login.value;
+  const password = loginForm.password.value;
+
+  const user = allowedUsers.find(u =>
+    u.login === login && u.password === password
+  );
+
+  if (!user) {
+    alert("Неверный логин или пароль");
+    return;
+  }
+
+  sessionStorage.setItem("auth", "true");
+
+  try {
+    await startInitialPreload();
+  } catch (error) {
+    console.error("Ошибка предзагрузки:", error);
+  }
+
+  renderTrip(activeTrip);
+  hideLoginOverlay();
+});
+
+
+
+async function preloadTripDays(tripYear) {
+  const trip = trips[tripYear];
+  if (!trip || !Array.isArray(trip.days)) return;
+
+  await Promise.allSettled(
+    trip.days.map(async (day, index) => {
+      await loadDayGpx(day);
+      applyDayDataFromGpx(day);
+      await resolveDayWeather(day, tripYear);
+      refreshDayCard(day, index);
+    })
+  );
 }
 
 tripToggleBtn.addEventListener("click", toggleTrip);
@@ -1953,7 +3069,14 @@ document.addEventListener("keydown", (event) => {
 });
 
 
-renderTrip(activeTrip);
+showLoginOverlay();
+
+startInitialPreload();
+
+requestAnimationFrame(() => {
+  document.body.classList.remove("auth-pending");
+});
+
 
 const backgrounds = [
   "./image/ornament/avar.png",
@@ -1970,7 +3093,33 @@ const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
 // применяем к body::after
 document.body.style.setProperty("--bg-image", `url('${randomBg}')`);
 
-</script>
+function checkMobile() {
+  const isMobile =
+    window.innerWidth <= 768 ||
+    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
+  const block = document.getElementById("mobile-block");
+  if (!block) return;
+
+  if (isMobile) {
+    block.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  } else {
+    block.style.display = "none";
+    document.body.style.overflow = "";
+  }
+}
+
+window.addEventListener("DOMContentLoaded", function () {
+  checkMobile();
+  window.addEventListener("resize", checkMobile);
+});
+</script>
+<div id="mobile-block" class="mobile-block">
+  <div class="mobile-block__content">
+    <div class="mobile-block__title">Мобильная версия в разработке</div>
+    <div class="mobile-block__text">Откройте сайт с компьютера</div>
+  </div>
+</div>
 </body>
 </html>
