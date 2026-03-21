@@ -2986,7 +2986,10 @@ let preloadPromise = null;
 
 function startInitialPreload() {
   if (!preloadPromise) {
-    preloadPromise = preloadTripDays(activeTrip);
+    preloadPromise = Promise.allSettled([
+      preloadTripDays("2024"),
+      preloadTripDays("2026")
+    ]);
   }
   return preloadPromise;
 }
