@@ -231,6 +231,47 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   text-align: center;
 }
 
+.participants{
+  transition: gap 0.45s ease, transform 0.45s ease;
+}
+
+.participant{
+  transition: transform 0.45s ease;
+}
+
+.participants.hug-ready{
+  gap: 4px;
+}
+
+.participants.hug-ready::after{
+  content: "";
+  position: absolute;
+  top: -78px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 110px;
+  background: url("./image/people/kiss.png") center / contain no-repeat;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.participants.hug-ready .participant:nth-child(1){
+  transform: translateX(12px);
+}
+
+.participants.hug-ready .participant:nth-child(2){
+  transform: translateX(4px);
+}
+
+.participants.hug-ready .participant:nth-child(3){
+  transform: translateX(-4px);
+}
+
+.participants.hug-ready .participant:nth-child(4){
+  transform: translateX(-12px);
+}
+
   .bottom{
   position: absolute;
   top: 480px;
@@ -1177,6 +1218,8 @@ body.auth-pending .login-overlay{
   display: flex !important;
 }
 
+
+
   </style>
 </head>
 <body class="auth-pending">
@@ -1377,6 +1420,10 @@ let tripToggleState = "2026";
 let routeProgressIndex = 0;
 let routeCurrentOpenedIndex = null;
 let easterEggActivated = false;
+let participantsUnlocked2024 = false;
+
+const participantClicks2024 = new Set();
+let participantsHugActivated2024 = false;
 
 sessionStorage.removeItem("auth");
 let countdownInterval = null;
@@ -2838,12 +2885,47 @@ function activateParticipantsEasterEgg() {
   if (activeTrip !== "2024") return;
 
   easterEggActivated = true;
+  participantsUnlocked2024 = true;
 
   const participants = participantsEl.querySelectorAll(".participant img");
 
   participants.forEach((img, index) => {
     img.src = `./image/people/easter-${index + 1}.png`;
   });
+}
+
+function resetParticipantsHug2024() {
+  participantClicks2024.clear();
+  participantsHugActivated2024 = false;
+  participantsUnlocked2024 = false;
+
+  participantsEl.classList.remove("hug-ready");
+}
+
+function handleParticipantClick(participantIndex) {
+  if (activeTrip !== "2024") return;
+  if (!participantsUnlocked2024) return;
+  if (participantsHugActivated2024) return;
+
+  participantClicks2024.add(participantIndex);
+
+  const totalParticipants = trips["2024"]?.participants?.length || 0;
+
+if (participantClicks2024.size >= totalParticipants) {
+  participantsHugActivated2024 = true;
+  participantsEl.classList.add("hug-ready");
+
+  // ⬇️ НОВОЕ: через паузу возвращаем обычные иконки
+  setTimeout(() => {
+    const participants = participantsEl.querySelectorAll(".participant img");
+
+    const originalParticipants = trips["2024"].participants;
+
+    participants.forEach((img, index) => {
+      img.src = originalParticipants[index].img;
+    });
+  }, 1200); // можно 800–1500 под вкус
+}
 }
 
 function pad(value) {
@@ -3004,6 +3086,8 @@ function renderTrip(year) {
   routeCurrentOpenedIndex = null;
   easterEggActivated = false;
 
+  resetParticipantsHug2024();
+
   const computedSummary = getTripSummary(trip);
 
   tripDatesEl.textContent = computedSummary.dates;
@@ -3016,17 +3100,22 @@ function renderTrip(year) {
   participantsEl.innerHTML = "";
   daysEl.innerHTML = "";
 
-  trip.participants.forEach((p) => {
-    const el = document.createElement("article");
-    el.className = "participant";
-    el.innerHTML = `
-      <div class="participant-photo">
-        <img src="${p.img}" alt="${p.name}">
-      </div>
-      <div class="participant-name">${p.name}</div>
-    `;
-    participantsEl.appendChild(el);
+  trip.participants.forEach((p, index) => {
+  const el = document.createElement("article");
+  el.className = "participant";
+  el.innerHTML = `
+    <div class="participant-photo">
+      <img src="${p.img}" alt="${p.name}">
+    </div>
+    <div class="participant-name">${p.name}</div>
+  `;
+
+  el.addEventListener("click", () => {
+    handleParticipantClick(index);
   });
+
+  participantsEl.appendChild(el);
+});
 
   trip.days.forEach((d, i) => {
     daysEl.appendChild(buildDayCard(d, i));
