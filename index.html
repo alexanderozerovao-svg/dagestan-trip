@@ -1372,6 +1372,11 @@ body.auth-pending .login-overlay{
 
 <script>
 let activeTrip = "2026";
+let tripToggleState = "2026";
+
+let routeProgressIndex = 0;
+let routeCurrentOpenedIndex = null;
+let easterEggActivated = false;
 
 sessionStorage.removeItem("auth");
 let countdownInterval = null;
@@ -1398,15 +1403,15 @@ const trips = {
         date: "28.09",
         km: null,
         climb: null,
-        height: 15,
-        down: 0,
+        height: null,
+        down: null,
         weather: null,
         tempMorning: null,
         tempDay: null,
         routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ",
         stageType: "равнина",
-        stageStars: 1,
-        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        stageStars: 0,
+        mapUrl: "https://mapmagic.app/embed?routes=0ykPL39",
         gpxTracks: [
         {
         id: "2024-day1-planned",
@@ -1438,17 +1443,17 @@ const trips = {
       {
         name: "Вс",
         date: "29.09",
-        km: 56,
-        climb: 1089,
-        height: 1400,
-        down: 1350,
-        weather: "cloudsun.png",
-        tempMorning: "+8",
-        tempDay: "+22",
+        km: null,
+        climb: null,
+        height: null,
+        down: null,
+        weather: null,
+        tempMorning: null,
+        tempDay: null,
         routeTitle: "ДЕРБЕНТ — ХУЧНИ",
         stageType: "горы",
         stageStars: 2,
-        mapUrl: "https://mapmagic.app/embed?routes=6qKorXV",
+        mapUrl: "https://mapmagic.app/embed?routes=6qKbl3V",
         gpxTracks: [
         {
         id: "2024-day2-planned",
@@ -1480,30 +1485,30 @@ const trips = {
       {
         name: "Пн",
         date: "30.09",
-        km: 39,
-        climb: 1423,
-        height: 1700,
-        down: 2000,
-        weather: "rain.png",
-        tempMorning: "+5",
-        tempDay: "+19",
+        km: null,
+        climb: null,
+        height: null,
+        down: null,
+        weather: null,
+        tempMorning: null,
+        tempDay: null,
         routeTitle: "ХУЧНИ — МАДЖАЛИС",
         stageType: "горы",
         stageStars: 2,
-        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        mapUrl: "https://mapmagic.app/embed?routes=0gaAek9",
         gpxTracks: [
         {
-        id: "2024-day1-planned",
+        id: "2024-day3-planned",
         title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
+        file: "./gpx/2024/2024-day3-planned.gpx",
         role: "main",
         kind: "planned",
         source: "mapmagic"
         },
         {
-        id: "2024-day1-actual",
+        id: "2024-day3-actual",
         title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
+        file: "./gpx/2024/2024-day3-actual.gpx",
         role: "main",
         kind: "actual",
         source: "garmin"
@@ -1522,30 +1527,30 @@ const trips = {
       {
         name: "Вт",
         date: "01.10",
-        km: 46,
-        climb: 2123,
-        height: 2000,
-        down: 2200,
-        weather: "cloud.png",
-        tempMorning: "+5",
-        tempDay: "+17",
+        km: null,
+        climb: null,
+        height: null,
+        down: null,
+        weather: null,
+        tempMorning: null,
+        tempDay: null,
         routeTitle: "МАДЖАЛИС — ГЕРХМАХИ",
         stageType: "горы",
         stageStars: 3,
-        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        mapUrl: "https://mapmagic.app/embed?routes=VQmNkbV",
         gpxTracks: [
         {
-        id: "2024-day1-planned",
+        id: "2024-day4-planned",
         title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
+        file: "./gpx/2024/2024-day4-planned.gpx",
         role: "main",
         kind: "planned",
         source: "mapmagic"
         },
         {
-        id: "2024-day1-actual",
+        id: "2024-day4-actual",
         title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
+        file: "./gpx/2024/2024-day4-actual.gpx",
         role: "main",
         kind: "actual",
         source: "garmin"
@@ -1564,30 +1569,30 @@ const trips = {
       {
         name: "Ср",
         date: "02.10",
-        km: 84,
-        climb: 1080,
-        height: 1800,
-        down: 400,
-        weather: "sun.png",
-        tempMorning: "+3",
-        tempDay: "+15",
+        km: null,
+        climb: null,
+        height: null,
+        down: null,
+        weather: null,
+        tempMorning: null,
+        tempDay: null,
         routeTitle: "ГЕРХМАХИ — ИРГАНАЙ",
         stageType: "спуск",
         stageStars: 2,
-        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        mapUrl: "https://mapmagic.app/embed?routes=6J453qV",
         gpxTracks: [
         {
-        id: "2024-day1-planned",
+        id: "2024-day5-planned",
         title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
+        file: "./gpx/2024/2024-day5-planned.gpx",
         role: "main",
         kind: "planned",
         source: "mapmagic"
         },
         {
-        id: "2024-day1-actual",
+        id: "2024-day5-actual",
         title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
+        file: "./gpx/2024/2024-day5-actual.gpx",
         role: "main",
         kind: "actual",
         source: "garmin"
@@ -1606,30 +1611,30 @@ const trips = {
       {
         name: "Чт",
         date: "03.10",
-        km: 29,
-        climb: 1803,
-        height: 500,
-        down: 500,
-        weather: "thinder.png",
-        tempMorning: "+10",
-        tempDay: "+16",
+        km: null,
+        climb: null,
+        height: null,
+        down: null,
+        weather: null,
+        tempMorning: null,
+        tempDay: null,
         routeTitle: "ИРГАНАЙ — ДУБКИ",
         stageType: "спуск",
         stageStars: 1,
-        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        mapUrl: "https://mapmagic.app/embed?routes=07Z1gnV",
         gpxTracks: [
         {
-        id: "2024-day1-planned",
+        id: "2024-day6-planned",
         title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
+        file: "./gpx/2024/2024-day6-planned.gpx",
         role: "main",
         kind: "planned",
         source: "mapmagic"
         },
         {
-        id: "2024-day1-actual",
+        id: "2024-day6-actual",
         title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
+        file: "./gpx/2024/2024-day6-actual.gpx",
         role: "main",
         kind: "actual",
         source: "garmin"
@@ -1648,33 +1653,41 @@ const trips = {
       {
         name: "Пт",
         date: "04.10",
-        km: 65,
-        climb: 995,
-        height: 1000,
-        down: 900,
-        weather: "cloudsun.png",
-        tempMorning: "+10",
-        tempDay: "+20",
+        km: null,
+        climb: null,
+        height: null,
+        down: null,
+        weather: null,
+        tempMorning: null,
+        tempDay: null,
         routeTitle: "ДУБКИ — МАХАЧКАЛА",
         stageType: "спуск",
         stageStars: 2,
-        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1",
+        mapUrl: "https://mapmagic.app/embed?routes=9xm8bqV%2C9rlbxG0",
         gpxTracks: [
         {
-        id: "2024-day1-planned",
+        id: "2024-day7-planned",
         title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
+        file: "./gpx/2024/2024-day7-planned.gpx",
         role: "main",
         kind: "planned",
         source: "mapmagic"
         },
         {
-        id: "2024-day1-actual",
-        title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
-        role: "main",
-        kind: "actual",
-        source: "garmin"
+          id: "2024-day7-actual-1",
+          title: "Фактический трек · сегмент 1",
+          file: "./gpx/2024/2024-day7-actual-1.gpx",
+          role: "main",
+          kind: "actual",
+          source: "garmin"
+        },
+        {
+          id: "2024-day7-actual-2",
+          title: "Фактический трек · сегмент 2",
+          file: "./gpx/2024/2024-day7-actual-2.gpx",
+          role: "secondary",
+          kind: "actual",
+          source: "garmin"
         }
         ],
         gpxData: {
@@ -1690,30 +1703,30 @@ const trips = {
       {
         name: "Сб",
         date: "05.10",
-        km: 15,
-        climb: 30,
-        height: 50,
-        down: 0,
-        weather: "sun.png",
-        tempMorning: "+8",
-        tempDay: "+24",
+        km: null,
+        climb: null,
+        height: null,
+        down: null,
+        weather: null,
+        tempMorning: null,
+        tempDay: null,
         routeTitle: "МАХАЧКАЛА — АЭРОПОРТ",
-        stageType: "отдых",
+        stageType: "равнина",
         stageStars: 0,
-        mapUrl: null,
+        mapUrl: "https://mapmagic.app/embed?routes=633k526",
         gpxTracks: [
         {
-        id: "2024-day1-planned",
+        id: "2024-day8-planned",
         title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
+        file: "./gpx/2024/2024-day8-planned.gpx",
         role: "main",
         kind: "planned",
         source: "mapmagic"
         },
         {
-        id: "2024-day1-actual",
+        id: "2024-day8-actual",
         title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
+        file: "./gpx/2024/2024-day8-actual.gpx",
         role: "main",
         kind: "actual",
         source: "garmin"
@@ -1725,7 +1738,7 @@ const trips = {
         },
         weatherPoints: {
           morning: { name: "МАХАЧКАЛА", lat: null, lon: null },
-          day: { name: "МАХАЧКАЛА", lat: null, lon: null }
+          day: { name: "АЭРОПОРТ", lat: null, lon: null }
         },
         weatherFetched: null
       }
@@ -1752,30 +1765,38 @@ const trips = {
       {
         name: "Пт",
         date: "22.05",
-        km: 12,
-        climb: 59,
+        km: null,
+        climb: null,
         height: null,
         down: null,
         weather: "sun.png",
         tempMorning: null,
         tempDay: null,
-        routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ",
-        stageType: null,
-        stageStars: null,
-        mapUrl: "https://mapmagic.app/embed?routes=VbeqPX9&surf=1", 
+        routeTitle: "МАХАЧКАЛА — ХАЗАР",
+        stageType: "равнина",
+        stageStars: 0,
+        mapUrl: "https://mapmagic.app/embed?routes=V5Nkyj0", 
         gpxTracks: [
         {
-        id: "2024-day1-planned",
-        title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
+        id: "2026-day1-planned-1",
+        title: "Плановый трек · сегмент 1",
+        file: "./gpx/2026/2026-day1-planned-1.gpx",
         role: "main",
         kind: "planned",
         source: "mapmagic"
         },
+          {
+          id: "2026-day1-planned-2",
+          title: "Фактический трек · сегмент 2",
+          file: "./gpx/2026/2026-day1-planned-2.gpx",
+          role: "secondary",
+          kind: "planned",
+          source: "mapmagic"
+          },
         {
-        id: "2024-day1-actual",
+        id: "2026-day1-actual",
         title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
+        file: "./gpx/2026/2026-day1-actual.gpx",
         role: "main",
         kind: "actual",
         source: "garmin"
@@ -1787,349 +1808,347 @@ const trips = {
         },
         weatherPoints: {
           morning: { name: "МАХАЧКАЛА", lat: null, lon: null },
-          day: { name: "ДЕРБЕНТ", lat: null, lon: null }
+          day: { name: "ХАЗАР", lat: null, lon: null }
         },
         weatherFetched: null
       },
-      {
-        name: "Сб",
-        date: "23.05",
-        km: 56,
-        climb: 1089,
-        height: null,
-        down: null,
-        weather: "cloudsun.png",
-        tempMorning: null,
-        tempDay: null,
-        routeTitle: "ДЕРБЕНТ — ХУЧНИ",
-        stageType: null,
-        stageStars: null,
-        mapUrl: "https://mapmagic.app/embed?routes=6ZAmlb0",
-        gpxTracks: [
-        {
-        id: "2024-day1-planned",
-        title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
-        role: "main",
-        kind: "planned",
-        source: "mapmagic"
-        },
-        {
-        id: "2024-day1-actual",
-        title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
-        role: "main",
-        kind: "actual",
-        source: "garmin"
-        }
-        ],
-        gpxData: {
-        planned: null,
-        actual: null
-        },
-        weatherPoints: {
-          morning: { name: "ДЕРБЕНТ", lat: null, lon: null },
-          day: { name: "ХУЧНИ", lat: null, lon: null }
-        },
-        weatherFetched: null
-      },
-      {
-        name: "Вс",
-        date: "24.05",
-        km: 39,
-        climb: 1423,
-        height: null,
-        down: null,
-        weather: "rain.png",
-        tempMorning: null,
-        tempDay: null,
-        routeTitle: "ХУЧНИ — КУБАЧИ",
-        stageType: null,
-        stageStars: null,
-        mapUrl: null,
-        gpxTracks: [
-        {
-        id: "2024-day1-planned",
-        title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
-        role: "main",
-        kind: "planned",
-        source: "mapmagic"
-        },
-        {
-        id: "2024-day1-actual",
-        title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
-        role: "main",
-        kind: "actual",
-        source: "garmin"
-        }
-        ],
-        gpxData: {
-        planned: null,
-        actual: null
-        },
-        weatherPoints: {
-          morning: { name: "ХУЧНИ", lat: null, lon: null },
-          day: { name: "КУБАЧИ", lat: null, lon: null }
-        },
-        weatherFetched: null
-      },
-      {
-        name: "Пн",
-        date: "25.05",
-        km: 46,
-        climb: 2123,
-        height: null,
-        down: null,
-        weather: "cloud.png",
-        tempMorning: null,
-        tempDay: null,
-        routeTitle: "КУБАЧИ — ГУНИБ",
-        stageType: null,
-        stageStars: null,
-        mapUrl: null,
-        gpxTracks: [
-        {
-        id: "2024-day1-planned",
-        title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
-        role: "main",
-        kind: "planned",
-        source: "mapmagic"
-        },
-        {
-        id: "2024-day1-actual",
-        title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
-        role: "main",
-        kind: "actual",
-        source: "garmin"
-        }
-        ],
-        gpxData: {
-        planned: null,
-        actual: null
-        },
-        weatherPoints: {
-          morning: { name: "КУБАЧИ", lat: null, lon: null },
-          day: { name: "ГУНИБ", lat: null, lon: null }
-        },
-        weatherFetched: null
-      },
-      {
-        name: "Вт",
-        date: "26.05",
-        km: 84,
-        climb: 1080,
-        height: null,
-        down: null,
-        weather: "sun.png",
-        tempMorning: null,
-        tempDay: null,
-        routeTitle: "ГУНИБ — ЧОХ",
-        stageType: null,
-        stageStars: null,
-        mapUrl: null,
-        gpxTracks: [
-        {
-        id: "2024-day1-planned",
-        title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
-        role: "main",
-        kind: "planned",
-        source: "mapmagic"
-        },
-        {
-        id: "2024-day1-actual",
-        title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
-        role: "main",
-        kind: "actual",
-        source: "garmin"
-        }
-        ],
-        gpxData: {
-        planned: null,
-        actual: null
-        },
-        weatherPoints: {
-          morning: { name: "ГУНИБ", lat: null, lon: null },
-          day: { name: "ЧОХ", lat: null, lon: null }
-        },
-        weatherFetched: null
-      },
-      {
-        name: "Ср",
-        date: "27.05",
-        km: 29,
-        climb: 1803,
-        height: null,
-        down: null,
-        weather: "thinder.png",
-        tempMorning: null,
-        tempDay: null,
-        routeTitle: "ЧОХ — ГАМСУТЛЬ",
-        stageType: null,
-        stageStars: null,
-        mapUrl: null,
-        gpxTracks: [
-        {
-        id: "2024-day1-planned",
-        title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
-        role: "main",
-        kind: "planned",
-        source: "mapmagic"
-        },
-        {
-        id: "2024-day1-actual",
-        title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
-        role: "main",
-        kind: "actual",
-        source: "garmin"
-        }
-        ],
-        gpxData: {
-        planned: null,
-        actual: null
-        },
-        weatherPoints: {
-          morning: { name: "ЧОХ", lat: null, lon: null },
-          day: { name: "ГАМСУТЛЬ", lat: null, lon: null }
-        },
-        weatherFetched: null
-      },
-      {
-        name: "Чт",
-        date: "28.05",
-        km: 65,
-        climb: 995,
-        height: null,
-        down: null,
-        weather: "cloudsun.png",
-        tempMorning: null,
-        tempDay: null,
-        routeTitle: "ГАМСУТЛЬ — САЛТА",
-        stageType: null,
-        stageStars: null,
-        mapUrl: null,
-        gpxTracks: [
-        {
-        id: "2024-day1-planned",
-        title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
-        role: "main",
-        kind: "planned",
-        source: "mapmagic"
-        },
-        {
-        id: "2024-day1-actual",
-        title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
-        role: "main",
-        kind: "actual",
-        source: "garmin"
-        }
-        ],
-        gpxData: {
-        planned: null,
-        actual: null
-        },
-        weatherPoints: {
-          morning: { name: "ГАМСУТЛЬ", lat: null, lon: null },
-          day: { name: "САЛТА", lat: null, lon: null }
-        },
-        weatherFetched: null
-      },
-      {
-        name: "Пт",
-        date: "29.05",
-        km: 15,
-        climb: 30,
-        height: null,
-        down: null,
-        weather: "sun.png",
-        tempMorning: null,
-        tempDay: null,
-        routeTitle: "САЛТА — ФИНИШ",
-        stageType: null,
-        stageStars: null,
-        mapUrl: null,
-        gpxTracks: [
-        {
-        id: "2024-day1-planned",
-        title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
-        role: "main",
-        kind: "planned",
-        source: "mapmagic"
-        },
-        {
-        id: "2024-day1-actual",
-        title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
-        role: "main",
-        kind: "actual",
-        source: "garmin"
-        }
-        ],
-        gpxData: {
-        planned: null,
-        actual: null
-        },
-        weatherPoints: {
-          morning: { name: "САЛТА", lat: null, lon: null },
-          day: { name: "ФИНИШ", lat: null, lon: null }
-        },
-        weatherFetched: null
-      },
-      {
-        name: "Сб",
-        date: "30.05",
-        km: 15,
-        climb: 30,
-        height: null,
-        down: null,
-        weather: "sun.png",
-        tempMorning: null,
-        tempDay: null,
-        routeTitle: "САЛТА — ФИНИШ",
-        stageType: null,
-        stageStars: null,
-        mapUrl: null,
-        gpxTracks: [
-        {
-        id: "2024-day1-planned",
-        title: "Плановый трек",
-        file: "./gpx/2024/2024-day1-planned.gpx",
-        role: "main",
-        kind: "planned",
-        source: "mapmagic"
-        },
-        {
-        id: "2024-day1-actual",
-        title: "Фактический трек",
-        file: "./gpx/2024/2024-day1-actual.gpx",
-        role: "main",
-        kind: "actual",
-        source: "garmin"
-        }
-        ],
-        gpxData: {
-        planned: null,
-        actual: null
-        },
-        weatherPoints: {
-          morning: { name: "САЛТА", lat: null, lon: null },
-          day: { name: "ФИНИШ", lat: null, lon: null }
-        },
-        weatherFetched: null
-      }
-    ]
-  }
-};
+    {
+  name: "Сб",
+  date: "23.05",
+  km: null,
+  climb: null,
+  height: null,
+  down: null,
+  weather: "cloudsun.png",
+  tempMorning: null,
+  tempDay: null,
+  routeTitle: "ДЕРБЕНТ — ХУЧНИ",
+  stageType: "горы",
+  stageStars: 2,
+  mapUrl: "https://mapmagic.app/embed?routes=9kgKyx9",
+  gpxTracks: [
+    {
+      id: "2026-day2-planned",
+      title: "Плановый трек",
+      file: "./gpx/2026/2026-day2-planned.gpx",
+      role: "main",
+      kind: "planned",
+      source: "mapmagic"
+    },
+    {
+      id: "2026-day2-actual",
+      title: "Фактический трек",
+      file: "./gpx/2026/2026-day2-actual.gpx",
+      role: "main",
+      kind: "actual",
+      source: "garmin"
+    }
+  ],
+  gpxData: {
+    planned: null,
+    actual: null
+  },
+  weatherPoints: {
+    morning: { name: "ДЕРБЕНТ", lat: null, lon: null },
+    day: { name: "ХУЧНИ", lat: null, lon: null }
+  },
+  weatherFetched: null
+},
+{
+  name: "Вс",
+  date: "24.05",
+  km: null,
+  climb: null,
+  height: null,
+  down: null,
+  weather: "cloudsun.png",
+  tempMorning: null,
+  tempDay: null,
+  routeTitle: "ХУЧНИ - МАДЖАЛИС",
+  stageType: "горы",
+  stageStars: 2,
+  mapUrl: "https://mapmagic.app/embed?routes=0ykPe39",
+  gpxTracks: [
+    {
+      id: "2026-day3-planned",
+      title: "Плановый трек",
+      file: "./gpx/2026/2026-day3-planned.gpx",
+      role: "main",
+      kind: "planned",
+      source: "mapmagic"
+    },
+    {
+      id: "2026-day3-actual",
+      title: "Фактический трек",
+      file: "./gpx/2026/2026-day3-actual.gpx",
+      role: "main",
+      kind: "actual",
+      source: "garmin"
+    }
+  ],
+  gpxData: {
+    planned: null,
+    actual: null
+  },
+  weatherPoints: {
+    morning: { name: "ХУЧНИ", lat: null, lon: null },
+    day: { name: "МАДЖАЛИС", lat: null, lon: null }
+  },
+  weatherFetched: null
+},
+{
+  name: "Пн",
+  date: "25.05",
+  km: null,
+  climb: null,
+  height: null,
+  down: null,
+  weather: "cloudsun.png",
+  tempMorning: null,
+  tempDay: null,
+  routeTitle: "МАДЖАЛИС — КУБАЧИ",
+  stageType: "горы",
+  stageStars: 3,
+  mapUrl: "https://mapmagic.app/embed?routes=VQmN8bV",
+  gpxTracks: [
+    {
+      id: "2026-day4-planned",
+      title: "Плановый трек",
+      file: "./gpx/2026/2026-day4-planned.gpx",
+      role: "main",
+      kind: "planned",
+      source: "mapmagic"
+    },
+    {
+      id: "2026-day4-actual",
+      title: "Фактический трек",
+      file: "./gpx/2026/2026-day4-actual.gpx",
+      role: "main",
+      kind: "actual",
+      source: "garmin"
+    }
+  ],
+  gpxData: {
+    planned: null,
+    actual: null
+  },
+  weatherPoints: {
+    morning: { name: "МАДЖАЛИС", lat: null, lon: null },
+    day: { name: "КУБАЧИ", lat: null, lon: null }
+  },
+  weatherFetched: null
+},
+{
+  name: "Вт",
+  date: "26.05",
+  km: null,
+  climb: null,
+  height: null,
+  down: null,
+  weather: "sun.png",
+  tempMorning: null,
+  tempDay: null,
+  routeTitle: "КУБАЧИ — КАССАГУМАХИ",
+  stageType: "горы",
+  stageStars: 2,
+  mapUrl: "https://mapmagic.app/embed?routes=6Agy3KV",
+  gpxTracks: [
+    {
+      id: "2026-day5-planned",
+      title: "Плановый трек",
+      file: "./gpx/2026/2026-day5-planned.gpx",
+      role: "main",
+      kind: "planned",
+      source: "mapmagic"
+    },
+    {
+      id: "2026-day5-actual",
+      title: "Фактический трек",
+      file: "./gpx/2026/2026-day5-actual.gpx",
+      role: "main",
+      kind: "actual",
+      source: "garmin"
+    }
+  ],
+  gpxData: {
+    planned: null,
+    actual: null
+  },
+  weatherPoints: {
+    morning: { name: "КУБАЧИ", lat: null, lon: null },
+    day: { name: "КАССАГУМАХИ", lat: null, lon: null }
+  },
+  weatherFetched: null
+},
+{
+  name: "Ср",
+  date: "27.05",
+  km: null,
+  climb: null,
+  height: null,
+  down: null,
+  weather: "cloudsun.png",
+  tempMorning: null,
+  tempDay: null,
+  routeTitle: "КАССАГУМАХИ — КУМУХ",
+  stageType: "горы",
+  stageStars: 2,
+  mapUrl: "https://mapmagic.app/embed?routes=0OKj4q0",
+  gpxTracks: [
+    {
+      id: "2026-day6-planned",
+      title: "Плановый трек",
+      file: "./gpx/2026/2026-day6-planned.gpx",
+      role: "main",
+      kind: "planned",
+      source: "mapmagic"
+    },
+    {
+      id: "2026-day6-actual",
+      title: "Фактический трек",
+      file: "./gpx/2026/2026-day6-actual.gpx",
+      role: "main",
+      kind: "actual",
+      source: "garmin"
+    }
+  ],
+  gpxData: {
+    planned: null,
+    actual: null
+  },
+  weatherPoints: {
+    morning: { name: "КАССАГУМАХИ", lat: null, lon: null },
+    day: { name: "КУМУХ", lat: null, lon: null }
+  },
+  weatherFetched: null
+},
+{
+  name: "Чт",
+  date: "28.05",
+  km: null,
+  climb: null,
+  height: null,
+  down: null,
+  weather: "rainsun.png",
+  tempMorning: null,
+  tempDay: null,
+  routeTitle: "КУМУХ — ГУНИБ",
+  stageType: "горы",
+  stageStars: 3,
+  mapUrl: "https://mapmagic.app/embed?routes=6ZAXbZ0",
+  gpxTracks: [
+    {
+      id: "2026-day7-planned",
+      title: "Плановый трек",
+      file: "./gpx/2026/2026-day7-planned.gpx",
+      role: "main",
+      kind: "planned",
+      source: "mapmagic"
+    },
+    {
+      id: "2026-day7-actual",
+      title: "Фактический трек",
+      file: "./gpx/2026/2026-day7-actual.gpx",
+      role: "main",
+      kind: "actual",
+      source: "garmin"
+    }
+  ],
+  gpxData: {
+    planned: null,
+    actual: null
+  },
+  weatherPoints: {
+    morning: { name: "КУМУХ", lat: null, lon: null },
+    day: { name: "ГУНИБ", lat: null, lon: null }
+  },
+  weatherFetched: null
+},
+{
+  name: "Пт",
+  date: "29.05",
+  km: null,
+  climb: null,
+  height: null,
+  down: null,
+  weather: "cloudsun.png",
+  tempMorning: null,
+  tempDay: null,
+  routeTitle: "ГУНИБ — ДУБКИ",
+  stageType: "спуск",
+  stageStars: 2,
+  mapUrl: "https://mapmagic.app/embed?routes=9D3Q1q6",
+  gpxTracks: [
+    {
+      id: "2026-day8-planned",
+      title: "Плановый трек",
+      file: "./gpx/2026/2026-day8-planned.gpx",
+      role: "main",
+      kind: "planned",
+      source: "mapmagic"
+    },
+    {
+      id: "2026-day8-actual",
+      title: "Фактический трек",
+      file: "./gpx/2026/2026-day8-actual.gpx",
+      role: "main",
+      kind: "actual",
+      source: "garmin"
+    }
+  ],
+  gpxData: {
+    planned: null,
+    actual: null
+  },
+  weatherPoints: {
+    morning: { name: "ГУНИБ", lat: null, lon: null },
+    day: { name: "ДУБКИ", lat: null, lon: null }
+  },
+  weatherFetched: null
+},
+{
+  name: "Сб",
+  date: "30.05",
+  km: null,
+  climb: null,
+  height: null,
+  down: null,
+  weather: "cloudsun.png",
+  tempMorning: null,
+  tempDay: null,
+  routeTitle: "ДУБКИ — МАХАЧКАЛА",
+  stageType: "спуск",
+  stageStars: 1,
+  mapUrl: "https://mapmagic.app/embed?routes=0XANra6",
+  gpxTracks: [
+    {
+      id: "2026-day9-planned",
+      title: "Плановый трек",
+      file: "./gpx/2026/2026-day9-planned.gpx",
+      role: "main",
+      kind: "planned",
+      source: "mapmagic"
+    },
+    {
+      id: "2026-day9-actual",
+      title: "Фактический трек",
+      file: "./gpx/2026/2026-day9-actual.gpx",
+      role: "main",
+      kind: "actual",
+      source: "garmin"
+    }
+  ],
+  gpxData: {
+    planned: null,
+    actual: null
+  },
+  weatherPoints: {
+    morning: { name: "САЛТА", lat: null, lon: null },
+    day: { name: "ФИНИШ", lat: null, lon: null }
+  },
+  weatherFetched: null
+}
+] } };
 const mapFrameWrap = document.getElementById("mapFrameWrap");
 const mapFramesCache = new Map();
 
@@ -2163,6 +2182,7 @@ const cdHours = document.getElementById("cdHours");
 const cdMinutes = document.getElementById("cdMinutes");
 const cdSeconds = document.getElementById("cdSeconds");
 const tripToggleBtn = document.getElementById("tripToggleBtn");
+
 
 
 function showDayMap(dayKey, mapUrl) {
@@ -2229,8 +2249,15 @@ function weatherCodeToIcon(code) {
   if (code === 0 || code === 1) return "sun.png";
   if (code === 2) return "cloudsun.png";
   if (code === 3 || code === 45 || code === 48) return "cloud.png";
-  if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return "rain.png";
-  if ([95,96,99].includes(code)) return "thinder.png";
+
+  // лёгкий дождь / морось
+  if ([51, 53, 56, 61, 80].includes(code)) return "rainsun.png";
+
+  // обычный дождь
+  if ([55, 57, 63, 65, 66, 67, 81, 82].includes(code)) return "rain.png";
+
+  if ([95, 96, 99].includes(code)) return "thinder.png";
+
   return "cloudsun.png";
 }
 
@@ -2330,11 +2357,11 @@ async function resolveDayWeather(day, tripYear) {
   const dayPoint = day.weatherPoints.day;
 
   if (
-    !morningPoint.lat || !morningPoint.lon ||
-    !dayPoint.lat || !dayPoint.lon
-  ) {
-    return null;
-  }
+  morningPoint.lat == null || morningPoint.lon == null ||
+  dayPoint.lat == null || dayPoint.lon == null
+) {
+  return null;
+}
 
   if (day.weatherFetched) {
     return day.weatherFetched;
@@ -2665,41 +2692,46 @@ function getForecastTrack(day) {
 }
 
 function applyDayDataFromGpx(day) {
-  const primaryTrack = getPrimaryTrack(day);
-  if (!primaryTrack?.summary) return;
+  const statisticTracks = getStatisticTracks(day);
+  const aggregatedStats = summarizeTrackCollection(statisticTracks);
 
-  const forecastTrack = getForecastTrack(day) || primaryTrack;
-  const summary = primaryTrack.summary;
-  const forecastSummary = forecastTrack.summary;
+  const forecastTrack = getForecastTrack(day) || statisticTracks?.[0] || null;
+  const forecastSummary = forecastTrack?.summary;
 
-  if (summary.distanceKm) {
-    day.km = summary.distanceKm;
+  if (aggregatedStats) {
+    if (aggregatedStats.distanceKm) {
+      day.km = aggregatedStats.distanceKm;
+    }
+
+    if (aggregatedStats.climb !== null && aggregatedStats.climb !== undefined) {
+      day.climb = aggregatedStats.climb;
+    }
+
+    if (aggregatedStats.down !== null && aggregatedStats.down !== undefined) {
+      day.down = aggregatedStats.down;
+    }
+
+    if (aggregatedStats.maxElevation !== null && aggregatedStats.maxElevation !== undefined) {
+      day.height = aggregatedStats.maxElevation;
+    }
   }
 
-  if (summary.climb !== null && summary.climb !== undefined) {
-    day.climb = summary.climb;
-  }
+if (forecastSummary?.start) {
+  day.weatherPoints.morning.lat = forecastSummary.start.lat;
+  day.weatherPoints.morning.lon = forecastSummary.start.lon;
+}
 
-  if (summary.down !== null && summary.down !== undefined) {
-    day.down = summary.down;
-  }
+const dayWeatherPoint = forecastSummary?.end || forecastSummary?.mid || null;
 
-  if (summary.maxElevation !== null && summary.maxElevation !== undefined) {
-    day.height = summary.maxElevation;
-  }
-
-  if (forecastSummary?.start) {
-    day.weatherPoints.morning.lat = forecastSummary.start.lat;
-    day.weatherPoints.morning.lon = forecastSummary.start.lon;
-  }
-
-  if (forecastSummary?.mid) {
-    day.weatherPoints.day.lat = forecastSummary.mid.lat;
-    day.weatherPoints.day.lon = forecastSummary.mid.lon;
-  }
+if (dayWeatherPoint) {
+  day.weatherPoints.day.lat = dayWeatherPoint.lat;
+  day.weatherPoints.day.lon = dayWeatherPoint.lon;
+}
 }
 
 async function openDayModal(day, index) {
+  routeCurrentOpenedIndex = index;
+  
   dayModalMeta.textContent = `ЭТАП ${index + 1} · ${String(day.name).toUpperCase()} · ${day.date}`;
   dayModalTitle.textContent = (day.routeTitle || day.title || "МАРШРУТ ЭТАПА").toUpperCase();
 
@@ -2771,6 +2803,47 @@ function closeDayModal() {
   dayModal.setAttribute("aria-hidden", "true");
   dayModal.classList.remove("is-open");
   document.body.classList.remove("modal-open");
+
+  checkRouteEasterEggProgress();
+  routeCurrentOpenedIndex = null;
+}
+
+function checkRouteEasterEggProgress() {
+  if (activeTrip !== "2024") return;
+  if (easterEggActivated) return;
+  if (routeCurrentOpenedIndex === null) return;
+
+  const trip = trips[activeTrip];
+  const totalDays = trip?.days?.length || 0;
+
+  if (routeCurrentOpenedIndex === routeProgressIndex) {
+    routeProgressIndex += 1;
+
+    if (routeProgressIndex >= totalDays) {
+      activateParticipantsEasterEgg();
+    }
+
+    return;
+  }
+
+  if (routeCurrentOpenedIndex === 0) {
+    routeProgressIndex = 1;
+    return;
+  }
+
+  routeProgressIndex = 0;
+}
+
+function activateParticipantsEasterEgg() {
+  if (activeTrip !== "2024") return;
+
+  easterEggActivated = true;
+
+  const participants = participantsEl.querySelectorAll(".participant img");
+
+  participants.forEach((img, index) => {
+    img.src = `./image/people/easter-${index + 1}.png`;
+  });
 }
 
 function pad(value) {
@@ -2924,7 +2997,12 @@ function renderTrip(year) {
   if (!trip) return;
 
   activeTrip = year;
+  tripToggleState = year;
   badgeYear.textContent = activeTrip;
+
+  routeProgressIndex = 0;
+  routeCurrentOpenedIndex = null;
+  easterEggActivated = false;
 
   const computedSummary = getTripSummary(trip);
 
@@ -2958,8 +3036,20 @@ function renderTrip(year) {
 }
 
 function toggleTrip() {
-  const nextTrip = activeTrip === "2026" ? "2024" : "2026";
-  renderTrip(nextTrip);
+  if (tripToggleState === "2026") {
+    tripToggleState = "2025";
+    badgeYear.textContent = "2025";
+    return;
+  }
+
+  if (tripToggleState === "2025") {
+    tripToggleState = "2024";
+    renderTrip("2024");
+    return;
+  }
+
+  tripToggleState = "2026";
+  renderTrip("2026");
 }
 
 function toLocalTime(utcString) {
@@ -2971,6 +3061,56 @@ function toLocalTime(utcString) {
     hour: "2-digit",
     minute: "2-digit"
   });
+}
+
+function getStatisticTracks(day) {
+  const actualTracks = Array.isArray(day?.gpxData?.actual)
+    ? day.gpxData.actual.filter(track => track?.summary)
+    : [];
+
+  if (actualTracks.length) {
+    return actualTracks;
+  }
+
+  const plannedTracks = Array.isArray(day?.gpxData?.planned)
+    ? day.gpxData.planned.filter(track => track?.summary)
+    : [];
+
+  return plannedTracks;
+}
+
+function summarizeTrackCollection(tracks) {
+  if (!Array.isArray(tracks) || !tracks.length) {
+    return null;
+  }
+
+  let distanceKm = 0;
+  let climb = 0;
+  let down = 0;
+  let maxElevation = null;
+
+  for (const track of tracks) {
+    const summary = track?.summary;
+    if (!summary) continue;
+
+    distanceKm += Number(summary.distanceKm) || 0;
+    climb += Number(summary.climb) || 0;
+    down += Number(summary.down) || 0;
+
+    if (summary.maxElevation !== null && summary.maxElevation !== undefined) {
+      maxElevation =
+        maxElevation === null
+          ? Number(summary.maxElevation)
+          : Math.max(maxElevation, Number(summary.maxElevation));
+    }
+  }
+
+  return {
+    distanceKm: Math.round(distanceKm * 10) / 10,
+    climb: Math.round(climb),
+    down: Math.round(down),
+    maxElevation: maxElevation !== null ? Math.round(maxElevation) : null
+  };
 }
 
 const loginOverlay = document.getElementById("loginOverlay");
