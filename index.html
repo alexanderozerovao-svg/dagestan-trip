@@ -2270,6 +2270,9 @@ const stageStarsEl = document.getElementById("stageStars");
 const elevationCanvas = document.getElementById("elevationCanvas");
 const elevationEmpty = document.getElementById("elevationEmpty");
 
+let currentElevationProfile = [];
+let elevationHoverState = null;
+
 const badgeYear = document.getElementById("badgeYear");
 const participantsEl = document.getElementById("participants");
 const daysEl = document.getElementById("days");
@@ -2902,6 +2905,8 @@ async function openDayModal(day, index) {
   const dayKey = `${activeTrip}-${index}`;
   showDayMap(dayKey, day.mapUrl);
 
+  currentElevationProfile = [];
+  elevationHoverState = null;
   drawElevationProfile([]);
 
   dayModal.setAttribute("aria-hidden", "false");
@@ -2918,18 +2923,25 @@ async function openDayModal(day, index) {
     stageDownEl.textContent = `${day.down ?? "—"} м`;
 
     const statisticTracks = getStatisticTracks(day);
-    const elevationProfile = buildElevationProfileFromTracks(statisticTracks);
+    
+    const rawProfile = buildElevationProfileFromTracks(statisticTracks);
+const elevationProfile = smoothElevationProfile(rawProfile, 0.1);
 
-    requestAnimationFrame(() => {
-      drawElevationProfile(elevationProfile);
-    });
+currentElevationProfile = elevationProfile;
+elevationHoverState = null;
+
+requestAnimationFrame(() => {
+  drawElevationProfile(currentElevationProfile);
+});
 
     refreshDayCard(day, index);
 
     console.log("GPX data:", day.gpxData);
     console.log("Weather points after GPX:", day.weatherPoints);
   } catch (error) {
-  drawElevationProfile([]);
+  currentElevationProfile = [];
+elevationHoverState = null;
+drawElevationProfile([]);
   console.error("Ошибка загрузки GPX для дня:", day.date, error);
 }
 
@@ -2993,6 +3005,150 @@ function buildElevationProfileFromTrack(points = []) {
   }
 
   return profile;
+}
+
+function smoothElevationProfile(profile, stepKm = 0.1) {
+  if (!Array.isArray(profile) || profile.length < 2) return profile;
+
+  const result = [];
+
+  let currentIndex = 0;
+  const maxDistance = profile[profile.length - 1].distance;
+
+  for (let d = 0; d <= maxDistance; d += stepKm) {
+    while (
+      currentIndex < profile.length - 1 &&
+      profile[currentIndex + 1].distance < d
+    ) {
+      currentIndex++;
+    }
+
+    const p1 = profile[currentIndex];
+    const p2 = profile[currentIndex + 1];
+
+    if (!p2 || p1.isBreak || p2.isBreak) {
+      result.push({ distance: d, ele: p1.ele });
+      continue;
+    }
+
+    const t =
+      (d - p1.distance) / (p2.distance - p1.distance || 1);
+
+    const ele = p1.ele + (p2.ele - p1.ele) * t;
+
+    result.push({
+      distance: d,
+      ele,
+      isBreak: false
+    });
+  }
+
+  return result;
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function findNearestProfilePoint(profile, distanceKm) {
+  if (!Array.isArray(profile) || !profile.length) return null;
+
+  let nearest = null;
+  let minDiff = Infinity;
+
+  for (const point of profile) {
+    if (!point || point.isBreak || !Number.isFinite(point.ele)) continue;
+
+    const diff = Math.abs(point.distance - distanceKm);
+    if (diff < minDiff) {
+      minDiff = diff;
+      nearest = point;
+    }
+  }
+
+  return nearest;
+}
+
+function getProfileSlopePercent(profile, point) {
+  if (!Array.isArray(profile) || !profile.length || !point) return 0;
+
+  const index = profile.findIndex(
+    p => !p.isBreak && p.distance === point.distance && p.ele === point.ele
+  );
+
+  if (index === -1) return 0;
+
+  let prev = null;
+  let next = null;
+
+  for (let i = index - 1; i >= 0; i--) {
+    if (!profile[i]?.isBreak && Number.isFinite(profile[i]?.ele)) {
+      prev = profile[i];
+      break;
+    }
+  }
+
+  for (let i = index + 1; i < profile.length; i++) {
+    if (!profile[i]?.isBreak && Number.isFinite(profile[i]?.ele)) {
+      next = profile[i];
+      break;
+    }
+  }
+
+  if (!prev || !next) return 0;
+
+  const deltaEle = next.ele - prev.ele;
+  const deltaDistMeters = (next.distance - prev.distance) * 1000;
+
+  if (!deltaDistMeters) return 0;
+
+  return (deltaEle / deltaDistMeters) * 100;
+}
+
+function updateElevationHover(event) {
+  const canvas = elevationCanvas;
+  if (!canvas || !Array.isArray(currentElevationProfile) || currentElevationProfile.length < 2) {
+    return;
+  }
+
+  const rect = canvas.getBoundingClientRect();
+  const cssWidth = canvas.clientWidth || rect.width || 600;
+  const cssHeight = canvas.clientHeight || rect.height || 190;
+
+  const pad = { top: 16, right: 18, bottom: 30, left: 46 };
+  const w = cssWidth - pad.left - pad.right;
+
+  const mouseX = event.clientX - rect.left;
+  const clampedX = clamp(mouseX, pad.left, pad.left + w);
+
+  const validPoints = currentElevationProfile.filter(
+    point => !point.isBreak && Number.isFinite(point.ele)
+  );
+
+  if (!validPoints.length) return;
+
+  const minX = validPoints[0].distance;
+  const maxX = validPoints[validPoints.length - 1].distance;
+
+  const distanceKm = minX + ((clampedX - pad.left) / (w || 1)) * (maxX - minX);
+  const nearestPoint = findNearestProfilePoint(validPoints, distanceKm);
+
+  if (!nearestPoint) return;
+
+  const slope = getProfileSlopePercent(validPoints, nearestPoint);
+
+  elevationHoverState = {
+    distance: nearestPoint.distance,
+    ele: nearestPoint.ele,
+    slope
+  };
+
+  drawElevationProfile(currentElevationProfile);
+}
+
+function clearElevationHover() {
+  elevationHoverState = null;
+  drawElevationProfile(currentElevationProfile);
 }
 
 function drawElevationProfile(profile = []) {
@@ -3125,6 +3281,80 @@ profile.forEach((point) => {
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
   ctx.stroke();
+    if (elevationHoverState) {
+    const hoverX = xToPx(elevationHoverState.distance);
+
+    ctx.save();
+
+    // вертикальная линия
+    ctx.beginPath();
+    ctx.strokeStyle = "rgba(120,120,120,0.65)";
+    ctx.lineWidth = 1;
+    ctx.moveTo(hoverX, pad.top);
+    ctx.lineTo(hoverX, pad.top + h);
+    ctx.stroke();
+
+    const tooltipLines = [
+      `${elevationHoverState.distance.toFixed(1)} км`,
+      `${Math.round(elevationHoverState.ele)} м`,
+      `${Math.round(elevationHoverState.slope)} %`
+    ];
+
+    ctx.font = "12px Arial";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+
+    const lineHeight = 18;
+    const boxPaddingX = 10;
+    const boxPaddingY = 8;
+    const boxWidth =
+      Math.max(...tooltipLines.map(line => ctx.measureText(line).width)) +
+      boxPaddingX * 2;
+    const boxHeight = tooltipLines.length * lineHeight + boxPaddingY * 2 - 2;
+
+    let boxX = hoverX + 10;
+    const boxY = pad.top + 4;
+
+    if (boxX + boxWidth > pad.left + w) {
+      boxX = hoverX - boxWidth - 10;
+    }
+
+    if (boxX < pad.left + 4) {
+      boxX = pad.left + 4;
+    }
+
+    // белый tooltip
+    ctx.fillStyle = "rgba(255,255,255,0.96)";
+    ctx.strokeStyle = "rgba(0,0,0,0.08)";
+    ctx.lineWidth = 1;
+
+    const radius = 10;
+    ctx.beginPath();
+    ctx.moveTo(boxX + radius, boxY);
+    ctx.lineTo(boxX + boxWidth - radius, boxY);
+    ctx.quadraticCurveTo(boxX + boxWidth, boxY, boxX + boxWidth, boxY + radius);
+    ctx.lineTo(boxX + boxWidth, boxY + boxHeight - radius);
+    ctx.quadraticCurveTo(boxX + boxWidth, boxY + boxHeight, boxX + boxWidth - radius, boxY + boxHeight);
+    ctx.lineTo(boxX + radius, boxY + boxHeight);
+    ctx.quadraticCurveTo(boxX, boxY + boxHeight, boxX, boxY + boxHeight - radius);
+    ctx.lineTo(boxX, boxY + radius);
+    ctx.quadraticCurveTo(boxX, boxY, boxX + radius, boxY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // текст tooltip
+    ctx.fillStyle = "#111";
+    tooltipLines.forEach((line, index) => {
+      ctx.fillText(
+        line,
+        boxX + boxPaddingX,
+        boxY + boxPaddingY + index * lineHeight
+      );
+    });
+
+    ctx.restore();
+  }
 }
 
 function closeDayModal() {
@@ -3574,6 +3804,9 @@ tripToggleBtn.addEventListener("click", toggleTrip);
 
 dayModalClose.addEventListener("click", closeDayModal);
 dayModalBackdrop.addEventListener("click", closeDayModal);
+
+elevationCanvas.addEventListener("mousemove", updateElevationHover);
+elevationCanvas.addEventListener("mouseleave", clearElevationHover);
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && dayModal.classList.contains("is-open")) {
