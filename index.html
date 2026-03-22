@@ -776,10 +776,11 @@ body.modal-open{
 }
 .day-modal-layout{
   display: grid;
-  grid-template-columns: minmax(260px, 0.75fr) minmax(460px, 1.45fr);
+  grid-template-columns: minmax(320px, 0.95fr) minmax(420px, 1.35fr);
   grid-template-areas:
     "summary map"
-    "logistics map";
+    "logistics elevation";
+  grid-template-rows: auto minmax(220px, 250px);
   gap: 18px;
   margin-top: 4px;
 
@@ -822,6 +823,40 @@ body.modal-open{
   padding: 0;
   overflow: hidden;
 }
+
+.day-panel-elevation{
+  grid-area: elevation;
+  min-height: 220px;
+  padding: 10px 12px 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.elevation-canvas{
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 190px;
+}
+
+.elevation-empty{
+  position: absolute;
+  inset: 10px 12px 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(30,42,34,0.42);
+  pointer-events: none;
+}
+
+.elevation-empty[hidden]{
+  display: none !important;
+}
+
+
 
 .map-frame-wrap{
   width: 100%;
@@ -869,13 +904,20 @@ body.modal-open{
     grid-template-columns: 1fr;
     grid-template-areas:
       "summary"
-      "logistics"
-      "map";
+      "map"
+      "elevation"
+      "logistics";
+    grid-template-rows: auto 320px 220px auto;
   }
 
   .day-panel-map{
+    grid-column: auto;
     height: 320px;
     min-height: 320px;
+  }
+
+  .day-panel-elevation{
+    min-height: 220px;
   }
 }
 
@@ -1369,6 +1411,11 @@ body.auth-pending .login-overlay{
 
   <section class="day-panel day-panel-map">
   <div class="map-frame-wrap" id="mapFrameWrap"></div>
+</section>
+
+<section class="day-panel day-panel-elevation">
+  <canvas class="elevation-canvas" id="elevationCanvas"></canvas>
+  <div class="elevation-empty" id="elevationEmpty" hidden>Нет данных высот</div>
 </section>
 </div>
 
@@ -2216,6 +2263,8 @@ const dayModalTitle = document.getElementById("dayModalTitle");
 const stageTypeEl = document.getElementById("stageType");
 const stageStarsEl = document.getElementById("stageStars");
 
+const elevationCanvas = document.getElementById("elevationCanvas");
+const elevationEmpty = document.getElementById("elevationEmpty");
 
 const badgeYear = document.getElementById("badgeYear");
 const participantsEl = document.getElementById("participants");
@@ -2648,8 +2697,56 @@ async function loadSingleGpxTrack(track) {
 
   return {
     ...track,
+    points: parsed.points,
     ...summarized
   };
+}
+
+function buildElevationProfileFromTracks(tracks = []) {
+  if (!Array.isArray(tracks) || !tracks.length) return [];
+
+  let totalDistance = 0;
+  const profile = [];
+  let previousPoint = null;
+
+  tracks.forEach((track, trackIndex) => {
+    const points = Array.isArray(track?.points)
+      ? track.points
+      : Array.isArray(track?.segments)
+        ? track.segments.flatMap(segment => segment.points || [])
+        : [];
+
+    if (!points.length) return;
+
+    points.forEach((point, i) => {
+      const elevation = Number(point?.ele);
+      if (!Number.isFinite(elevation)) return;
+
+      if (previousPoint) {
+        totalDistance += getDistanceMeters(previousPoint, point);
+      }
+
+      profile.push({
+        distance: totalDistance / 1000,
+        ele: elevation,
+        isBreak: false
+      });
+
+      previousPoint = point;
+    });
+
+    // 👉 добавляем маркер разрыва (между сегментами)
+    if (trackIndex < tracks.length - 1) {
+      profile.push({
+        distance: totalDistance / 1000,
+        ele: null,
+        isBreak: true
+      });
+      previousPoint = null;
+    }
+  });
+
+  return profile.length >= 2 ? profile : [];
 }
 
 async function loadDayGpx(day) {
@@ -2768,7 +2865,7 @@ if (forecastSummary?.start) {
   day.weatherPoints.morning.lon = forecastSummary.start.lon;
 }
 
-const dayWeatherPoint = forecastSummary?.end || forecastSummary?.mid || null;
+const dayWeatherPoint = forecastSummary?.finish || forecastSummary?.mid || null;
 
 if (dayWeatherPoint) {
   day.weatherPoints.day.lat = dayWeatherPoint.lat;
@@ -2787,7 +2884,7 @@ async function openDayModal(day, index) {
   stageHeightEl.textContent = `${day.height ?? "—"} м`;
   stageDownEl.textContent = `${day.down ?? "—"} м`;
 
-  stageTypeEl.textContent = day.stageType || "Горный";
+  stageTypeEl.textContent = day.stageType || "горы";
   renderStageStars(day.stageStars);
 
   stageWeatherIcon.src = day.weather ? `./image/weather/${day.weather}` : "";
@@ -2800,6 +2897,8 @@ async function openDayModal(day, index) {
 
   const dayKey = `${activeTrip}-${index}`;
   showDayMap(dayKey, day.mapUrl);
+
+  drawElevationProfile([]);
 
   dayModal.setAttribute("aria-hidden", "false");
   dayModal.classList.add("is-open");
@@ -2814,13 +2913,21 @@ async function openDayModal(day, index) {
     stageHeightEl.textContent = `${day.height ?? "—"} м`;
     stageDownEl.textContent = `${day.down ?? "—"} м`;
 
+    const statisticTracks = getStatisticTracks(day);
+    const elevationProfile = buildElevationProfileFromTracks(statisticTracks);
+
+    requestAnimationFrame(() => {
+      drawElevationProfile(elevationProfile);
+    });
+
     refreshDayCard(day, index);
 
     console.log("GPX data:", day.gpxData);
     console.log("Weather points after GPX:", day.weatherPoints);
   } catch (error) {
-    console.error("Ошибка загрузки GPX для дня:", day.date, error);
-  }
+  drawElevationProfile([]);
+  console.error("Ошибка загрузки GPX для дня:", day.date, error);
+}
 
   try {
     await resolveDayWeather(day, activeTrip);
@@ -2829,9 +2936,9 @@ async function openDayModal(day, index) {
     stageWeatherIcon.alt = day.weather ? "Погода" : "";
 
     stageTempEl.textContent =
-    day.tempMorning && day.tempDay
-    ? `${day.tempMorning}…${day.tempDay}`
-    : "—";
+      day.tempMorning && day.tempDay
+        ? `${day.tempMorning}…${day.tempDay}`
+        : "—";
 
     refreshDayCard(day, index);
 
@@ -2844,6 +2951,176 @@ async function openDayModal(day, index) {
   } catch (error) {
     console.error("Ошибка получения погоды:", day.date, error);
   }
+}
+
+function buildElevationProfileFromTrack(points = []) {
+  if (!Array.isArray(points) || points.length < 2) return [];
+
+  const toRad = (deg) => deg * Math.PI / 180;
+
+  const distanceMeters = (a, b) => {
+    const R = 6371000;
+    const dLat = toRad((b.lat || 0) - (a.lat || 0));
+    const dLon = toRad((b.lon || 0) - (a.lon || 0));
+    const lat1 = toRad(a.lat || 0);
+    const lat2 = toRad(b.lat || 0);
+
+    const s =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+
+    return 2 * R * Math.asin(Math.sqrt(s));
+  };
+
+  let total = 0;
+
+  const profile = [{
+    distance: 0,
+    ele: Number(points[0].ele) || 0
+  }];
+
+  for (let i = 1; i < points.length; i++) {
+    total += distanceMeters(points[i - 1], points[i]);
+
+    profile.push({
+      distance: total / 1000,
+      ele: Number(points[i].ele) || 0
+    });
+  }
+
+  return profile;
+}
+
+function drawElevationProfile(profile = []) {
+  const canvas = elevationCanvas;
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const cssWidth = canvas.clientWidth || 600;
+  const cssHeight = canvas.clientHeight || 190;
+
+  canvas.width = Math.round(cssWidth * dpr);
+  canvas.height = Math.round(cssHeight * dpr);
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, cssWidth, cssHeight);
+
+  if (!Array.isArray(profile) || profile.length < 2) {
+    if (elevationEmpty) elevationEmpty.hidden = false;
+    return;
+  }
+
+  if (elevationEmpty) elevationEmpty.hidden = true;
+
+  const pad = { top: 16, right: 18, bottom: 30, left: 46 };
+  const w = cssWidth - pad.left - pad.right;
+  const h = cssHeight - pad.top - pad.bottom;
+
+  const distances = profile.map(point => Number(point.distance) || 0);
+  const elevations = profile.map(point => Number(point.ele) || 0);
+
+  const minX = Math.min(...distances);
+  const maxX = Math.max(...distances);
+
+  let minY = Math.min(...elevations);
+  let maxY = Math.max(...elevations);
+
+  if (minY === maxY) {
+    minY -= 10;
+    maxY += 10;
+  }
+
+  const yPadding = Math.max(10, (maxY - minY) * 0.10);
+  minY -= yPadding;
+  maxY += yPadding;
+
+  const xToPx = (x) => pad.left + ((x - minX) / (maxX - minX || 1)) * w;
+  const yToPx = (y) => pad.top + h - ((y - minY) / (maxY - minY || 1)) * h;
+
+  ctx.strokeStyle = "rgba(30,42,34,0.10)";
+  ctx.lineWidth = 1;
+
+  const yGridCount = 5;
+  for (let i = 0; i <= yGridCount; i++) {
+    const y = pad.top + (h / yGridCount) * i;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(pad.left + w, y);
+    ctx.stroke();
+  }
+  // 👉 рисуем разрывы (пунктирные вертикальные линии)
+ctx.setLineDash([4, 4]);
+ctx.strokeStyle = "rgba(120,120,120,0.6)";
+ctx.lineWidth = 1;
+
+profile.forEach(point => {
+  if (!point.isBreak) return;
+
+  const x = xToPx(point.distance);
+
+  ctx.beginPath();
+  ctx.moveTo(x, pad.top);
+  ctx.lineTo(x, pad.top + h);
+  ctx.stroke();
+});
+
+ctx.setLineDash([]);
+
+
+  ctx.fillStyle = "rgba(30,42,34,0.55)";
+  ctx.font = "12px Arial";
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+
+  for (let i = 0; i <= yGridCount; i++) {
+    const value = maxY - ((maxY - minY) / yGridCount) * i;
+    const y = pad.top + (h / yGridCount) * i;
+    ctx.fillText(`${Math.round(value)} м`, pad.left - 8, y);
+  }
+
+  const xTickCount = Math.min(6, Math.max(2, Math.round((maxX - minX) / 3)));
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+
+  for (let i = 0; i <= xTickCount; i++) {
+    const value = minX + ((maxX - minX) / xTickCount) * i;
+    const x = xToPx(value);
+
+    ctx.beginPath();
+    ctx.moveTo(x, pad.top + h);
+    ctx.lineTo(x, pad.top + h + 5);
+    ctx.stroke();
+
+    ctx.fillText(`${value.toFixed(0)} км`, x, pad.top + h + 8);
+  }
+
+  ctx.beginPath();
+
+let started = false;
+
+profile.forEach((point) => {
+  if (point.isBreak) {
+    started = false;
+    return;
+  }
+
+  const x = xToPx(point.distance);
+  const y = yToPx(point.ele);
+
+  if (!started) {
+    ctx.moveTo(x, y);
+    started = true;
+  } else {
+    ctx.lineTo(x, y);
+  }
+});
+
+  ctx.strokeStyle = "rgba(120,120,120,0.95)";
+  ctx.lineWidth = 2.2;
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+  ctx.stroke();
 }
 
 function closeDayModal() {
