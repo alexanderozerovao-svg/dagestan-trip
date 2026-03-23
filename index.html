@@ -2346,6 +2346,19 @@ let activeLeafletMap = null;
 let activeLeafletTrack = null;
 let activeLeafletMarker = null;
 
+const trackColors = [
+  "#e53935", // красный
+  "#1e88e5", // синий
+  "#f4511e", // оранжевый
+  "#00897b", // зелёный
+  "#ec407a", // розовый
+  "#fb8c00", // янтарный
+  "#8e24aa", // фиолетовый
+  "#546e7a", // серый
+  "#43a047", // НОВЫЙ — травяной зелёный
+  "#3949ab"  // НОВЫЙ — насыщенный синий
+];
+
 const dayModal = document.getElementById("dayModal");
 const dayModalBackdrop = document.getElementById("dayModalBackdrop");
 const dayModalClose = document.getElementById("dayModalClose");
@@ -2438,6 +2451,12 @@ function showDayMap(dayKey, mapUrl, day = null) {
   }
 }
 
+function getTrackWeight(zoom) {
+  if (zoom <= 8) return 2;
+  if (zoom <= 11) return 3;
+  return 4;
+}
+
 function initLeafletMap(day) {
   const mapEl = document.createElement("div");
   mapEl.className = "leaflet-map";
@@ -2446,9 +2465,10 @@ function initLeafletMap(day) {
   const map = L.map(mapEl, {
   zoomControl: true,
   attributionControl: true,
-  zoomSnap: 0.4,
-  zoomDelta: 0.4
+  zoomSnap: 0.25,
+  zoomDelta: 0.25
 });
+map.zoomControl.setPosition("topright");
 
 const mapyOutdoor = L.tileLayer(
   `https://api.mapy.com/v1/maptiles/outdoor/256/{z}/{x}/{y}?apikey=${MAPY_API_KEY}`,
@@ -2474,14 +2494,25 @@ const latlngGroups = statisticTracks
   .filter(group => group.length > 0);
 
 if (latlngGroups.length) {
-  const polyline = L.polyline(latlngGroups, {
-    color: "#2b7cff",
-    weight: 5,
-    opacity: 0.95
+  const polylines = [];
+
+const dayIndex = trips[activeTrip].days.indexOf(day);
+const dayColor = trackColors[dayIndex % trackColors.length];
+
+latlngGroups.forEach((group) => {
+  const poly = L.polyline(group, {
+    color: dayColor,
+    weight: getTrackWeight(map.getZoom()),
+    opacity: 0.9,
+    lineCap: "round",
+    lineJoin: "round"
   }).addTo(map);
 
+  polylines.push(poly);
+});
+
   // bounds всего маршрута (для кнопки reset)
-const fullBounds = polyline.getBounds();
+const fullBounds = L.featureGroup(polylines).getBounds();
 
 // 👉 добавляем клики по каждому сегменту
 latlngGroups.forEach((group) => {
@@ -2500,14 +2531,23 @@ latlngGroups.forEach((group) => {
   });
 });
 
- map.fitBounds(polyline.getBounds(), {
+map.fitBounds(fullBounds, {
   paddingTopLeft: [10, 10],
   paddingBottomRight: [10, 10],
   maxZoom: 13
 });
 
+map.on("zoomend", () => {
+  const zoom = map.getZoom();
+  const weight = getTrackWeight(zoom);
+
+  polylines.forEach(poly => {
+    poly.setStyle({ weight });
+  });
+});
+
   const ResetControl = L.Control.extend({
-  options: { position: "topleft" },
+  options: { position: "topright" },
 
 onAdd: function () {
   const container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
@@ -2551,7 +2591,7 @@ map.addControl(new ResetControl());
 
   const firstPoint = latlngGroups[0][0];
 
-  activeLeafletTrack = polyline;
+  activeLeafletTrack = polylines;
   activeLeafletMarker = L.circleMarker(firstPoint, {
   radius: 5,
   weight: 2,
