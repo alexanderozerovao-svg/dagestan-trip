@@ -2435,9 +2435,11 @@ function initLeafletMap(day) {
   mapFrameWrap.appendChild(mapEl);
 
   const map = L.map(mapEl, {
-    zoomControl: true,
-    attributionControl: true
-  });
+  zoomControl: true,
+  attributionControl: true,
+  zoomSnap: 0.4,
+  zoomDelta: 0.4
+});
 
 L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
   attribution: "&copy; OpenStreetMap &copy; CARTO",
@@ -2484,13 +2486,18 @@ latlngGroups.forEach((group) => {
 
   clickLayer.on("click", () => {
     map.fitBounds(clickLayer.getBounds(), {
-      padding: [20, 20],
-      maxZoom: 14
-    });
+  paddingTopLeft: [10, 10],
+  paddingBottomRight: [10, 10],
+  maxZoom: 14
+});
   });
 });
 
-  map.fitBounds(polyline.getBounds(), { padding: [20, 20] });
+ map.fitBounds(polyline.getBounds(), {
+  paddingTopLeft: [10, 10],
+  paddingBottomRight: [10, 10],
+  maxZoom: 13
+});
 
   const ResetControl = L.Control.extend({
   options: { position: "topleft" },
@@ -2522,7 +2529,11 @@ onAdd: function () {
 
   L.DomEvent.on(button, "click", (e) => {
     L.DomEvent.stop(e);
-    map.fitBounds(fullBounds, { padding: [20, 20] });
+    map.fitBounds(fullBounds, {
+  paddingTopLeft: [10, 10],
+  paddingBottomRight: [10, 10],
+  maxZoom: 13
+});
   });
 
   return container;
