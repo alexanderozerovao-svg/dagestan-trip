@@ -1337,7 +1337,13 @@ body.auth-pending .login-overlay{
   display: flex !important;
 }
 
-
+.leaflet-control-attribution {
+  font-size: 9px !important;
+  opacity: 0.1;
+  background: rgba(255,255,255,0.4) !important;
+  padding: 2px 6px !important;
+  border-radius: 6px;
+}
 
   </style>
 </head>
@@ -2332,7 +2338,10 @@ const trips = {
 const mapFrameWrap = document.getElementById("mapFrameWrap");
 const mapFramesCache = new Map();
 
+const MAPY_API_KEY = "xn8Qn8kw9Ru7hsmnV4y6Pbp4ZeZD9t_dpUUlRz3xzW8";
+
 let mapMode = "leaflet"; // "iframe" | "leaflet"
+
 let activeLeafletMap = null;
 let activeLeafletTrack = null;
 let activeLeafletMarker = null;
@@ -2441,19 +2450,17 @@ function initLeafletMap(day) {
   zoomDelta: 0.4
 });
 
-L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-  attribution: "&copy; OpenStreetMap &copy; CARTO",
-  subdomains: "abcd",
-  maxZoom: 20,
-  detectRetina: true
-}).addTo(map);
-
-L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
-  attribution: "&copy; OpenTopoMap contributors",
-  maxZoom: 17,
-  opacity: 0.32,
-  detectRetina: true
-}).addTo(map);
+const mapyOutdoor = L.tileLayer(
+  `https://api.mapy.com/v1/maptiles/outdoor/256/{z}/{x}/{y}?apikey=${MAPY_API_KEY}`,
+  {
+    tileSize: 256,
+    minZoom: 0,
+    maxZoom: 19,
+    attribution:
+      '<a href="https://api.mapy.com/copyright" target="_blank">&copy; Mapy.com</a>',
+    detectRetina: true
+  }
+).addTo(map);
 
 const statisticTracks = getStatisticTracks(day);
 
