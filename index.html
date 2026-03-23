@@ -2535,11 +2535,13 @@ map.addControl(new ResetControl());
 
   activeLeafletTrack = polyline;
   activeLeafletMarker = L.circleMarker(firstPoint, {
-    radius: 6,
-    weight: 2,
-    opacity: 1,
-    fillOpacity: 1
-  }).addTo(map);
+  radius: 5,
+  weight: 2,
+  color: "#111",
+  fillColor: "#fff",
+  fillOpacity: 1,
+  opacity: 1
+}).addTo(map);
 } else {
   map.setView([42.067, 47.5], 8);
 }
@@ -2959,10 +2961,12 @@ function buildElevationProfileFromTracks(tracks = []) {
       }
 
       profile.push({
-        distance: totalDistance / 1000,
-        ele: elevation,
-        isBreak: false
-      });
+  distance: totalDistance / 1000,
+  ele: elevation,
+  lat: Number(point.lat),
+  lon: Number(point.lon),
+  isBreak: false
+});
 
       previousPoint = point;
     });
@@ -2970,10 +2974,12 @@ function buildElevationProfileFromTracks(tracks = []) {
     // 👉 добавляем маркер разрыва (между сегментами)
     if (trackIndex < tracks.length - 1) {
       profile.push({
-        distance: totalDistance / 1000,
-        ele: null,
-        isBreak: true
-      });
+  distance: totalDistance / 1000,
+  ele: null,
+  lat: null,
+  lon: null,
+  isBreak: true
+});
       previousPoint = null;
     }
   });
@@ -3252,20 +3258,38 @@ function smoothElevationProfile(profile, stepKm = 0.1) {
     const p2 = profile[currentIndex + 1];
 
     if (!p2 || p1.isBreak || p2.isBreak) {
-      result.push({ distance: d, ele: p1.ele });
-      continue;
-    }
+  result.push({
+    distance: d,
+    ele: p1.ele,
+    lat: p1.lat ?? null,
+    lon: p1.lon ?? null,
+    isBreak: !!p1.isBreak
+  });
+  continue;
+}
 
-    const t =
-      (d - p1.distance) / (p2.distance - p1.distance || 1);
+const t =
+  (d - p1.distance) / (p2.distance - p1.distance || 1);
 
-    const ele = p1.ele + (p2.ele - p1.ele) * t;
+const ele = p1.ele + (p2.ele - p1.ele) * t;
 
-    result.push({
-      distance: d,
-      ele,
-      isBreak: false
-    });
+const lat =
+  Number.isFinite(p1.lat) && Number.isFinite(p2.lat)
+    ? p1.lat + (p2.lat - p1.lat) * t
+    : null;
+
+const lon =
+  Number.isFinite(p1.lon) && Number.isFinite(p2.lon)
+    ? p1.lon + (p2.lon - p1.lon) * t
+    : null;
+
+result.push({
+  distance: d,
+  ele,
+  lat,
+  lon,
+  isBreak: false
+});
   }
 
   return result;
@@ -3292,6 +3316,13 @@ function findNearestProfilePoint(profile, distanceKm) {
   }
 
   return nearest;
+}
+
+function updateLeafletMarkerFromProfilePoint(point) {
+  if (!activeLeafletMarker || !point) return;
+  if (!Number.isFinite(point.lat) || !Number.isFinite(point.lon)) return;
+
+  activeLeafletMarker.setLatLng([point.lat, point.lon]);
 }
 
 function getProfileSlopePercent(profile, point) {
@@ -3362,17 +3393,32 @@ function updateElevationHover(event) {
 
   const slope = getProfileSlopePercent(validPoints, nearestPoint);
 
-  elevationHoverState = {
-    distance: nearestPoint.distance,
-    ele: nearestPoint.ele,
-    slope
-  };
+elevationHoverState = {
+  distance: nearestPoint.distance,
+  ele: nearestPoint.ele,
+  slope
+};
 
-  drawElevationProfile(currentElevationProfile);
+updateLeafletMarkerFromProfilePoint(nearestPoint);
+drawElevationProfile(currentElevationProfile);
 }
 
 function clearElevationHover() {
   elevationHoverState = null;
+
+  const firstPoint = Array.isArray(currentElevationProfile)
+    ? currentElevationProfile.find(
+        point =>
+          !point?.isBreak &&
+          Number.isFinite(point?.lat) &&
+          Number.isFinite(point?.lon)
+      )
+    : null;
+
+  if (firstPoint) {
+    updateLeafletMarkerFromProfilePoint(firstPoint);
+  }
+
   drawElevationProfile(currentElevationProfile);
 }
 
