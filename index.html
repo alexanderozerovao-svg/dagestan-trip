@@ -765,19 +765,18 @@ body.modal-open{
     min-height: 180px;
   }
 }
+
 .day-modal-layout{
   display: grid;
   grid-template-columns: minmax(260px, 0.72fr) minmax(520px, 1.58fr);
   grid-template-areas:
-    "summary map"
     "logistics map"
-    "logistics elevation";
+    "summary   elevation";
   grid-template-rows:
-    auto          /* summary + верх карты */
-    auto          /* особенности */
-    180px;        /* график */
+    auto
+    200px;
 
-  gap: 18px;
+  gap: 10px;
   margin-top: 4px;
 
   flex: 1 1 auto;
@@ -794,19 +793,18 @@ body.modal-open{
 
 .day-panel-summary{
   grid-area: summary;
-  padding: 8px;
-  width: 100%;
-  max-width: 360px;
-  align-self: start;
+  height: 200px;
+  min-height: 200px;
+  overflow: hidden;
 }
 
 .day-panel-logistics{
   grid-area: logistics;
   width: 100%;
   max-width: 360px;
-  height: 320px;
-  min-height: 320px;
-  padding: 24px 22px;
+  height: 350px;
+  min-height: 350px;
+  padding: 24px 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -826,8 +824,8 @@ body.modal-open{
 
 .day-panel-elevation{
   grid-area: elevation;
-  height: 180px;
-  min-height: 180px;
+  height: 200px;
+  min-height: 200px;
   padding: 10px 12px 10px;
   overflow: hidden;
   position: relative;
@@ -903,14 +901,14 @@ body.modal-open{
 
 @media (max-width: 900px){
   .day-modal-layout{
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "summary"
-      "map"
-      "elevation"
-      "logistics";
-    grid-template-rows: auto 320px 220px auto;
-  }
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "logistics"
+    "map"
+    "elevation"
+    "summary";
+  grid-template-rows: auto 320px 220px auto;
+}
 
   .day-panel-map{
     grid-column: auto;
@@ -924,17 +922,30 @@ body.modal-open{
 }
 
 .summary-grid{
+  --summary-tile-size: 84px;
+
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 128px));
-  gap: 8px;
-  justify-content: center;
+  grid-template-columns: repeat(3, var(--summary-tile-size));
+  grid-template-rows: repeat(2, var(--summary-tile-size));
+
+  column-gap: 5px;
+  row-gap: 5px;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 11px 11px;
+
+  justify-content: space-between;
+  align-content: space-between;
+  justify-items: stretch;
+  align-items: stretch;
 }
 
 .summary-tile{
   width: 100%;
-  max-width: 128px;
-  aspect-ratio: 1 / 1;
-  margin: 0 auto;
+  height: 100%;
+
   border-radius: 16px;
   background: rgba(255,255,255,0.95);
   border: 1px solid rgba(7,78,41,0.14);
@@ -942,6 +953,40 @@ body.modal-open{
     0 6px 16px rgba(0,0,0,0.06),
     inset 0 1px 0 rgba(255,255,255,0.9);
 }
+
+/* ===== ОСОБЕННОСТИ ДНЯ ===== */
+
+.logistics-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+
+  width: 100%;
+  flex: 1 1 auto;
+
+  padding: 0;
+  margin-top: 16px;
+
+  align-content: space-evenly;
+  justify-content: space-between;
+}
+
+.logistics-tile{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  border-radius: 16px;
+
+  background: rgba(255,255,255,0.95);
+  border: 1px solid rgba(7,78,41,0.14);
+
+  box-shadow:
+    0 6px 16px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+
+
 
 .summary-tile:hover{
   transform: translateY(-2px);
@@ -958,8 +1003,8 @@ body.modal-open{
   justify-content: center;
   align-items: center;
   height: 100%;
-  gap: 4px;
-  padding: 8px;
+  gap: 3px;
+  padding: 6px;
 }
 
 
@@ -972,7 +1017,7 @@ body.modal-open{
 }
 
 .tile-value{
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--title);
   line-height: 1.1;
@@ -989,7 +1034,7 @@ body.modal-open{
 
 .tile-stage-type{
   margin-top: 0;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1.1;
   color: var(--title);
@@ -1035,15 +1080,15 @@ body.modal-open{
 }
 
 .tile-weather-icon{
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
   display: block;
   flex: 0 0 auto;
 }
 
 .tile-content-weather .tile-value{
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1.1;
   color: var(--title);
@@ -1409,9 +1454,18 @@ body.auth-pending .login-overlay{
 </div>
   </section>
 
-  <section class="day-panel day-panel-logistics">
-    <div class="day-panel-title">Особенности дня</div>
-  </section>
+<section class="day-panel day-panel-logistics">
+  <div class="day-panel-title">Особенности дня</div>
+
+  <div class="logistics-grid">
+
+    <div class="logistics-tile"></div>
+    <div class="logistics-tile"></div>
+    <div class="logistics-tile"></div>
+    <div class="logistics-tile"></div>
+
+  </div>
+</section>
 
   <section class="day-panel day-panel-map">
   <div class="map-frame-wrap" id="mapFrameWrap"></div>
@@ -3294,64 +3348,55 @@ profile.forEach((point) => {
     ctx.lineTo(hoverX, pad.top + h);
     ctx.stroke();
 
-    const tooltipLines = [
-      `${elevationHoverState.distance.toFixed(1)} км`,
-      `${Math.round(elevationHoverState.ele)} м`,
-      `${Math.round(elevationHoverState.slope)} %`
-    ];
+const tooltipLines = [
+  `${elevationHoverState.distance.toFixed(1)} км`,
+  `${Math.round(elevationHoverState.ele)} м`,
+  `${Math.round(elevationHoverState.slope)} %`
+];
 
-    ctx.font = "12px Arial";
-    ctx.textAlign = "left";
-    ctx.textBaseline = "top";
+ctx.font = "12px Arial";
+ctx.textAlign = "left";
+ctx.textBaseline = "top";
 
-    const lineHeight = 18;
-    const boxPaddingX = 10;
-    const boxPaddingY = 8;
-    const boxWidth =
-      Math.max(...tooltipLines.map(line => ctx.measureText(line).width)) +
-      boxPaddingX * 2;
-    const boxHeight = tooltipLines.length * lineHeight + boxPaddingY * 2 - 2;
+const lineHeight = 18;
+const textPadX = 2;
+const textPadY = 1;
 
-    let boxX = hoverX + 10;
-    const boxY = pad.top + 4;
+let textX = hoverX + 10;
+const textY = pad.top + 6;
 
-    if (boxX + boxWidth > pad.left + w) {
-      boxX = hoverX - boxWidth - 10;
-    }
+const maxTextWidth = Math.max(...tooltipLines.map(line => ctx.measureText(line).width));
 
-    if (boxX < pad.left + 4) {
-      boxX = pad.left + 4;
-    }
+if (textX + maxTextWidth + textPadX * 2 > pad.left + w) {
+  textX = hoverX - maxTextWidth - textPadX * 2 - 10;
+}
 
-    // белый tooltip
-    ctx.fillStyle = "rgba(255,255,255,0.96)";
-    ctx.strokeStyle = "rgba(0,0,0,0.08)";
-    ctx.lineWidth = 1;
+if (textX < pad.left + 4) {
+  textX = pad.left + 4;
+}
 
-    const radius = 10;
-    ctx.beginPath();
-    ctx.moveTo(boxX + radius, boxY);
-    ctx.lineTo(boxX + boxWidth - radius, boxY);
-    ctx.quadraticCurveTo(boxX + boxWidth, boxY, boxX + boxWidth, boxY + radius);
-    ctx.lineTo(boxX + boxWidth, boxY + boxHeight - radius);
-    ctx.quadraticCurveTo(boxX + boxWidth, boxY + boxHeight, boxX + boxWidth - radius, boxY + boxHeight);
-    ctx.lineTo(boxX + radius, boxY + boxHeight);
-    ctx.quadraticCurveTo(boxX, boxY + boxHeight, boxX, boxY + boxHeight - radius);
-    ctx.lineTo(boxX, boxY + radius);
-    ctx.quadraticCurveTo(boxX, boxY, boxX + radius, boxY);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
+tooltipLines.forEach((line, index) => {
+  const y = textY + index * lineHeight;
+  const metrics = ctx.measureText(line);
+  const textWidth = metrics.width;
 
-    // текст tooltip
-    ctx.fillStyle = "#111";
-    tooltipLines.forEach((line, index) => {
-      ctx.fillText(
-        line,
-        boxX + boxPaddingX,
-        boxY + boxPaddingY + index * lineHeight
-      );
-    });
+  // белая локальная подложка только под текстом
+// тонкая подложка с мягкими краями
+ctx.fillStyle = "rgba(255,255,255,0.75)"; // прозрачность регулируется тут
+ctx.beginPath();
+ctx.roundRect(
+  textX - textPadX,
+  y - textPadY,
+  textWidth + textPadX * 2,
+  10 + textPadY * 2,
+  3 // радиус скругления
+);
+ctx.fill();
+
+// сам текст
+ctx.fillStyle = "#111";
+ctx.fillText(line, textX, y);
+});
 
     ctx.restore();
   }
@@ -3501,6 +3546,16 @@ function formatNumber(value) {
   return new Intl.NumberFormat("ru-RU").format(value);
 }
 
+function pluralizeParticipants(count) {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+
+  if (mod100 >= 11 && mod100 <= 14) return "участников";
+  if (mod10 === 1) return "участник";
+  if (mod10 >= 2 && mod10 <= 4) return "участника";
+  return "участников";
+}
+
 function getTripSummary(trip) {
   const days = Array.isArray(trip.days) ? trip.days : [];
   const participantsCount = Array.isArray(trip.participants) ? trip.participants.length : 0;
@@ -3531,7 +3586,7 @@ function getTripSummary(trip) {
     meta += ` · маршрут формируется`;
   }
 
-  meta += ` · ${participantsCount} участника`;
+  meta += ` · ${participantsCount} ${pluralizeParticipants(participantsCount)}`;
 
   return {
     dates,
