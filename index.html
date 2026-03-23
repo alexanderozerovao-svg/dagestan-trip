@@ -9,6 +9,18 @@
   <link rel="icon" type="image/png" sizes="192x192" href="./image/favicon.png">
   <link rel="apple-touch-icon" href="./image/favicon.png">
   
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""
+/>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""
+></script>
+
   <style>
     @font-face {
       font-family: 'DagestanCustom';
@@ -870,6 +882,22 @@ body.modal-open{
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+.map-embed{
+  width: 100%;
+  height: 100%;
+}
+
+.leaflet-map{
+  width: 100%;
+  height: 100%;
+}
+
+.leaflet-container{
+  width: 100%;
+  height: 100%;
+  background: #e9efe8;
 }
 
 .day-panel-title{
@@ -2304,6 +2332,11 @@ const trips = {
 const mapFrameWrap = document.getElementById("mapFrameWrap");
 const mapFramesCache = new Map();
 
+let mapMode = "leaflet"; // "iframe" | "leaflet"
+let activeLeafletMap = null;
+let activeLeafletTrack = null;
+let activeLeafletMarker = null;
+
 const dayModal = document.getElementById("dayModal");
 const dayModalBackdrop = document.getElementById("dayModalBackdrop");
 const dayModalClose = document.getElementById("dayModalClose");
@@ -2340,40 +2373,178 @@ const cdMinutes = document.getElementById("cdMinutes");
 const cdSeconds = document.getElementById("cdSeconds");
 const tripToggleBtn = document.getElementById("tripToggleBtn");
 
+function destroyLeafletMap() {
+  if (activeLeafletMap) {
+    activeLeafletMap.remove();
+    activeLeafletMap = null;
+  }
 
+  activeLeafletTrack = null;
+  activeLeafletMarker = null;
+}
 
-function showDayMap(dayKey, mapUrl) {
+function clearMapContainer() {
   mapFramesCache.forEach((iframe) => {
     iframe.style.display = "none";
   });
 
-  if (!mapUrl) {
-    return;
-  }
+  destroyLeafletMap();
+  mapFrameWrap.innerHTML = "";
+}
 
-  if (mapFramesCache.has(dayKey)) {
-    const existingIframe = mapFramesCache.get(dayKey);
+function showDayMap(dayKey, mapUrl, day = null) {
+  clearMapContainer();
 
-    if (!mapFrameWrap.contains(existingIframe)) {
-      mapFrameWrap.appendChild(existingIframe);
+  if (mapMode === "iframe") {
+    if (!mapUrl) {
+      return;
     }
 
-    existingIframe.style.display = "block";
+    if (mapFramesCache.has(dayKey)) {
+      const existingIframe = mapFramesCache.get(dayKey);
+
+      if (!mapFrameWrap.contains(existingIframe)) {
+        mapFrameWrap.appendChild(existingIframe);
+      }
+
+      existingIframe.style.display = "block";
+      return;
+    }
+
+    const iframe = document.createElement("iframe");
+    iframe.src = mapUrl;
+    iframe.title = "MapMagic route";
+    iframe.frameBorder = "0";
+    iframe.allowFullscreen = true;
+    iframe.className = "map-embed";
+    iframe.style.display = "block";
+
+    mapFrameWrap.appendChild(iframe);
+    mapFramesCache.set(dayKey, iframe);
     return;
   }
 
-  const iframe = document.createElement("iframe");
-  iframe.src = mapUrl;
-  iframe.title = "MapMagic route";
-  iframe.frameBorder = "0";
-  iframe.allowFullscreen = true;
-  iframe.style.width = "100%";
-  iframe.style.height = "100%";
-  iframe.style.border = "0";
-  iframe.style.display = "block";
+  if (mapMode === "leaflet") {
+    initLeafletMap(day);
+  }
+}
 
-  mapFrameWrap.appendChild(iframe);
-  mapFramesCache.set(dayKey, iframe);
+function initLeafletMap(day) {
+  const mapEl = document.createElement("div");
+  mapEl.className = "leaflet-map";
+  mapFrameWrap.appendChild(mapEl);
+
+  const map = L.map(mapEl, {
+    zoomControl: true,
+    attributionControl: true
+  });
+
+L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+  attribution: "&copy; OpenStreetMap &copy; CARTO",
+  subdomains: "abcd",
+  maxZoom: 20,
+  detectRetina: true
+}).addTo(map);
+
+L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
+  attribution: "&copy; OpenTopoMap contributors",
+  maxZoom: 17,
+  opacity: 0.32,
+  detectRetina: true
+}).addTo(map);
+
+const statisticTracks = getStatisticTracks(day);
+
+const latlngGroups = statisticTracks
+  .map(track => {
+    const points = Array.isArray(track?.points) ? track.points : [];
+    return points
+      .filter(point => Number.isFinite(point?.lat) && Number.isFinite(point?.lon))
+      .map(point => [point.lat, point.lon]);
+  })
+  .filter(group => group.length > 0);
+
+if (latlngGroups.length) {
+  const polyline = L.polyline(latlngGroups, {
+    color: "#2b7cff",
+    weight: 5,
+    opacity: 0.95
+  }).addTo(map);
+
+  // bounds всего маршрута (для кнопки reset)
+const fullBounds = polyline.getBounds();
+
+// 👉 добавляем клики по каждому сегменту
+latlngGroups.forEach((group) => {
+  const clickLayer = L.polyline(group, {
+    color: "#000",
+    weight: 12,      // чуть шире для удобного клика
+    opacity: 0       // полностью невидимая
+  }).addTo(map);
+
+  clickLayer.on("click", () => {
+    map.fitBounds(clickLayer.getBounds(), {
+      padding: [20, 20],
+      maxZoom: 14
+    });
+  });
+});
+
+  map.fitBounds(polyline.getBounds(), { padding: [20, 20] });
+
+  const ResetControl = L.Control.extend({
+  options: { position: "topleft" },
+
+onAdd: function () {
+  const container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+
+  const button = L.DomUtil.create("a", "", container);
+  button.href = "#";
+  button.title = "Показать весь маршрут";
+
+  // базовые стили кнопки (как у + / -)
+  button.style.width = "30px";
+  button.style.height = "30px";
+  button.style.display = "flex";
+  button.style.alignItems = "center";
+  button.style.justifyContent = "center";
+
+  // внутренняя иконка
+  const icon = L.DomUtil.create("span", "reset-icon", button);
+  icon.innerHTML = "⟳";
+
+  // стиль стрелки
+  icon.style.fontSize = "26px";
+  icon.style.display = "block";
+
+  // 👇 СМЕЩЕНИЕ СТРЕЛКИ (играй тут)
+  icon.style.transform = "translateX(1px) translateY(-1px)";
+
+  L.DomEvent.on(button, "click", (e) => {
+    L.DomEvent.stop(e);
+    map.fitBounds(fullBounds, { padding: [20, 20] });
+  });
+
+  return container;
+}
+});
+
+map.addControl(new ResetControl());
+
+  const firstPoint = latlngGroups[0][0];
+
+  activeLeafletTrack = polyline;
+  activeLeafletMarker = L.circleMarker(firstPoint, {
+    radius: 6,
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 1
+  }).addTo(map);
+} else {
+  map.setView([42.067, 47.5], 8);
+}
+
+  activeLeafletMap = map;
 }
 
 function renderStageStars(count) {
@@ -2957,7 +3128,7 @@ async function openDayModal(day, index) {
       : "—";
 
   const dayKey = `${activeTrip}-${index}`;
-  showDayMap(dayKey, day.mapUrl);
+  showDayMap(dayKey, day.mapUrl, day);
 
   currentElevationProfile = [];
   elevationHoverState = null;
