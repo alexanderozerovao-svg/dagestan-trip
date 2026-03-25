@@ -702,7 +702,7 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
   min-height: 28px;
 }
 
@@ -716,22 +716,30 @@ text-shadow: 0 3px 6px rgba(0,0,0,0.15);
 
 
 .day-modal-meta{
-  position: absolute;
-  right: 60px;
-  top: 2px;
-  height: 24px;
+  grid-row: 2;
   display: flex;
   align-items: center;
-  font-size: 16px;
+  justify-content: center;
+
+  min-height: 24px;
+  margin: 0;
+
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(7, 78, 41, 0.58);
   line-height: 1;
   white-space: nowrap;
-  transform: none;
-
   pointer-events: none;
+  
+}
+
+.day-panel-meta{
+  width: 100%;
+  margin: 0 0 16px;
+  text-align: center;
+  flex: 0 0 auto;
 }
 
 .day-modal-route-title{
@@ -785,7 +793,7 @@ body.modal-open{
     "logistics map"
     "summary   elevation";
   grid-template-rows:
-    auto
+    minmax(0, 1fr)
     200px;
 
   gap: 10px;
@@ -794,6 +802,7 @@ body.modal-open{
   flex: 1 1 auto;
   height: 100%;
   overflow: hidden;
+  align-items: stretch;
 }
 
 .day-panel{
@@ -814,13 +823,13 @@ body.modal-open{
   grid-area: logistics;
   width: 100%;
   max-width: 360px;
-  height: 350px;
-  min-height: 350px;
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-self: start;
+  height: auto;
+  min-height: 0;
+
+  padding: 0 20px;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr auto 1fr;
+  align-self: stretch;
 }
 
 
@@ -985,18 +994,16 @@ body.modal-open{
 /* ===== ОСОБЕННОСТИ ДНЯ ===== */
 
 .logistics-grid{
-  --logistics-cols: 2;
+  grid-row: 4;
 
+  --logistics-cols: 2;
   display: grid;
   grid-template-columns: repeat(var(--logistics-cols), minmax(0, 1fr));
   gap: 12px;
-
   width: 100%;
-  flex: 1 1 auto;
-
   padding: 0;
-  margin-top: 16px;
-
+  margin: 0;
+  min-height: 0;
   align-content: start;
 }
 
@@ -1386,6 +1393,79 @@ body.auth-pending .login-overlay{
   border-radius: 6px;
 }
 
+.photo-map-marker-wrap{
+  background: transparent;
+  border: none;
+}
+
+.photo-map-marker{
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.22),
+    0 0 0 1px rgba(0,0,0,0.10);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    width 0.2s ease,
+    height 0.2s ease;
+}
+
+.photo-map-marker.is-active{
+  transform: scale(1);
+  box-shadow:
+    0 8px 18px rgba(0,0,0,0.28),
+    0 0 0 2px rgba(7,78,41,0.18);
+}
+
+.photo-pin{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  transform: translateY(-6px);
+  transition: transform 0.2s ease;
+  opacity: 0.6;
+}
+
+.photo-pin.is-active{
+  transform: translateY(-10px);
+  opacity: 1;
+}
+
+/* круг с фото */
+.photo-pin-img{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+
+  border: 3px solid #fff;
+
+  box-shadow:
+    0 6px 16px rgba(0,0,0,0.25),
+    0 0 0 1px rgba(0,0,0,0.12);
+}
+
+/* хвостик (иголка) */
+.photo-pin-tail{
+  position: absolute;
+  left: 50%;
+  bottom: -9px;
+  transform: translateX(-50%);
+
+  width: 0;
+  height: 0;
+
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 12px solid #fff;
+}
   </style>
 </head>
 <body class="auth-pending">
@@ -1453,7 +1533,7 @@ body.auth-pending .login-overlay{
     <button class="day-modal-close" id="dayModalClose" type="button" aria-label="Закрыть">×</button>
 
    <div class="day-modal-topline">
-  <div class="day-modal-meta" id="dayModalMeta"></div>
+
   <div class="day-modal-route-title" id="dayModalTitle"></div>
 </div>
 
@@ -1530,6 +1610,7 @@ body.auth-pending .login-overlay{
   </section>
 
 <section class="day-panel day-panel-logistics">
+  <div class="day-modal-meta" id="dayModalMeta"></div>
   <div class="logistics-grid" id="logisticsGrid"></div>
 </section>
 
@@ -1629,6 +1710,9 @@ const trips = {
         routeTitle: "МАХАЧКАЛА — ДЕРБЕНТ",
         stageType: "равнина",
         stageStars: 0,
+        features: [
+            { id: "logistics", title: "Логистика", png: "./image/days/log.webp" }
+        ],
         mapUrl: "https://mapmagic.app/embed?routes=0ykPL39",
         gpxTracks: [
         {
@@ -1671,6 +1755,19 @@ const trips = {
         routeTitle: "ДЕРБЕНТ — ХУЧНИ",
         stageType: "горы",
         stageStars: 2,
+features: [
+  {
+    id: "day2",
+    title: "день2",
+    png: "./image/days/2024/2024day2.webp",
+    activePhotoIndex: 0,
+
+    photos: [
+      { src: "./image/days/2024/2024day2.webp", lat: 41.92181 , lon: 48.22668 },
+      { src: "./image/days/2024/2024day3.webp", lat: 41.95694 , lon: 48.08167 }
+    ]
+  }
+],
         mapUrl: "https://mapmagic.app/embed?routes=6qKbl3V",
         gpxTracks: [
         {
@@ -2443,6 +2540,9 @@ let activeLeafletMap = null;
 let activeLeafletTrack = null;
 let activeLeafletMarker = null;
 
+let activePhotoIndex = 0;
+let photoMarkers = [];
+
 const trackColors = [
   "#e53935", // красный
   "#1e88e5", // синий
@@ -2477,6 +2577,8 @@ const logisticsGridEl = document.getElementById("logisticsGrid");
 
 const elevationCanvas = document.getElementById("elevationCanvas");
 const elevationEmpty = document.getElementById("elevationEmpty");
+
+
 
 let currentElevationProfile = [];
 let elevationHoverState = null;
@@ -2754,21 +2856,57 @@ function renderLogisticsTiles(day) {
     tile.title = feature.title || "";
 
     const img = document.createElement("img");
-    img.src = feature.png;
+
+    const hasPhotos = Array.isArray(feature.photos) && feature.photos.length > 0;
+    const safePhotoIndex = Number.isInteger(feature.activePhotoIndex)
+      ? feature.activePhotoIndex
+      : 0;
+
+    const currentPhoto = hasPhotos
+      ? feature.photos[safePhotoIndex] || feature.photos[0]
+      : null;
+
+    img.src = currentPhoto?.src || feature.png;
     img.alt = feature.title || `Особенность ${featureIndex + 1}`;
 
     tile.appendChild(img);
 
     tile.addEventListener("click", () => {
-      if (typeof feature.onClick === "function") {
-        feature.onClick(feature, day, featureIndex);
-      } else {
-        console.log("Клик по плашке:", feature, day);
+      if (activeTrip !== "2024") {
+        if (typeof feature.onClick === "function") {
+          feature.onClick(feature, day, featureIndex);
+        }
+        return;
       }
+
+      const photos = Array.isArray(feature.photos) ? feature.photos : [];
+      if (!photos.length) return;
+
+      const currentIndex = Number.isInteger(feature.activePhotoIndex)
+        ? feature.activePhotoIndex
+        : 0;
+
+      const nextIndex = (currentIndex + 1) % photos.length;
+
+      feature.activePhotoIndex = nextIndex;
+      activePhotoIndex = nextIndex;
+
+      updateFeatureTileImage(featureIndex, photos[nextIndex].src);
+      updatePhotoOnMap(photos, featureIndex, day);
     });
 
     logisticsGridEl.appendChild(tile);
   });
+}
+
+function updateFeatureTileImage(featureIndex, photoSrc) {
+  const tileImg = logisticsGridEl?.querySelector(
+    `.logistics-tile[data-feature-index="${featureIndex}"] img`
+  );
+
+  if (!tileImg || !photoSrc) return;
+
+  tileImg.src = photoSrc;
 }
 
 function buildIsoDate(dayDate, tripYear) {
@@ -3345,6 +3483,21 @@ async function openDayModal(day, index) {
   const dayKey = `${activeTrip}-${index}`;
   showDayMap(dayKey, day.mapUrl, day);
 
+if (activeTrip === "2024") {
+  const featureIndex = 0;
+  const feature = day.features?.[featureIndex];
+
+  if (feature?.photos?.length) {
+    activePhotoIndex = Number.isInteger(feature.activePhotoIndex)
+      ? feature.activePhotoIndex
+      : 0;
+
+    setTimeout(() => {
+      updatePhotoOnMap(feature.photos, featureIndex, day);
+    }, 300);
+  }
+}
+
   currentElevationProfile = [];
   elevationHoverState = null;
   drawElevationProfile([]);
@@ -3532,6 +3685,52 @@ function updateLeafletMarkerFromProfilePoint(point) {
   if (!Number.isFinite(point.lat) || !Number.isFinite(point.lon)) return;
 
   activeLeafletMarker.setLatLng([point.lat, point.lon]);
+}
+
+function updatePhotoOnMap(photos, featureIndex = 0, day = null) {
+  if (!activeLeafletMap) return;
+
+  photoMarkers.forEach(marker => marker.remove());
+  photoMarkers = [];
+
+  photos.forEach((photo, index) => {
+    const isActive = index === activePhotoIndex;
+
+    const size = isActive ? 70 : 40;
+    const border = isActive ? 3 : 2;
+
+    const icon = L.divIcon({
+      className: "photo-map-marker-wrap",
+html: `
+  <div class="photo-pin ${isActive ? "is-active" : ""}" 
+       style="width:${size}px; height:${size}px;">
+       
+    <div class="photo-pin-img"
+         style="background-image:url('${photo.src}')">
+    </div>
+
+    <div class="photo-pin-tail"></div>
+  </div>
+`,
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size]
+    });
+
+    const marker = L.marker([photo.lat, photo.lon], { icon }).addTo(activeLeafletMap);
+
+    marker.on("click", () => {
+      activePhotoIndex = index;
+
+      if (day?.features?.[featureIndex]) {
+        day.features[featureIndex].activePhotoIndex = index;
+      }
+
+      updateFeatureTileImage(featureIndex, photo.src);
+      updatePhotoOnMap(photos, featureIndex, day);
+    });
+
+    photoMarkers.push(marker);
+  });
 }
 
 function getProfileSlopePercent(profile, point) {
