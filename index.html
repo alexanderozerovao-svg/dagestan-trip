@@ -2657,6 +2657,8 @@ let mapMode = "leaflet"; // "iframe" | "leaflet"
 let activeLeafletMap = null;
 let activeLeafletTrack = null;
 let activeLeafletMarker = null;
+let activeLeafletFullBounds = null;
+let activeLeafletPhotoPadding = [40, 40];
 
 let activePhotoIndex = 0;
 let photoMarkers = [];
@@ -2722,6 +2724,7 @@ function destroyLeafletMap() {
 
   activeLeafletTrack = null;
   activeLeafletMarker = null;
+  activeLeafletFullBounds = null;
 }
 
 function clearMapContainer() {
@@ -2832,7 +2835,7 @@ latlngGroups.forEach((group) => {
 
   // bounds всего маршрута (для кнопки reset)
 const fullBounds = L.featureGroup(polylines).getBounds();
-
+activeLeafletFullBounds = fullBounds;
 // 👉 добавляем клики по каждому сегменту
 latlngGroups.forEach((group) => {
   const clickLayer = L.polyline(group, {
@@ -3611,7 +3614,7 @@ if (activeTrip === "2024") {
       : 0;
 
     setTimeout(() => {
-      updatePhotoOnMap(feature.photos, featureIndex, day);
+      updatePhotoOnMap(feature.photos, featureIndex, day, { skipPan: true });
     }, 300);
   }
 }
@@ -3805,8 +3808,39 @@ function updateLeafletMarkerFromProfilePoint(point) {
   activeLeafletMarker.setLatLng([point.lat, point.lon]);
 }
 
-function updatePhotoOnMap(photos, featureIndex = 0, day = null) {
+function isPhotoVisibleInCurrentMap(photo) {
+  if (!activeLeafletMap || !photo) return false;
+  if (!Number.isFinite(photo.lat) || !Number.isFinite(photo.lon)) return false;
+
+  const bounds = activeLeafletMap.getBounds();
+  if (!bounds) return false;
+
+  // небольшой внутренний отступ, чтобы не считать фото "видимым",
+  // если оно почти упирается в край карты
+  const paddedBounds = bounds.pad(-0.12);
+
+  return paddedBounds.contains([photo.lat, photo.lon]);
+}
+
+function panSmoothToPhotoIfNeeded(photo) {
+  if (!activeLeafletMap || !photo) return;
+  if (!Number.isFinite(photo.lat) || !Number.isFinite(photo.lon)) return;
+
+  if (isPhotoVisibleInCurrentMap(photo)) {
+    return;
+  }
+
+  activeLeafletMap.flyTo([photo.lat, photo.lon], activeLeafletMap.getZoom(), {
+    animate: true,
+    duration: 2.8,   // чем больше, тем медленнее
+    easeLinearity: 0.15
+  });
+}
+
+function updatePhotoOnMap(photos, featureIndex = 0, day = null, options = {}) {
   if (!activeLeafletMap) return;
+
+  const { skipPan = false } = options;
 
   photoMarkers.forEach(marker => marker.remove());
   photoMarkers = [];
@@ -3836,21 +3870,25 @@ html: `
 
     const marker = L.marker([photo.lat, photo.lon], { icon }).addTo(activeLeafletMap);
 
-    marker.on("click", () => {
-      activePhotoIndex = index;
+marker.on("click", () => {
+  activePhotoIndex = index;
 
-      if (day?.features?.[featureIndex]) {
-        day.features[featureIndex].activePhotoIndex = index;
-      }
+  if (day?.features?.[featureIndex]) {
+    day.features[featureIndex].activePhotoIndex = index;
+  }
 
-      updateFeatureTileImage(featureIndex, photo.src);
-      updatePhotoOnMap(photos, featureIndex, day);
-    });
+  updateFeatureTileImage(featureIndex, photo.src);
+  updatePhotoOnMap(photos, featureIndex, day, { skipPan: true });
+});
 
     photoMarkers.push(marker);
   });
-}
+  const activePhoto = photos[activePhotoIndex];
 
+  if (!skipPan && activePhoto) {
+    panSmoothToPhotoIfNeeded(activePhoto);
+  }
+}
 function getProfileSlopePercent(profile, point) {
   if (!Array.isArray(profile) || !profile.length || !point) return 0;
 
