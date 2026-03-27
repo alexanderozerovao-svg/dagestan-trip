@@ -2209,12 +2209,44 @@ features: [
         stageType: "равнина",
         stageStars: 0,
 
-        features: [
-            { id: "logistics", title: "Логистика", png: "./image/days/log.webp" },
-            { id: "derbent", title: "Дербент", png: "./image/days/derbent.webp" },
-            { id: "lun", title: "Лунь", png: "./image/days/lun.webp" },
-            { id: "home", title: "ночевка", png: "./image/days/home.webp" }
-        ],
+features: [
+  {
+    id: "logistics",
+    title: "Логистика",
+    png: "./image/days/log.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/log.webp", lat: 42.72596, lon: 47.68135 } // Махачкала (условно старт)
+    ]
+  },
+  {
+    id: "derbent",
+    title: "Дербент",
+    png: "./image/days/derbent.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/derbent.webp", lat: 42.05637, lon: 48.30701 }
+    ]
+  },
+  {
+    id: "lun",
+    title: "Лунь",
+    png: "./image/days/lun.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/lun.webp", lat: 41.94098, lon: 48.37926 }
+    ]
+  },
+  {
+    id: "home",
+    title: "Ночевка",
+    png: "./image/days/home.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/home.webp", lat: 42.0032, lon: 48.33693 } // чуть южнее Дербента
+    ]
+  }
+],
 
         mapUrl: "https://mapmagic.app/embed?routes=V5Nkyj0", 
         gpxTracks: [
@@ -2267,12 +2299,44 @@ features: [
   stageType: "горы",
   stageStars: 2,
 
-          features: [
-            { id: "tanasaran", title: "Табасаран", png: "./image/days/tabasaran.webp" },
-            { id: "huchni", title: "Хучни", png: "./image/days/huchni.webp" },
-            { id: "hanag", title: "Ханагский водопад", png: "./image/days/hanag.webp" },
-            { id: "home", title: "ночевка", png: "./image/days/home.webp" }
-        ],
+features: [
+  {
+    id: "tanasaran",
+    title: "Табасаран",
+    png: "./image/days/tabasaran.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/tabasaran.webp", lat: 41.92185, lon: 48.22599}
+    ]
+  },
+  {
+    id: "huchni",
+    title: "Хучни",
+    png: "./image/days/huchni.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/huchni.webp", lat: 41.96476, lon: 47.95834 }
+    ]
+  },
+  {
+    id: "hanag",
+    title: "Ханагский водопад",
+    png: "./image/days/hanag.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/hanag.webp", lat: 41.97261, lon: 47.92829}
+    ]
+  },
+  {
+    id: "home",
+    title: "Ночевка",
+    png: "./image/days/home.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/home.webp", lat: 41.96426, lon: 47.9481 }
+    ]
+  }
+],
 
   mapUrl: "https://mapmagic.app/embed?routes=9kgKyx9",
   gpxTracks: [
@@ -2316,12 +2380,45 @@ features: [
   routeTitle: "ХУЧНИ - МАДЖАЛИС",
   stageType: "горы",
   stageStars: 2,
-          features: [
-            { id: "aul", title: "Аулы", png: "./image/days/aul.webp" },
-            { id: "mountine", title: "Переход", png: "./image/days/mountine.webp" },
-            { id: "mtb", title: "Даунхилл", png: "./image/days/mtb.webp" },
-            { id: "home", title: "ночевка", png: "./image/days/home.webp" }
-        ],
+
+features: [
+  {
+    id: "aul",
+    title: "Аулы",
+    png: "./image/days/aul.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/aul.webp", lat: 42.01641, lon: 47.84353 }
+    ]
+  },
+  {
+    id: "mountine",
+    title: "Переход",
+    png: "./image/days/mountine.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/mountine.webp", lat: 42.00965, lon: 47.80427 }
+    ]
+  },
+  {
+    id: "mtb",
+    title: "Даунхилл",
+    png: "./image/days/mtb.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/mtb.webp", lat: 42.031548, lon: 47.78460 }
+    ]
+  },
+  {
+    id: "home",
+    title: "Ночевка",
+    png: "./image/days/home.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/home.webp", lat: 42.11078, lon: 47.81553 }
+    ]
+  }
+],
 
   mapUrl: "https://mapmagic.app/embed?routes=0ykPe39",
   gpxTracks: [
@@ -2365,12 +2462,44 @@ features: [
   routeTitle: "МАДЖАЛИС — КУБАЧИ",
   stageType: "горы",
   stageStars: 3,
-           features: [
-            { id: "uphill", title: "Апхилл", png: "./image/days/uphill.webp" },
-            { id: "kubachi", title: "Кубачи", png: "./image/days/kubachi.webp" },
-            { id: "master", title: "Кубачи ремесло", png: "./image/days/master.webp" },
-            { id: "home", title: "ночевка", png: "./image/days/home.webp" }
-        ],
+features: [
+  {
+    id: "uphill",
+    title: "Апхилл",
+    png: "./image/days/uphill.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/uphill.webp", lat: 42.09731, lon: 47.66352 }
+    ]
+  },
+  {
+    id: "kubachi",
+    title: "Кубачи",
+    png: "./image/days/kubachi.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/kubachi.webp", lat: 42.08739, lon: 47.59947 }
+    ]
+  },
+  {
+    id: "master",
+    title: "Кубачи ремесло",
+    png: "./image/days/master.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/master.webp", lat: 42.09415, lon: 47.59612 }
+    ]
+  },
+  {
+    id: "home",
+    title: "Ночевка",
+    png: "./image/days/home.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/home.webp", lat: 42.09542, lon: 47.59505 }
+    ]
+  }
+],
   mapUrl: "https://mapmagic.app/embed?routes=VQmN8bV",
   gpxTracks: [
     {
@@ -2414,12 +2543,44 @@ features: [
   stageType: "горы",
   stageStars: 2,
 
-           features: [
-            { id: "kross", title: "Кросс-кантри", png: "./image/days/kross.webp" },
-            { id: "alp", title: "Альпийские луга", png: "./image/days/alp.webp" },
-            { id: "silence", title: "Тишина", png: "./image/days/silence.webp" },
-            { id: "home2", title: "Гостевой дом в горах", png: "./image/days/home2.webp" }
-        ],
+features: [
+  {
+    id: "kross",
+    title: "Кросс-кантри",
+    png: "./image/days/kross.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/kross.webp", lat: 42.08803, lon: 47.57881 }
+    ]
+  },
+  {
+    id: "alp",
+    title: "Альпийские луга",
+    png: "./image/days/alp.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/alp.webp", lat: 42.07767, lon: 47.52592  }
+    ]
+  },
+  {
+    id: "silence",
+    title: "Тишина",
+    png: "./image/days/silence.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/silence.webp", lat: 42.09606, lon: 47.45721}
+    ]
+  },
+  {
+    id: "home2",
+    title: "Гостевой дом в горах",
+    png: "./image/days/home2.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/home2.webp", lat: 42.04679, lon:  47.37349 }
+    ]
+  }
+],
 
   mapUrl: "https://mapmagic.app/embed?routes=6Agy3KV",
   gpxTracks: [
@@ -2464,12 +2625,44 @@ features: [
   stageType: "горы",
   stageStars: 2,
 
-           features: [
-            { id: "covkra", title: "Цовкра", png: "./image/days/covkra.webp" },
-            { id: "serp", title: "Спуск", png: "./image/days/serp.webp" },
-            { id: "kumuh", title: "Тишина", png: "./image/days/kumuh.webp" },
-            { id: "home", title: "Гостевой дом в горах", png: "./image/days/home.webp" }
-        ],
+features: [
+  {
+    id: "covkra",
+    title: "Цовкра",
+    png: "./image/days/covkra.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/covkra.webp", lat: 42.06, lon: 47.26868 }
+    ]
+  },
+  {
+    id: "serp",
+    title: "Спуск",
+    png: "./image/days/serp.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/serp.webp", lat: 42.07835, lon: 47.210310 }
+    ]
+  },
+  {
+    id: "kumuh",
+    title: "Кумух",
+    png: "./image/days/kumuh.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/kumuh.webp", lat: 42.16493, lon: 47.116580 }
+    ]
+  },
+  {
+    id: "home",
+    title: "Гостевой дом в горах",
+    png: "./image/days/home.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/home.webp", lat: 42.17613, lon: 47.12379 }
+    ]
+  }
+],
 
   mapUrl: "https://mapmagic.app/embed?routes=0OKj4q0",
   gpxTracks: [
@@ -2512,13 +2705,45 @@ features: [
   tempDay: null,
   routeTitle: "КУМУХ — ГУНИБ",
   stageType: "горы",
-  stageStars: 3,
-             features: [
-            { id: "gamsutl", title: "Гамсутль", png: "./image/days/gamsutl.webp" },
-            { id: "choh", title: "ЧОХ", png: "./image/days/choh.webp" },
-            { id: "gunib", title: "Гуниб", png: "./image/days/gunib.webp" },
-            { id: "home", title: "Гостевой дом в горах", png: "./image/days/home.webp" }
-        ],
+stageStars: 3,
+features: [
+  {
+    id: "gamsutl",
+    title: "Гамсутль",
+    png: "./image/days/gamsutl.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/gamsutl.webp", lat: 42.30406, lon: 46.99675 }
+    ]
+  },
+  {
+    id: "choh",
+    title: "ЧОХ",
+    png: "./image/days/choh.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/choh.webp", lat: 42.32454, lon: 47.03419 }
+    ]
+  },
+  {
+    id: "gunib",
+    title: "Гуниб",
+    png: "./image/days/gunib.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/gunib.webp", lat: 42.38873, lon: 46.96363, }
+    ]
+  },
+  {
+    id: "home",
+    title: "Гостевой дом в горах",
+    png: "./image/days/home.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/home.webp", lat: 42.38213, lon: 46.96226 }
+    ]
+  }
+],
   mapUrl: "https://mapmagic.app/embed?routes=6ZAXbZ0",
   gpxTracks: [
     {
@@ -2560,14 +2785,45 @@ features: [
   tempDay: null,
   routeTitle: "ГУНИБ — ДУБКИ",
   stageType: "спуск",
-  stageStars: 2,
-             features: [
-            { id: "karadah", title: "Карадах", png: "./image/days/karadah.webp" },
-            { id: "irganai", title: "Ирганай", png: "./image/days/irganai.webp" },
-            { id: "logistics", title: "Логистика", png: "./image/days/log.webp" },
-            { id: "home", title: "Гостевой дом в горах", png: "./image/days/home.webp" }
-        ],
-
+stageStars: 2,
+features: [
+  {
+    id: "karadah",
+    title: "Карадах",
+    png: "./image/days/karadah.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/karadah.webp", lat: 42.46304, lon: 46.887760 }
+    ]
+  },
+  {
+    id: "irganai",
+    title: "Ирганай",
+    png: "./image/days/irganai.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/irganai.webp", lat: 42.62613, lon: 46.94441 }
+    ]
+  },
+  {
+    id: "logistics",
+    title: "Логистика",
+    png: "./image/days/log.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/log.webp", lat: 42.74379, lon: 46.82668 }
+    ]
+  },
+  {
+    id: "home",
+    title: "Гостевой дом в горах",
+    png: "./image/days/home.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/home.webp", lat: 43.02175, lon: 46.83867 }
+    ]
+  }
+],
   mapUrl: "https://mapmagic.app/embed?routes=9D3Q1q6",
   gpxTracks: [
     {
@@ -2610,12 +2866,44 @@ features: [
   routeTitle: "ДУБКИ — МАХАЧКАЛА",
   stageType: "спуск",
   stageStars: 1,
-               features: [
-            { id: "sulak", title: "Сулак", png: "./image/days/sulak.webp" },
-            { id: "noho", title: "Ирганай", png: "./image/days/noho.webp" },
-            { id: "logistics", title: "Логистика", png: "./image/days/log.webp" },
-            { id: "home", title: "Гостевой дом в горах", png: "./image/days/home.webp" }
-        ],
+features: [
+  {
+    id: "sulak",
+    title: "Сулак",
+    png: "./image/days/sulak.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/sulak.webp", lat: 43.01306, lon: 46.81618 }
+    ]
+  },
+  {
+    id: "noho",
+    title: "Ирганай",
+    png: "./image/days/noho.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/noho.webp", lat: 43.06419, lon: 46.82881 }
+    ]
+  },
+  {
+    id: "logistics",
+    title: "Логистика",
+    png: "./image/days/log.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/log.webp", lat: 43.205622, lon: 46.8674 }
+    ]
+  },
+  {
+    id: "home",
+    title: "Гостевой дом",
+    png: "./image/days/home.webp",
+    activePhotoIndex: 0,
+    photos: [
+      { src: "./image/days/home.webp", lat: 42.98795, lon: 47.50231 }
+    ]
+  }
+],
 
   mapUrl: "https://mapmagic.app/embed?routes=0XANra6",
   gpxTracks: [
@@ -2992,30 +3280,29 @@ function renderLogisticsTiles(day) {
 
     tile.appendChild(img);
 
-    tile.addEventListener("click", () => {
-      if (activeTrip !== "2024") {
-        if (typeof feature.onClick === "function") {
-          feature.onClick(feature, day, featureIndex);
-        }
-        return;
-      }
+tile.addEventListener("click", () => {
+  const photos = Array.isArray(feature.photos) ? feature.photos : [];
+  if (!photos.length) {
+    if (typeof feature.onClick === "function") {
+      feature.onClick(feature, day, featureIndex);
+    }
+    return;
+  }
 
-      const photos = Array.isArray(feature.photos) ? feature.photos : [];
-      if (!photos.length) return;
+  const currentIndex = Number.isInteger(feature.activePhotoIndex)
+    ? feature.activePhotoIndex
+    : 0;
 
-      const currentIndex = Number.isInteger(feature.activePhotoIndex)
-        ? feature.activePhotoIndex
-        : 0;
+  const nextIndex = photos.length > 1
+    ? (currentIndex + 1) % photos.length
+    : 0;
 
-      const nextIndex = (currentIndex + 1) % photos.length;
+  feature.activePhotoIndex = nextIndex;
+  activePhotoIndex = nextIndex;
 
-      feature.activePhotoIndex = nextIndex;
-      activePhotoIndex = nextIndex;
-
-      updateFeatureTileImage(featureIndex, photos[nextIndex].src);
-      updatePhotoOnMap(photos, featureIndex, day);
-    });
-
+  updateFeatureTileImage(featureIndex, photos[nextIndex].src);
+updateDayFeaturesOnMap(day, featureIndex);
+});
     logisticsGridEl.appendChild(tile);
   });
 }
@@ -3604,19 +3891,20 @@ async function openDayModal(day, index) {
   const dayKey = `${activeTrip}-${index}`;
   showDayMap(dayKey, day.mapUrl, day);
 
-if (activeTrip === "2024") {
-  const featureIndex = 0;
-  const feature = day.features?.[featureIndex];
+const firstFeatureIndex = Array.isArray(day.features)
+  ? day.features.findIndex(feature => Array.isArray(feature?.photos) && feature.photos.length)
+  : -1;
 
-  if (feature?.photos?.length) {
-    activePhotoIndex = Number.isInteger(feature.activePhotoIndex)
-      ? feature.activePhotoIndex
-      : 0;
+if (firstFeatureIndex !== -1) {
+  const feature = day.features[firstFeatureIndex];
 
-    setTimeout(() => {
-      updatePhotoOnMap(feature.photos, featureIndex, day, { skipPan: true });
-    }, 300);
-  }
+  activePhotoIndex = Number.isInteger(feature.activePhotoIndex)
+    ? feature.activePhotoIndex
+    : 0;
+
+setTimeout(() => {
+  updateDayFeaturesOnMap(day, firstFeatureIndex, { skipPan: true });
+}, 300);
 }
 
   currentElevationProfile = [];
@@ -3837,7 +4125,7 @@ function panSmoothToPhotoIfNeeded(photo) {
   });
 }
 
-function updatePhotoOnMap(photos, featureIndex = 0, day = null, options = {}) {
+function updateDayFeaturesOnMap(day, activeFeatureIndex = 0, options = {}) {
   if (!activeLeafletMap) return;
 
   const { skipPan = false } = options;
@@ -3845,50 +4133,60 @@ function updatePhotoOnMap(photos, featureIndex = 0, day = null, options = {}) {
   photoMarkers.forEach(marker => marker.remove());
   photoMarkers = [];
 
-  photos.forEach((photo, index) => {
-    const isActive = index === activePhotoIndex;
+  const features = Array.isArray(day?.features) ? day.features : [];
+  let activePhoto = null;
 
+  features.forEach((feature, featureIndex) => {
+    const photos = Array.isArray(feature?.photos) ? feature.photos : [];
+    if (!photos.length) return;
+
+    const photoIndex = Number.isInteger(feature.activePhotoIndex)
+      ? feature.activePhotoIndex
+      : 0;
+
+    const photo = photos[photoIndex] || photos[0];
+    if (!photo) return;
+    if (!Number.isFinite(photo.lat) || !Number.isFinite(photo.lon)) return;
+
+    const isActive = featureIndex === activeFeatureIndex;
     const size = isActive ? 70 : 40;
-    const border = isActive ? 3 : 2;
+
+    if (isActive) {
+      activePhoto = photo;
+      activePhotoIndex = photoIndex;
+    }
 
     const icon = L.divIcon({
       className: "photo-map-marker-wrap",
-html: `
-  <div class="photo-pin ${isActive ? "is-active" : ""}" 
-       style="width:${size}px; height:${size}px;">
-       
-    <div class="photo-pin-img"
-         style="background-image:url('${photo.src}')">
-    </div>
-
-    <div class="photo-pin-tail"></div>
-  </div>
-`,
+      html: `
+        <div class="photo-pin ${isActive ? "is-active" : ""}"
+             style="width:${size}px; height:${size}px;">
+          <div class="photo-pin-img"
+               style="background-image:url('${photo.src}')"></div>
+          <div class="photo-pin-tail"></div>
+        </div>
+      `,
       iconSize: [size, size],
       iconAnchor: [size / 2, size]
     });
 
     const marker = L.marker([photo.lat, photo.lon], { icon }).addTo(activeLeafletMap);
 
-marker.on("click", () => {
-  activePhotoIndex = index;
-
-  if (day?.features?.[featureIndex]) {
-    day.features[featureIndex].activePhotoIndex = index;
-  }
-
-  updateFeatureTileImage(featureIndex, photo.src);
-  updatePhotoOnMap(photos, featureIndex, day, { skipPan: true });
-});
+    marker.on("click", () => {
+      feature.activePhotoIndex = photoIndex;
+      updateFeatureTileImage(featureIndex, photo.src);
+      updateDayFeaturesOnMap(day, featureIndex, { skipPan: true });
+    });
 
     photoMarkers.push(marker);
   });
-  const activePhoto = photos[activePhotoIndex];
 
   if (!skipPan && activePhoto) {
     panSmoothToPhotoIfNeeded(activePhoto);
   }
 }
+
+
 function getProfileSlopePercent(profile, point) {
   if (!Array.isArray(profile) || !profile.length || !point) return 0;
 
