@@ -4140,52 +4140,62 @@ function updateDayFeaturesOnMap(day, activeFeatureIndex = 0, options = {}) {
     const photos = Array.isArray(feature?.photos) ? feature.photos : [];
     if (!photos.length) return;
 
-    const photoIndex = Number.isInteger(feature.activePhotoIndex)
+    const safeActivePhotoIndex = Number.isInteger(feature.activePhotoIndex)
       ? feature.activePhotoIndex
       : 0;
 
-    const photo = photos[photoIndex] || photos[0];
-    if (!photo) return;
-    if (!Number.isFinite(photo.lat) || !Number.isFinite(photo.lon)) return;
+    const isActiveFeature = featureIndex === activeFeatureIndex;
 
-    const isActive = featureIndex === activeFeatureIndex;
-    const size = isActive ? 70 : 40;
+    // Для активной feature показываем ВСЕ её фото:
+    // активное — большое, остальные — маленькие.
+    // Для неактивных feature оставляем старое поведение:
+    // показываем только текущее фото.
+    const photosToRender = isActiveFeature
+      ? photos.map((photo, photoIndex) => ({ photo, photoIndex }))
+      : [{ photo: photos[safeActivePhotoIndex] || photos[0], photoIndex: safeActivePhotoIndex }];
 
-    if (isActive) {
-      activePhoto = photo;
-      activePhotoIndex = photoIndex;
-    }
+    photosToRender.forEach(({ photo, photoIndex }) => {
+      if (!photo) return;
+      if (!Number.isFinite(photo.lat) || !Number.isFinite(photo.lon)) return;
 
-    const icon = L.divIcon({
-      className: "photo-map-marker-wrap",
-      html: `
-        <div class="photo-pin ${isActive ? "is-active" : ""}"
-             style="width:${size}px; height:${size}px;">
-          <div class="photo-pin-img"
-               style="background-image:url('${photo.src}')"></div>
-          <div class="photo-pin-tail"></div>
-        </div>
-      `,
-      iconSize: [size, size],
-      iconAnchor: [size / 2, size]
+      const isActivePhoto = isActiveFeature && photoIndex === safeActivePhotoIndex;
+      const size = isActivePhoto ? 70 : 40;
+
+      if (isActivePhoto) {
+        activePhoto = photo;
+        activePhotoIndex = photoIndex;
+      }
+
+      const icon = L.divIcon({
+        className: "photo-map-marker-wrap",
+        html: `
+          <div class="photo-pin ${isActivePhoto ? "is-active" : ""}"
+               style="width:${size}px; height:${size}px;">
+            <div class="photo-pin-img"
+                 style="background-image:url('${photo.src}')"></div>
+            <div class="photo-pin-tail"></div>
+          </div>
+        `,
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size]
+      });
+
+      const marker = L.marker([photo.lat, photo.lon], { icon }).addTo(activeLeafletMap);
+
+      marker.on("click", () => {
+        feature.activePhotoIndex = photoIndex;
+        updateFeatureTileImage(featureIndex, photo.src);
+        updateDayFeaturesOnMap(day, featureIndex, { skipPan: true });
+      });
+
+      photoMarkers.push(marker);
     });
-
-    const marker = L.marker([photo.lat, photo.lon], { icon }).addTo(activeLeafletMap);
-
-    marker.on("click", () => {
-      feature.activePhotoIndex = photoIndex;
-      updateFeatureTileImage(featureIndex, photo.src);
-      updateDayFeaturesOnMap(day, featureIndex, { skipPan: true });
-    });
-
-    photoMarkers.push(marker);
   });
 
   if (!skipPan && activePhoto) {
     panSmoothToPhotoIfNeeded(activePhoto);
   }
 }
-
 
 function getProfileSlopePercent(profile, point) {
   if (!Array.isArray(profile) || !profile.length || !point) return 0;
